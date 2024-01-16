@@ -163,26 +163,11 @@
             }
         }
 
-        async function loadIframe(url, iframeId) {
-            let response = await fetch(`https://zunderscore-tv-functions.azurewebsites.net/api/fetch?url=${encodeURIComponent(url)}`);
-
-            if (response.ok) {
-                let pageData = await response.text();
-
-                let iframe = document.getElementById(iframeId);
-                iframe.src = url;
-                iframe.contentWindow.document.href = url;
-                iframe.contentWindow.document.write(pageData);
-            }
-        }
-
         document.addEventListener("DOMContentLoaded", async () => {
             updateTimeParts();
 
             promoImagePath = (await getFirebotCustomVariable("promoImagePath")).replace(/(^"|"$)/g, "");
             checkPromoImage();
-            //await loadIframe("https://streamkit.discord.com/overlay/voice/696408571327545397/794730954492608542?icon=true&online=true&logo=white&text_color=%23ffffff&text_size=36&text_outline_color=%23000000&text_outline_size=0&text_shadow_color=%23000000&text_shadow_size=0&bg_color=%23000000&bg_opacity=1&bg_shadow_color=%23000000&bg_shadow_size=0&invite_code=X3DfrtsQTP&limit_speaking=false&small_avatars=false&hide_names=false&fade_chat=0", "discord-voice");
-            //await loadIframe("https://dashboard.twitch.tv/widgets/goal/zunderscore", "twitch-goal");
 
             setInterval(updateTimeParts, 1000);
             setInterval(checkPromoImage, 1000);

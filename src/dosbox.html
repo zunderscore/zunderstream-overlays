@@ -67,6 +67,10 @@
             animation: cursorBlink 0.5s steps(1) 0s infinite forwards;
         }
 
+        .blink-1s {
+            animation: cursorBlink 2s steps(1) 0s infinite forwards;
+        }
+
         .bg-black {
             background-color: var(--black);
         }
@@ -108,6 +112,17 @@
             left: 0;
         }
 
+        #app-contents {
+            position: absolute;
+            top: 40px;
+            bottom: 40px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
         #app-footer {
             position: fixed;
             top: calc(26 * 40px);
@@ -116,6 +131,13 @@
 
             background-color: var(--white);
             color: var(--black);
+            padding: 0 20px;
+        }
+
+        #app-footer .right {
+            position: absolute;
+            right: 0;
+            text-align: right;
             padding: 0 20px;
         }
     </style>
@@ -130,7 +152,13 @@
         <div id="app-frame-left"></div>
         <div id="app-frame-right"></div>
         <div id="app-frame-bottom"></div>
-        <div id="app-footer">Welcome to the zunderstream!</div>
+        <div id="app-contents">
+            <span class="cursor-blink">_</span>
+        </div>
+        <div id="app-footer">
+            <span>Welcome to the zunderstream!</span>
+            <span class="right"><span id="date">2024-01-16</span> <span id="hours">02</span><span class="blink-1s">:</span><span id="minutes">14</span> <span id="meridian">PM</span></span>
+        </div>
     </div>
 
     <script>
@@ -170,8 +198,20 @@
             }
         }
 
+        function updateTimeParts() {
+            let currentTime = new Date();
+
+            setElementContents("date", `${currentTime.getFullYear()}-${`${currentTime.getMonth() + 1}`.padStart(2, "0")}-${`${currentTime.getDate()}`.padStart(2, "0")}`);
+            setElementContents("hours", `${currentTime.getHours() % 12 || 12}`.padStart(2, "0"));
+            setElementContents("minutes", `${currentTime.getMinutes()}`.padStart(2, "0"));
+            setElementContents("meridian", currentTime.getHours() > 11 ? "PM" : "AM");
+        }
+
         document.addEventListener("DOMContentLoaded", async () => {
+            updateTimeParts();
             refreshLowerThird();
+
+            setInterval(updateTimeParts, 1000);
             setInterval(refreshLowerThird, 5000);
         });
     </script>

@@ -322,6 +322,7 @@
             }
         }
     </style>
+    <script src="./scripts/zunderstream-base.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -373,7 +374,7 @@
             let currentSecondValue = currentTime % 60;
             let formattedSeconds = String(currentSecondValue).padStart(2, "0");
 
-            document.getElementById("countdown").innerText = `${formattedMinutes}:${formattedSeconds}`;
+            setElementText("countdown", `${formattedMinutes}:${formattedSeconds}`);
         }
 
         var currentCoinCounter = 0;
@@ -397,7 +398,7 @@
                     currentCoinHundreds = hundreds;
 
                     let livesString = String(Math.min(currentCoinHundreds + 5, 99)).padStart(2, "0");
-                    document.getElementById("lives-count").innerText = livesString;
+                    setElementText("lives-count", livesString);
 
                     let extraLifeSound = new Audio("./sounds/SMB3_1-up.mp3");
                     extraLifeSound.play();
@@ -407,36 +408,8 @@
                 }
 
                 let coinsString = String(currentCoinCounter).padStart(2, "0");
-                document.getElementById("coin-count").innerText = coinsString;
+                setElementText("coin-count", coinsString);
             }
-        }
-
-        function firebotRootUrl() {
-            return `http://localhost:7472/`;
-        }
-
-        function firebotApiRootUrl() {
-            return firebotRootUrl() + 'api/v1';
-        }
-
-        async function getFirebotCustomVariable(variableName) {
-            let url = `${firebotApiRootUrl()}/custom-variables/${variableName}`;
-
-            const response = await fetch(url);
-
-            return await response.text();
-        }
-
-        async function setFirebotCustomVariable(variableName, value) {
-            let url = `${firebotApiRootUrl()}/custom-variables/${variableName}`;
-
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ data: value })
-            });
         }
 
         document.addEventListener("DOMContentLoaded", async () => {

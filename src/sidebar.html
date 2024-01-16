@@ -65,6 +65,7 @@
             height: 300px;
         }
     </style>
+    <script src="./scripts/zunderstream-base.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -88,22 +89,6 @@
     <script type="text/javascript">
         let showPromoImage = false;
         let promoImagePath = "";
-
-        function firebotRootUrl() {
-            return `http://localhost:7472/`;
-        }
-
-        function firebotApiRootUrl() {
-            return firebotRootUrl() + 'api/v1';
-        }
-
-        async function getFirebotCustomVariable(variableName) {
-            let url = `${firebotApiRootUrl()}/custom-variables/${variableName}`;
-
-            const response = await fetch(url);
-
-            return await response.text();
-        }
 
         const daysOfWeek = [
             "Sun",
@@ -133,11 +118,11 @@
         function updateTimeParts() {
             let currentTime = new Date();
 
-            document.getElementById("datetime").innerText =
+            setElementText("datetime",
                 `${currentTime.getHours() % 12 || 12}:${String(currentTime.getMinutes()).padStart(2, "0")} ` +
                 `${currentTime.getHours() > 11 ? "PM" : "AM"} ET • ` +
                 `${daysOfWeek[currentTime.getDay()]}, ${months[currentTime.getMonth()]} ` +
-                `${currentTime.getDate()}, ${currentTime.getFullYear()}`;
+                `${currentTime.getDate()}, ${currentTime.getFullYear()}`);
         }
 
         async function checkPromoImage() {

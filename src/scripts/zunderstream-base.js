@@ -18,7 +18,7 @@ async function getFirebotCustomVariable(variableName) {
     return await response.text();
 }
 
-async function setFirebotCustomVariable(variableName, value) {
+async function setFirebotCustomVariable(variableName, value, ttl) {
     let url = `${firebotApiRootUrl()}/custom-variables/${variableName}`;
 
     const response = await fetch(url, {
@@ -26,10 +26,14 @@ async function setFirebotCustomVariable(variableName, value) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ data: value })
+        body: JSON.stringify({ data: value, ttl: ttl })
     });
 }
 
 function setElementContents(elementId, contents) {
     document.getElementById(elementId).innerHTML = contents;
+}
+
+function setElementText(elementId, contents) {
+    document.getElementById(elementId).innerText = contents;
 }

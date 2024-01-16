@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- OPTIMAL RESOLUTION: 3840x2160 -->
+<!-- FONT REFERENCE: https://fonts2u.com/pixel-nes.font -->
+
+<head>
+    <title>zunderstream Retro Countdown 3.0</title>
+    <style type="text/css">
+        @font-face {
+            font-family: pixel-nes;
+            src: url(resources/Pixel_NES.woff);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 3840px;
+            height: 2160px;
+            background-color: #3cf;
+            font-family: pixel-nes;
+            color: #000;
+            overflow: hidden;
+            font-size: 192px;
+        }
+
+        .sky {
+            position: fixed;
+            width: 3840px;
+            height: 2160px;
+            background-color: #3cf;
+        }
+
+        .ground {
+            position: fixed;
+            top: 1440px;
+            height: 720px;
+            width: 3840px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #090;
+            color: #fff;
+        }
+
+        .ground-gradient {
+            position: fixed;
+            height: 40px;
+            width: 3840px;
+        }
+
+        .ground-gradient.one {
+            top: 1520px;
+            background-color: #00802b;
+        }
+
+        .ground-gradient.two {
+            top: 1480px;
+            background-color: #062;
+        }
+
+        .ground-gradient.three {
+            top: 1440px;
+            background-color: #004d1a;
+        }
+
+        .hud {
+            height: 120px;
+            max-height: 120px;
+            font-size: 96px;
+            display: flex;
+            align-items: center;
+        }
+
+        .world-indicator {
+            position: fixed;
+            top: 20px;
+            left: 30px;
+        }
+
+        .lives-indicator {
+            position: fixed;
+            top: 20px;
+            left: 3120px;
+        }
+
+        .lives-indicator>img {
+            height: 120px;
+            margin-right: 20px;
+        }
+
+        .coin-indicator {
+            position: fixed;
+            top: 20px;
+            left: 3480px;
+        }
+
+        .animated-coin {
+            height: 120px;
+            margin-right: 20px;
+            animation: coinAnimation 1s step-end infinite;
+        }
+
+        @keyframes coinAnimation {
+            0% {
+                filter: brightness(75%);
+            }
+
+            20% {
+                filter: brightness(50%);
+            }
+
+            40% {
+                filter: brightness(75%);
+            }
+
+            60% {
+                filter: brightness(100%);
+            }
+
+            100% {
+                filter: brightness(100%);
+            }
+        }
+
+        .loading-text {
+            position: fixed;
+            top: 260px;
+            left: 0;
+            width: 3840px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .countdown {
+            position: absolute;
+            top: calc(50% - 200px);
+            left: calc(50% - 800px);
+            height: 400px;
+            width: 1600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 480px;
+            animation: countdownStart 5s step-end 4s forwards, countdownEnd 5s step-end 309s forwards;
+        }
+
+        @keyframes countdownStart {
+            0% {
+                opacity: 1;
+            }
+
+            10% {
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            30% {
+                opacity: 0;
+            }
+
+            40% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+
+            60% {
+                opacity: 1;
+            }
+
+            70% {
+                opacity: 0;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes countdownEnd {
+            0% {
+                opacity: 1;
+            }
+
+            10% {
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            30% {
+                opacity: 0;
+            }
+
+            40% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+
+            60% {
+                opacity: 1;
+            }
+
+            70% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .press-start {
+            width: 100%;
+            left: 0;
+            font-size: 360px;
+            visibility: hidden;
+            animation: pressStartAppear 0s step-end 313s forwards, pressStartBlink 5s step-end 319s forwards infinite;
+        }
+
+        @keyframes pressStartAppear {
+            to {
+                visibility: visible;
+            }
+        }
+
+        @keyframes pressStartBlink {
+            0% {
+                opacity: 1;
+            }
+
+            5% {
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            15% {
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .title {
+            position: fixed;
+            width: 3840px;
+            height: 2160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #000;
+            color: #fff;
+            animation: titleDisappear 0s linear 4s forwards;
+        }
+
+        .title-logo {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            font-size: 96px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            animation: titleLogoAppear 0s linear 500ms forwards, titleLogoFade 1s linear 2s forwards;
+        }
+
+        .title-logo img {
+            min-width: 600px;
+            max-width: 600px;
+        }
+
+        .title-logo.title-text {
+            order: 1;
+        }
+
+        @keyframes titleDisappear {
+            to {
+                visibility: hidden;
+            }
+        }
+
+        @keyframes titleLogoAppear {
+            to {
+                visibility: visible;
+            }
+        }
+
+        @keyframes titleLogoFade {
+            to {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sky"></div>
+    <div class="loading-text">LOADING</div>
+    <div class="ground">PLAYERS, GET READY!</div>
+    <div class="ground-gradient one"></div>
+    <div class="ground-gradient two"></div>
+    <div class="ground-gradient three"></div>
+
+    <div class="hud world-indicator">ZNDR 1-1</div>
+    <div class="hud lives-indicator">
+        <img src="./images/retro/icebear.png" />x<span id="lives-count">05</span>
+    </div>
+    <div class="hud coin-indicator">
+        <img src="./images/retro/coin.png" class="animated-coin" />x<span id="coin-count">00</span>
+    </div>
+
+    <div class="countdown" id="countdown">05:00</div>
+    <div class="countdown press-start">PRESS START</div>
+
+    <div class="title">
+        <div class="title-logo">
+            <div><img src="./images/z_icon.png" /></div>
+            <div class="title-text">ZUNTENDO</div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        const totalTime = 300;
+        var currentTime = totalTime;
+        var countdownTime = 0;
+
+        function startCountdown() {
+            countdownTimer = setInterval(setTimerText, 1000);
+        }
+
+        function setTimerText() {
+            currentTime--;
+
+            if (currentTime < 0) {
+                clearInterval(countdownTimer);
+                currentTime = 0;
+            }
+
+            let currentMinuteValue = Math.floor(currentTime / 60);
+            let formattedMinutes = String(currentMinuteValue).padStart(2, "0");
+
+            let currentSecondValue = currentTime % 60;
+            let formattedSeconds = String(currentSecondValue).padStart(2, "0");
+
+            document.getElementById("countdown").innerText = `${formattedMinutes}:${formattedSeconds}`;
+        }
+
+        var currentCoinCounter = 0;
+        var totalCoinCounter = 0;
+        var currentCoinHundreds = 0;
+
+        function startCoinCounterCheck() {
+            setInterval(coinCounterCheck, 500);
+        }
+
+        async function coinCounterCheck() {
+            let coinsString = await getFirebotCustomVariable("coinCount");
+            let coins = Number(coinsString);
+
+            if (coins > totalCoinCounter) {
+                let hundreds = Math.floor(coins / 100);
+                totalCoinCounter = coins;
+                currentCoinCounter = coins - (hundreds * 100);
+
+                if (hundreds > currentCoinHundreds) {
+                    currentCoinHundreds = hundreds;
+
+                    let livesString = String(Math.min(currentCoinHundreds + 5, 99)).padStart(2, "0");
+                    document.getElementById("lives-count").innerText = livesString;
+
+                    let extraLifeSound = new Audio("./sounds/SMB3_1-up.mp3");
+                    extraLifeSound.play();
+                } else {
+                    let coinSound = new Audio("./sounds/SMB3_coin.mp3");
+                    coinSound.play();
+                }
+
+                let coinsString = String(currentCoinCounter).padStart(2, "0");
+                document.getElementById("coin-count").innerText = coinsString;
+            }
+        }
+
+        function firebotRootUrl() {
+            return `http://localhost:7472/`;
+        }
+
+        function firebotApiRootUrl() {
+            return firebotRootUrl() + 'api/v1';
+        }
+
+        async function getFirebotCustomVariable(variableName) {
+            let url = `${firebotApiRootUrl()}/custom-variables/${variableName}`;
+
+            const response = await fetch(url);
+
+            return await response.text();
+        }
+
+        async function setFirebotCustomVariable(variableName, value) {
+            let url = `${firebotApiRootUrl()}/custom-variables/${variableName}`;
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ data: value })
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            // Reset coin count on start
+            await setFirebotCustomVariable("coinCount", 0);
+
+            let coinSound = new Audio("./sounds/SMB3_coin.mp3");
+            coinSound.volume = 0;
+            coinSound.play();
+
+            let extraLifeSound = new Audio("./sounds/SMB3_1-up.mp3");
+            extraLifeSound.volume = 0;
+            extraLifeSound.play();
+
+            setTimeout(startCountdown, 8000);
+            setTimeout(startCoinCounterCheck, 8000);
+        });
+    </script>
+</body>
+
+</html>

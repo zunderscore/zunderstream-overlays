@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+
+<!-- OPTIMAL RESOLUTION: 1920x1080 -->
+
+<head>
+    <title>zunderstream TPIR Stage</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --border-panel-bg-color: #116600;
+        }
+
+        body {
+            background-color: #000;
+            width: 1920px;
+            height: 1080px;
+        }
+
+        @keyframes light {
+            0% {
+                opacity: 0.2;
+            }
+
+            25% {
+                opacity: 0.8;
+            }
+
+            100% {
+                opacity: 0.2;
+            }
+        }
+
+        .light {
+            position: fixed;
+            height: 30px;
+            width: 30px;
+            margin: -15px 0 0 -15px;
+            border: 2px solid #666;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ffb, #ffb0);
+            animation: light 0.4s ease-in-out 0s infinite;
+        }
+
+        .light.one {
+            animation-delay: 0s;
+        }
+
+        .light.two {
+            animation-delay: 0.1s;
+        }
+
+        .light.three {
+            animation-delay: 0.2s;
+        }
+
+        .light.four {
+            animation-delay: 0.3s;
+        }
+
+        .border-panel {
+            position: fixed;
+            background-color: var(--border-panel-bg-color);
+        }
+
+        @keyframes titleTextTransition {
+            0% {
+                transform: scale(0) rotate3d(0, 1, 0, 180deg);
+                opacity: 1;
+            }
+
+            25% {
+                transform: scale(1) rotate3d(0, 1, 0, 360deg);
+                opacity: 1;
+            }
+
+            75% {
+                transform: scale(1) rotate3d(0, 1, 0, 360deg);
+                opacity: 1;
+            }
+
+            76% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .title-text-container {
+            opacity: 0;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #title-text {
+            width: 1200px;
+            font-family: 'Windsor';
+            font-size: 144px;
+            color: #09f;
+            text-align: center;
+            text-transform: uppercase;
+            text-shadow: 3px 3px 0 #000;
+            animation: titleTextTransition 2s linear 0s 3 forwards;
+        }
+    </style>
+    <script src="./scripts/zunderstream-base.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <!-- BORDER PANELS -->
+    <!-- Inverted corners behind the other panels-->
+    <div class="border-panel" style="top: 800px; height: 80px; right: 0; width: 300px; background: radial-gradient(circle 40px at 0 0, transparent 0, transparent 80px, var(--border-panel-bg-color) 81px);"></div>
+    <div class="border-panel" style="top: 120px; height: 80px; right: 0; width: 300px; background: radial-gradient(circle 40px at 0 80px, transparent 0, transparent 80px, var(--border-panel-bg-color) 81px);"></div>
+
+    <div class="border-panel" style="top: 800px; height: 80px; left: 0; width: 300px; background: radial-gradient(circle 40px at 300px 0, transparent 0, transparent 80px, var(--border-panel-bg-color) 81px);"></div>
+    <div class="border-panel" style="top: 120px; height: 80px; left: 0; width: 300px; background: radial-gradient(circle 40px at 300px 80px, transparent 0, transparent 80px, var(--border-panel-bg-color) 81px);"></div>
+
+    <div class="border-panel" style="top: 880px; height: 200px; left: 1500px; width: 420px; border-top-left-radius: 80px;"></div>
+    <div class="border-panel" style="top: 880px; bottom: 1080px; height: 200px; left: 0px; right: 420px; width: 420px; border-top-right-radius: 80px;"></div>
+
+    <div class="border-panel" style="top: 200px; height: 600px; right: 0; width: 220px;"></div>
+    <div class="border-panel" style="top: 200px; height: 600px; left: 0; width: 220px;"></div>
+    <div class="border-panel" style="top: 0; height: 120px; left: 0; width: 1920px;"></div>
+
+    <!-- BOTTOM RIGHT CORNER-->
+    <div class="light one" style="top: 1060px; left: 1500px;"></div>
+    <div class="light two" style="top: 1020px; left: 1500px;"></div>
+    <div class="light three" style="top: 980px; left: 1500px;"></div>
+    <div class="light four" style="top: 940px; left: 1500px;"></div>
+    <div class="light one" style="top: 900px; left: 1520px;"></div>
+    <div class="light two" style="top: 880px; left: 1560px;"></div>
+    <div class="light three" style="top: 880px; left: 1600px;"></div>
+    <div class="light four" style="top: 880px; left: 1640px;"></div>
+    <div class="light one" style="top: 860px; left: 1680px;"></div>
+
+    <!-- RIGHT SIDE -->
+    <div class="light two" style="top: 820px; left: 1700px;"></div>
+    <div class="light three" style="top: 780px; left: 1700px;"></div>
+    <div class="light four" style="top: 740px; left: 1700px;"></div>
+    <div class="light one" style="top: 700px; left: 1700px;"></div>
+    <div class="light two" style="top: 660px; left: 1700px;"></div>
+    <div class="light three" style="top: 620px; left: 1700px;"></div>
+    <div class="light four" style="top: 580px; left: 1700px;"></div>
+    <div class="light one" style="top: 540px; left: 1700px;"></div>
+    <div class="light two" style="top: 500px; left: 1700px;"></div>
+    <div class="light three" style="top: 460px; left: 1700px;"></div>
+    <div class="light four" style="top: 420px; left: 1700px;"></div>
+    <div class="light one" style="top: 380px; left: 1700px;"></div>
+    <div class="light two" style="top: 340px; left: 1700px;"></div>
+    <div class="light three" style="top: 300px; left: 1700px;"></div>
+    <div class="light four" style="top: 260px; left: 1700px;"></div>
+    <div class="light one" style="top: 220px; left: 1700px;"></div>
+    <div class="light two" style="top: 180px; left: 1700px;"></div>
+    <div class="light three" style="top: 140px; left: 1680px;"></div>
+
+    <!-- TOP -->
+    <div class="light four" style="top: 120px; left: 1640px;"></div>
+    <div class="light one" style="top: 120px; left: 1600px;"></div>
+    <div class="light two" style="top: 120px; left: 1560px;"></div>
+    <div class="light three" style="top: 120px; left: 1520px;"></div>
+    <div class="light four" style="top: 120px; left: 1480px;"></div>
+    <div class="light one" style="top: 120px; left: 1440px;"></div>
+    <div class="light two" style="top: 120px; left: 1400px;"></div>
+    <div class="light three" style="top: 120px; left: 1360px;"></div>
+    <div class="light four" style="top: 120px; left: 1320px;"></div>
+    <div class="light one" style="top: 120px; left: 1280px;"></div>
+    <div class="light two" style="top: 120px; left: 1240px;"></div>
+    <div class="light three" style="top: 120px; left: 1200px;"></div>
+    <div class="light four" style="top: 120px; left: 1160px;"></div>
+    <div class="light one" style="top: 120px; left: 1120px;"></div>
+    <div class="light two" style="top: 120px; left: 1080px;"></div>
+    <div class="light three" style="top: 120px; left: 1040px;"></div>
+    <div class="light four" style="top: 120px; left: 1000px;"></div>
+    <div class="light one" style="top: 120px; left: 960px;"></div>
+    <div class="light two" style="top: 120px; left: 920px;"></div>
+    <div class="light three" style="top: 120px; left: 880px;"></div>
+    <div class="light four" style="top: 120px; left: 840px;"></div>
+    <div class="light one" style="top: 120px; left: 800px;"></div>
+    <div class="light two" style="top: 120px; left: 760px;"></div>
+    <div class="light three" style="top: 120px; left: 720px;"></div>
+    <div class="light four" style="top: 120px; left: 680px;"></div>
+    <div class="light one" style="top: 120px; left: 640px;"></div>
+    <div class="light two" style="top: 120px; left: 600px;"></div>
+    <div class="light three" style="top: 120px; left: 560px;"></div>
+    <div class="light four" style="top: 120px; left: 520px;"></div>
+    <div class="light one" style="top: 120px; left: 480px;"></div>
+    <div class="light two" style="top: 120px; left: 440px;"></div>
+    <div class="light three" style="top: 120px; left: 400px;"></div>
+    <div class="light four" style="top: 120px; left: 360px;"></div>
+    <div class="light one" style="top: 120px; left: 320px;"></div>
+    <div class="light two" style="top: 120px; left: 280px;"></div>
+
+    <!-- LEFT SIDE -->
+    <div class="light three" style="top: 140px; left: 240px;"></div>
+    <div class="light four" style="top: 180px; left: 220px;"></div>
+    <div class="light one" style="top: 220px; left: 220px;"></div>
+    <div class="light two" style="top: 260px; left: 220px;"></div>
+    <div class="light three" style="top: 300px; left: 220px;"></div>
+    <div class="light four" style="top: 340px; left: 220px;"></div>
+    <div class="light one" style="top: 380px; left: 220px;"></div>
+    <div class="light two" style="top: 420px; left: 220px;"></div>
+    <div class="light three" style="top: 460px; left: 220px;"></div>
+    <div class="light four" style="top: 500px; left: 220px;"></div>
+    <div class="light one" style="top: 540px; left: 220px;"></div>
+    <div class="light two" style="top: 580px; left: 220px;"></div>
+    <div class="light three" style="top: 620px; left: 220px;"></div>
+    <div class="light four" style="top: 660px; left: 220px;"></div>
+    <div class="light one" style="top: 700px; left: 220px;"></div>
+    <div class="light two" style="top: 740px; left: 220px;"></div>
+    <div class="light three" style="top: 780px; left: 220px;"></div>
+    <div class="light four" style="top: 820px; left: 220px;"></div>
+
+    <!-- BOTTOM RIGHT CORNER-->
+    <div class="light one" style="top: 860px; left: 240px;"></div>
+    <div class="light two" style="top: 880px; left: 280px;"></div>
+    <div class="light three" style="top: 880px; left: 320px;"></div>
+    <div class="light four" style="top: 880px; left: 360px;"></div>
+    <div class="light one" style="top: 900px; left: 400px;"></div>
+    <div class="light two" style="top: 940px; left: 420px;"></div>
+    <div class="light three" style="top: 980px; left: 420px;"></div>
+    <div class="light four" style="top: 1020px; left: 420px;"></div>
+    <div class="light one" style="top: 1060px; left: 420px;"></div>
+
+    <div class="title-text-container">
+        <div id="title-text">Prizes<br />Galore</div>
+    </div>
+</body>
+
+</html>

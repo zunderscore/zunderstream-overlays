@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<!-- OPTIMAL RESOLUTION: 1920x1080 -->
+<!-- FONT REFERENCE: https://int10h.org/oldschool-pc-fonts/fontlist/font?ibm_vga_8x16 -->
+
+<html>
+
+<head>
+    <title>zunderstream DOS Console</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --black: #000;
+            --blue: #00a;
+            --green: #0a0;
+            --cyan: #0aa;
+            --red: #a00;
+            --magenta: #a0a;
+            --brown: #950;
+            --white: #aaa;
+            --gray: #555;
+            --light-blue: #55f;
+            --light-green: #55ff40;
+            --light-cyan: #5ff;
+            --light-red: #f55;
+            --light-magenta: #f5f;
+            --yellow: #ff5;
+            --bright-white: #fff;
+        }
+
+        @font-face {
+            font-family: IBM-VGA;
+            src: url(resources/Web437_IBM_VGA_8x16.woff);
+        }
+
+        html {
+            width: 1920px;
+            height: 1080px;
+        }
+
+        body {
+            background-color: var(--black);
+            color: var(--white);
+            font-family: IBM-VGA;
+            font-size: 40px;
+        }
+
+        @keyframes cursorBlink {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .cursor-blink {
+            animation: cursorBlink 0.5s steps(1) 0s infinite forwards;
+        }
+
+        .bg-black {
+            background-color: var(--black);
+        }
+
+        .bg-blue {
+            background-color: var(--blue);
+        }
+
+        .app-frame {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            white-space: nowrap;
+        }
+
+        #app-title {
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        #app-frame-left {
+            position: fixed;
+            top: 40px;
+            left: 0;
+        }
+
+        #app-frame-right {
+            position: fixed;
+            top: 40px;
+            right: 0;
+        }
+
+        #app-frame-bottom {
+            position: fixed;
+            top: calc(25 * 40px);
+            left: 0;
+        }
+
+        #app-footer {
+            position: fixed;
+            top: calc(26 * 40px);
+            left: 0;
+            right: 0;
+
+            background-color: var(--white);
+            color: var(--black);
+            padding: 0 20px;
+        }
+    </style>
+    <script src="./scripts/zunderstream-base.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <div style="opacity: 0;">C:\><span class="cursor-blink">_</span></div>
+
+    <div class="app-frame bg-blue">
+        <div id="app-title"></div>
+        <div id="app-frame-left"></div>
+        <div id="app-frame-right"></div>
+        <div id="app-frame-bottom"></div>
+        <div id="app-footer">Welcome to the zunderstream!</div>
+    </div>
+
+    <script>
+        const MAX_LINE_LENGTH = 96;
+        const MAX_LINES = 26;
+
+        let streamTitle = "";
+
+        function setTitle(title) {
+            if (title.length % 2 === 1) {
+                title = `${title} `;
+            }
+            const sideLength = (MAX_LINE_LENGTH - title.length - 4) / 2
+            const fullTitle = `&#x2554${"&#x2550".repeat(sideLength)} ${title} ${"&#x2550".repeat(sideLength)}&#x2557`;
+
+            setElementContents("app-title", fullTitle);
+        }
+
+        let appFrameSideContent = []
+        appFrameSideContent.length = MAX_LINES - 2;
+        appFrameSideContent.fill("&#x2551");
+
+        setElementContents("app-frame-left", appFrameSideContent.join("<br/>"));
+        setElementContents("app-frame-right", appFrameSideContent.join("<br/>"));
+        setElementContents("app-frame-bottom", `&#x255A${"&#x2550".repeat(MAX_LINE_LENGTH - 2)}&#x255D`);
+
+        async function refreshLowerThird() {
+            const url = `${zunderstreamAdminRootUrl()}/lowerthird`;
+            const response = await fetch(url);
+
+            if (response.ok) {
+                const newStreamTitle = await response.text();
+                if (newStreamTitle !== streamTitle) {
+                    streamTitle = newStreamTitle;
+                    setTitle(streamTitle);
+                }
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            refreshLowerThird();
+            setInterval(refreshLowerThird, 5000);
+        });
+    </script>
+</body>
+
+</html>

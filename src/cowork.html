@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<!-- OPTIMAL RESOLUTION: 3840x2160 -->
+
+<head>
+    <title>zunderstream Co-Working</title>
+    <style type="text/css">
+        @import url("./styles/typekit.css");
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            width: 3840px;
+            height: 2160px;
+            font-family: 'Bebas Neue Pro';
+            background-color: #000;
+            color: #fff;
+            font-size: 3vw;
+            overflow: hidden;
+        }
+
+        iframe {
+            border: 0;
+        }
+
+        main {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            transition: all 1s;
+        }
+
+        main.shade {
+            background-color: #000d;
+        }
+
+        main iframe {
+            width: 100%;
+            height: 100%;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .header-image,
+        .footer-image {
+            display: flex;
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 100px;
+            justify-content: center;
+        }
+
+        .header-image img,
+        .footer-image img {
+            max-height: 100px;
+        }
+
+        .header-image {
+            top: 20px;
+        }
+
+        .footer-image {
+            bottom: 20px;
+        }
+
+        .main-header,
+        .main-footer {
+            display: grid;
+            padding: 0 80px;
+            height: 140px;
+            width: calc(100% - 160px);
+            background-color: #fff;
+            color: #000;
+            font-size: 100px;
+            font-weight: bold;
+        }
+
+        .main-header>.left,
+        .main-footer>.left {
+            grid-row: 1;
+            grid-column: 1 / 2;
+            text-align: left;
+        }
+
+        .main-header>.right,
+        .main-footer>.right {
+            grid-row: 1;
+            grid-column: 2;
+            text-align: right;
+        }
+
+        .post-header,
+        .pre-footer {
+            height: 120px;
+        }
+
+        .post-header {
+            background-image: linear-gradient(#fff, #fff0);
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .pre-footer {
+            background-image: linear-gradient(#ffffff00, #fff);
+        }
+    </style>
+    <script src="./scripts/zunderstream-base.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <main id="main">
+
+    </main>
+
+    <header>
+        <div class="main-header">
+            <div class="left">Co-Working Today</div>
+            <div id="header-right" class="right"></div>
+        </div>
+        <div class="header-image"><img src="./images/emotes/hi.png"></div>
+        <div class="post-header"></div>
+    </header>
+
+    <footer>
+        <div class="pre-footer"></div>
+        <div class="main-footer">
+            <div id="footer-left" class="left"></div>
+            <div id="footer-right" class="right"></div>
+        </div>
+        <div class="footer-image"><img src="./images/emotes/loaf.png"></div>
+    </footer>
+
+    <script type="text/javascript">
+        let headerMessageRight = "", footerMessageLeft = "", footerMessageRight = "";
+        let enableCoworkShade = false;
+
+        async function checkCoworkSetup() {
+            headerMessageRight = (await getFirebotCustomVariable("coworkHeaderMessageRight")).replace(/^"|"$/g, "");
+            footerMessageLeft = (await getFirebotCustomVariable("coworkFooterMessageLeft")).replace(/^"|"$/g, "");
+            footerMessageRight = (await getFirebotCustomVariable("coworkFooterMessageRight")).replace(/^"|"$/g, "");
+
+            if (headerMessageRight && headerMessageRight.toLowerCase() != "null") {
+                setElementContents("header-right", headerMessageRight);
+            }
+
+            if (footerMessageLeft && footerMessageLeft.toLowerCase() != "null") {
+                setElementContents("footer-left", footerMessageLeft);
+            }
+
+            if (footerMessageRight && footerMessageRight.toLowerCase() != "null") {
+                setElementContents("footer-right", footerMessageRight);
+            }
+
+            newEnableCoworkShade = (await getFirebotCustomVariable("enableCoworkShade")) == "true";
+
+            if (enableCoworkShade != newEnableCoworkShade) {
+                enableCoworkShade = newEnableCoworkShade;
+
+                if (enableCoworkShade) {
+                    document.getElementById("main").classList.add("shade");
+                } else {
+                    document.getElementById("main").classList.remove("shade");
+                }
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            checkCoworkSetup();
+
+            setInterval(checkCoworkSetup, 1000);
+        });
+    </script>
+</body>
+
+</html>

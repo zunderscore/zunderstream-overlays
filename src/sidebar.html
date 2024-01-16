@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <title>zunderstream Sidebar</title>
+    <style type="text/css">
+        @import url("./styles/typekit.css");
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Bebas Neue Pro';
+            background-color: #000;
+            color: #fff;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            margin: 0 auto;
+            min-width: 854px;
+            max-width: 854px;
+            justify-content: start;
+            align-items: center;
+        }
+
+        main iframe {
+            border: 0;
+            width: 80%;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .full {
+            width: 100%;
+        }
+
+        .zunderscore {
+            font-size: 160px;
+            line-height: 160px;
+        }
+
+        .datetime {
+            font-size: 64px;
+            margin-bottom: 30px;
+        }
+
+        #promo-image-container {
+            opacity: 0;
+            height: 0;
+            transition: opacity 1s linear;
+        }
+
+        #promo-image-container img {
+            height: 100%;
+        }
+
+        #promo-image-container.show {
+            opacity: 1;
+            height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="center zunderscore">zunderscore</div>
+        <div class="center datetime" id="datetime"></div>
+
+        <div id="promo-image-container" class="center">
+            <img id="promo-image" src="" />
+        </div>
+
+        <div class="full center">
+            <iframe id="twitch-goal" src="https://dashboard.twitch.tv/widgets/goal/zunderscore"></iframe>
+        </div>
+
+        <div class="full center">
+            <iframe id="discord-voice" src="about:blank"></iframe>
+        </div>
+    </main>
+
+    <script type="text/javascript">
+        let showPromoImage = false;
+        let promoImagePath = "";
+
+        function firebotRootUrl() {
+            return `http://localhost:7472/`;
+        }
+
+        function firebotApiRootUrl() {
+            return firebotRootUrl() + 'api/v1';
+        }
+
+        async function getFirebotCustomVariable(variableName) {
+            let url = `${firebotApiRootUrl()}/custom-variables/${variableName}`;
+
+            const response = await fetch(url);
+
+            return await response.text();
+        }
+
+        const daysOfWeek = [
+            "Sun",
+            "Mon",
+            "Tues",
+            "Wed",
+            "Thurs",
+            "Fri",
+            "Sat"
+        ];
+
+        const months = [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+        ]
+
+        function updateTimeParts() {
+            let currentTime = new Date();
+
+            document.getElementById("datetime").innerText =
+                `${currentTime.getHours() % 12 || 12}:${String(currentTime.getMinutes()).padStart(2, "0")} ` +
+                `${currentTime.getHours() > 11 ? "PM" : "AM"} ET • ` +
+                `${daysOfWeek[currentTime.getDay()]}, ${months[currentTime.getMonth()]} ` +
+                `${currentTime.getDate()}, ${currentTime.getFullYear()}`;
+        }
+
+        async function checkPromoImage() {
+            showPromoImage = await getFirebotCustomVariable("showPromoImage") === "true";
+
+            if (showPromoImage === true) {
+                let newPromoImagePath = (await getFirebotCustomVariable("promoImagePath")).replace(/(^"|"$)/g, "");
+                let timeout = 0;
+
+                if (newPromoImagePath != promoImagePath) {
+                    promoImagePath = newPromoImagePath;
+                    document.getElementById("promo-image-container").classList.remove("show");
+                    timeout = 1000;
+                }
+
+                setTimeout(() => {
+                    document.getElementById("promo-image").src = promoImagePath;
+
+                    document.getElementById("promo-image-container").classList.add("show");
+                }, timeout);
+            } else {
+                document.getElementById("promo-image-container").classList.remove("show");
+            }
+        }
+
+        async function loadIframe(url, iframeId) {
+            let response = await fetch(`https://zunderscore-tv-functions.azurewebsites.net/api/fetch?url=${encodeURIComponent(url)}`);
+
+            if (response.ok) {
+                let pageData = await response.text();
+
+                let iframe = document.getElementById(iframeId);
+                iframe.src = url;
+                iframe.contentWindow.document.href = url;
+                iframe.contentWindow.document.write(pageData);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            updateTimeParts();
+
+            promoImagePath = (await getFirebotCustomVariable("promoImagePath")).replace(/(^"|"$)/g, "");
+            checkPromoImage();
+            //await loadIframe("https://streamkit.discord.com/overlay/voice/696408571327545397/794730954492608542?icon=true&online=true&logo=white&text_color=%23ffffff&text_size=36&text_outline_color=%23000000&text_outline_size=0&text_shadow_color=%23000000&text_shadow_size=0&bg_color=%23000000&bg_opacity=1&bg_shadow_color=%23000000&bg_shadow_size=0&invite_code=X3DfrtsQTP&limit_speaking=false&small_avatars=false&hide_names=false&fade_chat=0", "discord-voice");
+            //await loadIframe("https://dashboard.twitch.tv/widgets/goal/zunderscore", "twitch-goal");
+
+            setInterval(updateTimeParts, 1000);
+            setInterval(checkPromoImage, 1000);
+        });
+    </script>
+</body>
+
+</html>

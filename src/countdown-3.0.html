@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- OPTIMAL RESOLUTION: 3840x2160 -->
+
+<head>
+    <title>zunderstream Countdown 3.0</title>
+    <style type="text/css">
+        @import url("./styles/typekit.css");
+
+        @property --t {
+            syntax: "<number>";
+            initial-value: 0;
+            inherits: true;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 3840px;
+            height: 2160px;
+            background-color: #000;
+            font-family: 'Bebas Neue Pro';
+            color: #fff;
+            overflow: hidden;
+            letter-spacing: -0.2em;
+        }
+
+        .middle-background {
+            background-color: #000;
+            position: fixed;
+            width: 3840px;
+            height: 1520px;
+            top: 320px;
+            left: 0;
+        }
+
+        .white-bar {
+            width: 100%;
+            height: 320px;
+            position: fixed;
+            left: 0;
+            background-color: #fff;
+            color: #000;
+            line-height: 280px;
+            text-align: center;
+            font-size: 200px;
+            font-weight: bold;
+        }
+
+        .white-bar.top {
+            top: 0;
+        }
+
+        .white-bar.bottom {
+            bottom: 0;
+        }
+
+        #outer-countdown-container {
+            position: absolute;
+            height: 1000px;
+            width: 1000px;
+            top: calc(50% - 500px);
+            left: calc(50% - 500px);
+            transition: transform 2s cubic-bezier(0, 1, .5, 1);
+        }
+
+        .countdown-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            animation: fadeIn 1s linear 2s forwards, fadeOut 2s linear 308s forwards;
+        }
+
+        .countdown-circle {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            stroke-width: 50px;
+            animation: mainCountdown 300s linear 6s forwards;
+        }
+
+        #back-circle {
+            fill: none;
+            stroke: #fff;
+        }
+
+        #front-circle {
+            --k: calc(var(--t)/300);
+            transform: rotate(-90deg);
+            fill: none;
+            stroke: #666;
+            stroke-dasharray: var(--k) 1;
+        }
+
+        .center-text {
+            position: fixed;
+            display: flex;
+            height: 900px;
+            width: 900px;
+            top: calc(50% - 450px);
+            left: calc(50% - 450px);
+            justify-content: center;
+            line-height: 860px;
+            text-align: center;
+            font-size: 400px;
+            font-weight: bold;
+            opacity: 0;
+        }
+
+        .countdown {
+            position: absolute;
+            width: 100%;
+            height: 400px;
+            top: calc(50% - 200px);
+            line-height: 360px;
+            opacity: 0;
+            overflow: hidden;
+            animation: fadeIn 1s linear 4s forwards;
+        }
+
+        .countdown>div {
+            position: absolute;
+            top: 0;
+            line-height: 360px;
+            text-align: center;
+            font-size: 400px;
+            font-weight: bold;
+        }
+
+        .countdown-minutes,
+        .countdown-seconds-tens,
+        .countdown-seconds-ones {
+            width: 160px;
+        }
+
+        .countdown-separator {
+            width: 80px;
+        }
+
+        .countdown-minutes {
+            left: 220px;
+        }
+
+        .countdown-separator {
+            left: 380px;
+        }
+
+        .countdown-seconds-tens {
+            left: 460px;
+        }
+
+        .countdown-seconds-ones {
+            left: 620px;
+        }
+
+        .countdown>.next {
+            visibility: hidden;
+        }
+
+        .counter-roll-in {
+            animation: counterRollIn 1s linear;
+        }
+
+        .counter-roll-out {
+            animation: counterRollOut 1s linear;
+        }
+
+        .shift-countdown-left {
+            transform: translateX(-1000px)
+        }
+
+        .shift-countdown-right {
+            transform: translateX(1000px);
+        }
+
+        @keyframes counterRollIn {
+            0% {
+                transform: translateY(-100%);
+                visibility: visible;
+            }
+
+            50% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes counterRollOut {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(100%);
+            }
+
+            100% {
+                transform: translateY(100%);
+            }
+        }
+
+        .soon {
+            animation: fadeIn 1s linear 310s forwards;
+        }
+
+        .tm {
+            position: absolute;
+            left: 780px;
+            top: 220px;
+            line-height: initial;
+            font-size: 120px;
+            opacity: 0;
+            animation: fadeIn 1s linear 420s forwards;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .message-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #next-message {
+            visibility: hidden;
+        }
+
+        .link-text {
+            color: #06f;
+        }
+
+        @keyframes mainCountdown {
+            to {
+                --t: 300;
+            }
+        }
+
+        @keyframes bottomMessageRollOut {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-100%);
+            }
+
+            100% {
+                transform: translateY(-100%);
+            }
+        }
+
+        @keyframes bottomMessageRollIn {
+            0% {
+                transform: translateY(100%);
+                visibility: visible;
+            }
+
+            50% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .roll-out {
+            animation: bottomMessageRollOut 2s cubic-bezier(0, 1, .95, 1);
+        }
+
+        .roll-in {
+            animation: bottomMessageRollIn 2s cubic-bezier(0, 1, .95, 1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="white-bar top">Welcome! Grab a snack/drink and get comfy️</div>
+    <div class="white-bar bottom">
+        <div class="message-text" id="current-message">The #zunderstream is about to begin</div>
+        <div class="message-text" id="next-message"></div>
+    </div>
+
+    <div class="middle-background"></div>
+
+    <div id="outer-countdown-container">
+        <div class="countdown-container">
+            <div class="countdown-circle">
+                <svg viewBox="-500 -500 1000 1000">
+                    <circle id="back-circle" r="450"></circle>
+                    <circle id="front-circle" r="450" pathLength="1"></circle>
+                </svg>
+            </div>
+            <div class="countdown">
+                <div id="countdown-minutes" class="countdown-minutes">5</div>
+                <div id="countdown-minutes-next" class="countdown-minutes next">5</div>
+
+                <div class="countdown-separator">:</div>
+
+                <div id="countdown-seconds-tens" class="countdown-seconds-tens">0</div>
+                <div id="countdown-seconds-tens-next" class="countdown-seconds-tens next">0</div>
+
+                <div id="countdown-seconds-ones" class="countdown-seconds-ones">0</div>
+                <div id="countdown-seconds-ones-next" class="countdown-seconds-ones next">0</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="center-text soon">
+        SOON<div class="tm">TM</div>
+    </div>
+    <script type="text/javascript">
+        const totalTime = 300;
+        var currentTime = totalTime;
+
+        var lastMinutesValue = 5;
+        var lastSecondsTensValue = 0;
+        var lastSecondsOnesValue = 0;
+
+        function startCountdown() {
+            var countdownTimer = setInterval(setTimerText, 1000);
+        }
+
+        function setTimerText() {
+            currentTime--;
+
+            if (currentTime < 0) clearInterval(countdownTimer);
+
+            let currentMinuteValue = Math.floor(currentTime / 60);
+            let secondPart = currentTime % 60;
+            let formattedSeconds = String(secondPart).padStart(2, "0");
+
+            let currentSecondsTensValue = Number(formattedSeconds.substring(0, 1));
+            let currentSecondsOnesValue = Number(formattedSeconds.substring(1, 2));
+
+            let currentMinutesElement = document.getElementById("countdown-minutes");
+            let nextMinutesElement = document.getElementById("countdown-minutes-next");
+
+            let currentSecondsTensElement = document.getElementById("countdown-seconds-tens");
+            let nextSecondsTensElement = document.getElementById("countdown-seconds-tens-next");
+
+            let currentSecondsOnesElement = document.getElementById("countdown-seconds-ones");
+            let nextSecondsOnesElement = document.getElementById("countdown-seconds-ones-next");
+
+            nextMinutesElement.innerText = currentMinuteValue;
+            nextSecondsTensElement.innerText = currentSecondsTensValue;
+            nextSecondsOnesElement.innerText = currentSecondsOnesValue;
+
+            if (currentMinuteValue != lastMinutesValue) currentMinutesElement.classList.add("counter-roll-out");
+            if (currentSecondsTensValue != lastSecondsTensValue) currentSecondsTensElement.classList.add("counter-roll-out");
+            if (currentSecondsOnesValue != lastSecondsOnesValue) currentSecondsOnesElement.classList.add("counter-roll-out");
+
+            if (currentMinuteValue != lastMinutesValue) nextMinutesElement.classList.add("counter-roll-in");
+            if (currentSecondsTensValue != lastSecondsTensValue) nextSecondsTensElement.classList.add("counter-roll-in");
+            if (currentSecondsOnesValue != lastSecondsOnesValue) nextSecondsOnesElement.classList.add("counter-roll-in");
+
+            setTimeout(() => {
+                currentMinutesElement.innerText = currentMinuteValue;
+                currentSecondsTensElement.innerText = currentSecondsTensValue;
+                currentSecondsOnesElement.innerText = currentSecondsOnesValue;
+
+                currentMinutesElement.classList.remove("counter-roll-out");
+                currentSecondsTensElement.classList.remove("counter-roll-out");
+                currentSecondsOnesElement.classList.remove("counter-roll-out");
+
+                nextMinutesElement.classList.remove("counter-roll-in");
+                nextSecondsTensElement.classList.remove("counter-roll-in");
+                nextSecondsOnesElement.classList.remove("counter-roll-in");
+
+                lastMinutesValue = currentMinuteValue;
+                lastSecondsTensValue = currentSecondsTensValue;
+                lastSecondsOnesValue = currentSecondsOnesValue;
+            }, 750);
+        }
+
+        var messageList = [
+            'The #zunderstream is about to begin',
+            'Wanna know what\'s coming up? <span class="link-text">zunderscore.tv/schedule</span>',
+            'Want swag? Go to <span class="link-text">zunderscore.tv/merch</span> to get yours!',
+            'Be sure to follow the channel so you know when I\'m live!'
+        ];
+        var currentMessage = 0;
+
+        function startMessageLoop() {
+            setTimeout(rotateMessage, 30000);
+        }
+
+        function rotateMessage() {
+            currentMessage++;
+
+            if (currentMessage >= messageList.length) currentMessage = 0;
+
+            let currentMessageElement = document.getElementById("current-message");
+            let nextMessageElement = document.getElementById("next-message");
+
+            nextMessageElement.innerHTML = messageList[currentMessage];
+
+            currentMessageElement.classList.add("roll-out");
+            nextMessageElement.classList.add("roll-in");
+
+            setTimeout(rotateMessage, currentMessage === 0 ? 30000 : 15000);
+
+            setTimeout(() => {
+                currentMessageElement.innerHTML = messageList[currentMessage];
+
+                currentMessageElement.classList.remove("roll-out");
+                nextMessageElement.classList.remove("roll-in");
+            }, 1500);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(startCountdown, 6000);
+            setTimeout(startMessageLoop, 6000);
+        });
+    </script>
+</body>
+
+</html>

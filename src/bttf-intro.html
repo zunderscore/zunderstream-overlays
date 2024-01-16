@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<!-- OPTIMAL RESOLUTION: 3840x2160 -->
+
+<head>
+    <title>zunderstream BTTF Intro</title>
+    <style type="text/css">
+        @import url("./styles/typekit.css");
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            width: 3840px;
+            height: 2160px;
+            font-family: 'futura-pt';
+            font-weight: 400;
+            font-style: normal;
+            background-color: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .first-title,
+        .second-title {
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+            }
+        }
+
+        .first-title {
+            animation: fadeIn 500ms linear 4s forwards, fadeOut 500ms linear 8s forwards;
+        }
+
+        .second-title {
+            animation: fadeIn 500ms linear 10s forwards, fadeOut 500ms linear 14s forwards;
+        }
+
+        .title {
+            font-size: 240px;
+            line-height: 240px;
+        }
+
+        .subtitle {
+            font-size: 160px;
+            line-height: 160px;
+        }
+
+        .date-time {
+            position: fixed;
+            top: 70%;
+            width: 100%;
+            display: flex;
+            font-size: 160px;
+            line-height: 160px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeOut 500ms linear 22.5s forwards
+        }
+
+        .date-time>.day,
+        .date-time>.date,
+        .date-time>.year {
+            opacity: 0;
+        }
+
+        .date-time>.day {
+            animation: fadeIn 500ms linear 15.5s forwards;
+        }
+
+        .date-time>.date {
+            animation: fadeIn 500ms linear 17s forwards;
+        }
+
+        .date-time>.year {
+            animation: fadeIn 500ms linear 18.5s forwards;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="first-title">
+            <div class="title">ZUNDERSCORE</div>
+            <div class="subtitle">Presents</div>
+        </div>
+
+        <div class="second-title">
+            <div class="subtitle">A</div>
+            <div class="title">FUTURLAB</div>
+            <div class="subtitle">Game</div>
+        </div>
+
+        <div class="date-time">
+            <div class="day">Thursday</div>
+            <div class="date">November 16</div>
+            <div class="year">2023</div>
+        </div>
+    </main>
+</body>
+
+</html>

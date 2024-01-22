@@ -8,76 +8,7 @@
 <head>
     <title>zunderstream DOS Console</title>
     <style type="text/css">
-        * {
-            margin: 0;
-            padding: 0;
-        }
-
-        :root {
-            --black: #000;
-            --blue: #00a;
-            --green: #0a0;
-            --cyan: #0aa;
-            --red: #a00;
-            --magenta: #a0a;
-            --brown: #950;
-            --white: #aaa;
-            --gray: #555;
-            --light-blue: #55f;
-            --light-green: #55ff40;
-            --light-cyan: #5ff;
-            --light-red: #f55;
-            --light-magenta: #f5f;
-            --yellow: #ff5;
-            --bright-white: #fff;
-        }
-
-        @font-face {
-            font-family: IBM-VGA;
-            src: url(resources/Web437_IBM_VGA_8x16.woff);
-        }
-
-        html {
-            width: 1920px;
-            height: 1080px;
-        }
-
-        body {
-            background-color: var(--black);
-            color: var(--white);
-            font-family: IBM-VGA;
-            font-size: 40px;
-        }
-
-        @keyframes cursorBlink {
-            0% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0;
-            }
-
-            100% {
-                opacity: 1;
-            }
-        }
-
-        .cursor-blink {
-            animation: cursorBlink 0.5s steps(1) 0s infinite forwards;
-        }
-
-        .blink-1s {
-            animation: cursorBlink 2s steps(1) 0s infinite forwards;
-        }
-
-        .bg-black {
-            background-color: var(--black);
-        }
-
-        .bg-blue {
-            background-color: var(--blue);
-        }
+        @import url(./styles/dosbox.css);
 
         .app-frame {
             position: fixed;
@@ -88,10 +19,22 @@
             white-space: nowrap;
         }
 
-        #app-title {
+        #app-titlebar {
             position: fixed;
             top: 0;
             left: 0;
+        }
+
+        #app-title {
+            background-color: var(--white);
+            color: var(--blue);
+            padding: 0 20px;
+        }
+
+        #app-voice-header {
+            position: fixed;
+            left: calc(74 * 20px);
+            top: 0;
         }
 
         #app-frame-left {
@@ -134,56 +77,70 @@
             padding: 0 20px;
         }
 
+        #app-footer img,
+        #app-footer svg {
+            display: none;
+        }
+
         #app-footer .right {
             position: absolute;
             right: 0;
             text-align: right;
             padding: 0 20px;
         }
+
+        .news-bar-blue {
+            color: var(--blue);
+        }
+
+        .hide {
+            display: none;
+            opacity: 0;
+        }
     </style>
     <script src="./scripts/zunderstream-base.js" type="text/javascript"></script>
 </head>
 
 <body>
-    <div style="opacity: 0;">C:\><span class="cursor-blink">_</span></div>
-
     <div class="app-frame bg-blue">
-        <div id="app-title"></div>
+        <div id="app-titlebar">&#x2554;<span id="app-titlebar-left"></span><span id="app-title"></span><span id="app-titlebar-right"></span>&#x2557;</div>
         <div id="app-frame-left"></div>
         <div id="app-frame-right"></div>
         <div id="app-frame-bottom"></div>
         <div id="app-contents">
-            <span class="cursor-blink">_</span>
+            <span class="cursor-blink hide">_</span>
         </div>
+        <div id="app-voice-header">
+            &#x2564;<br />
+            &#x2502;&nbsp;In Voice<br />
+            &#x2514;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2562;</div>
         <div id="app-footer">
-            <span>Welcome to the zunderstream!</span>
+            <span id="footer-text">Welcome to the zunderstream!</span>
             <span class="right"><span id="date">2024-01-16</span> <span id="hours">02</span><span class="blink-1s">:</span><span id="minutes">14</span> <span id="meridian">PM</span></span>
         </div>
     </div>
 
     <script>
         const MAX_LINE_LENGTH = 96;
-        const MAX_LINES = 26;
+        const MAX_LINES = 27;
 
         let streamTitle = "";
 
         function setTitle(title) {
-            if (title.length % 2 === 1) {
-                title = `${title} `;
-            }
-            const sideLength = (MAX_LINE_LENGTH - title.length - 4) / 2
-            const fullTitle = `&#x2554${"&#x2550".repeat(sideLength)} ${title} ${"&#x2550".repeat(sideLength)}&#x2557`;
+            const sideLength = (MAX_LINE_LENGTH - title.length - 4) / 2;
 
-            setElementContents("app-title", fullTitle);
+            setElementContents("app-titlebar-left", `${"&#x2550;".repeat(sideLength)}`);
+            setElementContents("app-title", title);
+            setElementContents("app-titlebar-right", `${"&#x2550;".repeat(title.length % 2 === 1 ? sideLength + 1 : sideLength)}`);
         }
 
         let appFrameSideContent = []
-        appFrameSideContent.length = MAX_LINES - 2;
+        appFrameSideContent.length = MAX_LINES - 3;
         appFrameSideContent.fill("&#x2551");
 
         setElementContents("app-frame-left", appFrameSideContent.join("<br/>"));
         setElementContents("app-frame-right", appFrameSideContent.join("<br/>"));
-        setElementContents("app-frame-bottom", `&#x255A${"&#x2550".repeat(MAX_LINE_LENGTH - 2)}&#x255D`);
+        setElementContents("app-frame-bottom", `&#x255A;${"&#x2550;".repeat(MAX_LINE_LENGTH - 2)}&#x255D;`);
 
         async function refreshLowerThird() {
             const url = `${zunderstreamAdminRootUrl()}/lowerthird`;
@@ -198,6 +155,14 @@
             }
         }
 
+        async function getLatestNewsBarItem() {
+            const currentItem = JSON.parse(await getFirebotCustomVariable("currentNewsBarItem"));
+            setElementContents("footer-text", currentItem);
+            //const etherealElement = document.createElement("div");
+            //etherealElement.innerHTML = currentItem;
+            //setElementText("footer-text", etherealElement.innerText.replace(/^"/i, "").replace(/"$/i, ""));
+        }
+
         function updateTimeParts() {
             let currentTime = new Date();
 
@@ -210,9 +175,11 @@
         document.addEventListener("DOMContentLoaded", async () => {
             updateTimeParts();
             refreshLowerThird();
+            await getLatestNewsBarItem();
 
             setInterval(updateTimeParts, 1000);
             setInterval(refreshLowerThird, 5000);
+            setInterval(getLatestNewsBarItem, 1000);
         });
     </script>
 </body>

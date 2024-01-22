@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<!-- OPTIMAL RESOLUTION: 1920x1080 -->
+<!-- FONT REFERENCE: https://int10h.org/oldschool-pc-fonts/fontlist/font?ibm_vga_8x16 -->
+
+<html>
+
+<head>
+    <title>zunderstream DOS Boot Sequence</title>
+    <style type="text/css">
+        @import url(./styles/dosbox.css);
+
+        #bios-post {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        #bios-logo {
+            position: fixed;
+            top: 0;
+            right: 0;
+        }
+
+        #bios-logo>img {
+            height: 200px;
+        }
+
+        #bios-mini-logo {
+            position: fixed;
+            top: 0;
+            left: 8px;
+        }
+
+        #bios-mini-logo>img {
+            height: 80px;
+        }
+
+        #bios-post-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        #bios-post-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .bios-hotkey {
+            color: var(--bright-white);
+        }
+
+        #dos-setup {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--blue);
+            color: var(--white);
+        }
+
+        #dos-setup-title {
+            position: fixed;
+            top: 40px;
+            left: 40px;
+        }
+
+        #dos-setup-info-text {
+            position: fixed;
+            top: calc(4 * 40px);
+            left: calc(8 * 20px);
+            right: calc(8 * 20px);
+        }
+
+        #marquee-text {
+            display: inline-block;
+            position: fixed;
+            top: calc(13 * 40px);
+            left: calc(12 * 20px);
+            right: calc(8 * 20px);
+        }
+
+        #dos-setup-progress-bar-outer-frame-top {
+            position: fixed;
+            top: calc(16 * 40px);
+            left: calc(10 * 20px);
+        }
+
+        #dos-setup-progress-bar-outer-frame-left {
+            position: fixed;
+            top: calc(17 * 40px);
+            left: calc(10 * 20px);
+        }
+
+        #dos-setup-progress-bar-outer-frame-right {
+            position: fixed;
+            top: calc(17 * 40px);
+            right: calc(10 * 20px);
+        }
+
+        #dos-setup-progress-bar-outer-frame-bottom {
+            position: fixed;
+            top: calc(22 * 40px);
+            left: calc(10 * 20px);
+        }
+
+        #dos-setup-progress-bar-status-text {
+            position: fixed;
+            top: calc(17 * 40px);
+            left: calc(12 * 20px);
+        }
+
+        #dos-setup-progress-bar-percent-indicator {
+            position: fixed;
+            top: calc(18 * 40px);
+            left: calc(46 * 20px);
+        }
+
+        #dos-setup-progress-bar-inner-frame-top {
+            position: fixed;
+            top: calc(19 * 40px);
+            left: calc(20 * 20px);
+        }
+
+        #dos-setup-progress-bar-inner-frame-left {
+            position: fixed;
+            top: calc(20 * 40px);
+            left: calc(20 * 20px);
+        }
+
+        #dos-setup-progress-bar-inner-frame-right {
+            position: fixed;
+            top: calc(20 * 40px);
+            right: calc(20 * 20px);
+        }
+
+        #dos-setup-progress-bar-inner-frame-bottom {
+            position: fixed;
+            top: calc(21 * 40px);
+            left: calc(20 * 20px);
+        }
+
+        #dos-setup-progress-bar-indicator {
+            position: fixed;
+            top: calc(20 * 40px);
+            left: calc(22 * 20px);
+            background-color: var(--yellow);
+        }
+
+        #dos-setup-footer {
+            position: fixed;
+            top: calc(26 * 40px);
+            left: 0;
+            right: 0;
+            padding: 0 20px;
+            background-color: var(--white);
+            color: var(--black);
+        }
+
+        #dos-setup-footer .right {
+            position: absolute;
+            top: 0;
+            left: calc(72 * 20px);
+        }
+
+        .link-text {
+            background-color: var(--white);
+            color: var(--blue);
+            padding: 0 20px;
+        }
+    </style>
+    <script src="./scripts/zunderstream-base.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <div id="initial-waiting">Waiting to boot stream...<span id="powering-on" class="hide">&nbsp;Powering on now</span><span class="cursor-blink">_</span></div>
+
+    <div id="bios-post" class="hide">
+        <div id="bios-logo"><img src="./images/z_icon.png"></div>
+        <div id="bios-mini-logo"><img src="./images/retro/icebear.png"></div>
+        <div id="bios-post-header">
+            &nbsp;&nbsp;&nbsp;Ice Bear BIOS v3.00<br />
+            &nbsp;&nbsp;&nbsp;Copyright (c) 2020-2024, zundermedia<br /><br />
+            AMD BIOS for zunderstream F1a<br /><br />
+            Main Processor : AMD Ryzen 9 3900X 12-Core Processor, 3801 Mhz<br />
+            Memory Testing : <span id="bios-memory-byte-count">0</span>MB OK<br /><br />
+            <span id="bios-memory-speed" class="hide">Memory Runs at Boy Howdy Super Fast Speed</span><br /><br />
+            <span id="bios-storage-details" class="hide">
+                IDE Channel 1 : LOL LMAOROFL 1TB 1.0<br />
+                IDE Channel 2 : OMG WTFBBQ 2TB 3.05
+            </span><br /><br />
+            <span id="bios-detecting-ide-drives" class="hide">
+                Detecting IDE Drives...&nbsp;<span id="bios-storage-scan-done" class="hide">Done!</span>
+            </span>
+        </div>
+        <div id="bios-post-footer">
+            &lt;<span class="bios-hotkey">DEL</span>&gt;:BIOS Setup&nbsp;&lt;<span class="bios-hotkey">F5</span>&gt;:Refresh&nbsp;&lt;<span class="bios-hotkey">F12</span>&gt;:Boot Menu&nbsp;&lt;<span class="bios-hotkey">End</span>&gt;:Zflash<br />
+            <span id="bios-footer-date-time"></span>
+        </div>
+    </div>
+
+    <div id="dos-setup" class="hide">
+        <div id="dos-setup-title"></div>
+        <div id="dos-setup-contents">
+            <div id="dos-setup-info-text">
+                Please wait while Setup loads the stream.<br /><br />
+                &nbsp;&nbsp;&#x2022;&nbsp;zunderscore is getting ready to start.<br /><br />
+                For more information about the zunderstream, including schedule, social links, and more, visit <span class="link-text">zunderscore.tv</span>.<br /><br />
+                Tip of the Day<br /><br />
+                &nbsp;&nbsp;&#x2022;<div id="marquee-text"></div>
+            </div>
+
+            <div id="dos-setup-progress-bar">
+                <div id="dos-setup-progress-bar-outer-frame-top"></div>
+                <div id="dos-setup-progress-bar-outer-frame-left">&#x2551;<br />&#x2551;<br />&#x2551;<br />&#x2551;<br />&#x2551;</div>
+                <div id="dos-setup-progress-bar-outer-frame-right">&#x2551;<br />&#x2551;<br />&#x2551;<br />&#x2551;<br />&#x2551;</div>
+                <div id="dos-setup-progress-bar-outer-frame-bottom"></div>
+                <div id="dos-setup-progress-bar-status-text">Setup is loading stream... <span id="status-text-spinner"></span></div>
+                <div id="dos-setup-progress-bar-percent-indicator">&nbsp;0%</div>
+                <div id="dos-setup-progress-bar-inner-frame-top"></div>
+                <div id="dos-setup-progress-bar-inner-frame-left">&#x2502;</div>
+                <div id="dos-setup-progress-bar-inner-frame-right">&#x2502;</div>
+                <div id="dos-setup-progress-bar-inner-frame-bottom"></div>
+                <div id="dos-setup-progress-bar-indicator"></div>
+            </div>
+        </div>
+        <div id="dos-setup-footer">F1=Help&nbsp;&nbsp;F3=Exit<div class="right">&#x2502; Copying: PETLOAF.EXE</div>
+        </div>
+    </div>
+
+    <script>
+        const MAX_LINE_LENGTH = 96;
+        const MAX_LINES = 27;
+
+        const TOTAL_MEMORY_MB = 96 * 1024;
+        let currentMemoryKbValue = 0;
+
+        function powerOn() {
+            const audio = new Audio("./sounds/dos/dos_power_on.mp3");
+            audio.play();
+            document.getElementById("powering-on").classList.remove("hide");
+            setTimeout(doBiosPost, 2000);
+        }
+
+        function doBiosPost() {
+            document.getElementById("initial-waiting").classList.add("hide");
+            setTimeout(() => {
+                document.getElementById("bios-post").classList.remove("hide");
+
+                setupBiosFooter();
+                doMemoryTest();
+            }, 250);
+        }
+
+        function setupBiosFooter() {
+            const currentTime = new Date();
+
+            setElementText("bios-footer-date-time", `2024-01-17-IC3-B34R-00`);
+        }
+
+        function doMemoryTest() {
+            currentMemoryKbValue += 4096;
+
+            setElementText("bios-memory-byte-count", String(currentMemoryKbValue));
+
+            if (currentMemoryKbValue >= TOTAL_MEMORY_MB) {
+                showMemorySpeed();
+            } else {
+                setTimeout(doMemoryTest, 50);
+            }
+        }
+
+        function showMemorySpeed() {
+            document.getElementById("bios-memory-speed").classList.remove("hide");
+            setTimeout(showBiosStorageDetails, 2000);
+        }
+
+        function showBiosStorageDetails() {
+            document.getElementById("bios-storage-details").classList.remove("hide");
+            setTimeout(showIdeDetectingMessage, 1500);
+        }
+
+        function showIdeDetectingMessage() {
+            const audio = new Audio("./sounds/dos/floppy_drive_boot_check.mp3");
+            audio.play();
+            document.getElementById("bios-detecting-ide-drives").classList.remove("hide");
+            setTimeout(showBiosStorageScanDone, 3000);
+        }
+
+        function showBiosStorageScanDone() {
+            const audio = new Audio("./sounds/dos/pc_bios_post.mp3");
+            audio.play();
+            document.getElementById("bios-storage-scan-done").classList.remove("hide");
+            setTimeout(showMbrBoot, 500);
+        }
+
+        function showMbrBoot() {
+            document.getElementById("bios-post").classList.add("hide");
+            //TODO
+
+            setTimeout(showDOSSetup, 500);
+        }
+
+        function showDOSSetup() {
+            document.getElementById("dos-setup").classList.remove("hide");
+
+            setTitle();
+            setupProgressBarContainer();
+            rotateMarquee();
+            startCountdown();
+            setInterval(updateSpinners, 100);
+        }
+
+        const PROGRESS_BAR_MARGIN = 21;
+
+        const TITLE = "zunderstream Setup";
+
+        const MARQUEE_ITEMS = [
+            `The zunderstream is about to begin.`,
+            `To see the stream schedule, including special events, go to <span class="link-text">zunderscore.tv/schedule</span>.`,
+            `You can get your own zunderstream merch at <span class="link-text">zunderscore.tv/merch</span>!`,
+            `Be sure to follow the channel so you know when zunder is live!`
+        ];
+        let currentMarqueeItem = -1;
+
+        // maps current character in 'spinner' to next character of spinner
+        const spinnerCharMap = {
+            '-': '\\',
+            '\\': '|',
+            '|': '/',
+            '/': '-',
+        };
+
+        function updateSpinners() {
+            const element = document.getElementById("status-text-spinner");
+            const text = element.innerText;
+            if (!spinnerCharMap.hasOwnProperty(text)) {
+                element.innerText = '-';
+            } else {
+                if (Math.random() <= 0.6) {
+                    element.innerText = spinnerCharMap[text];
+                }
+            }
+        }
+
+        const TOTAL_TIME = 300;
+        var currentTime = 0;
+
+        let countdownTimer;
+
+        function setTitle() {
+            setElementContents("dos-setup-title", `${TITLE}<br />${"&#x2550;".repeat(TITLE.length)}`);
+        }
+
+        function setupProgressBarContainer() {
+            setElementContents("dos-setup-progress-bar-outer-frame-top", `&#x2554;${"&#x2550;".repeat(MAX_LINE_LENGTH - (11 * 2))}&#x2557;`);
+            setElementContents("dos-setup-progress-bar-outer-frame-bottom", `&#x255A;${"&#x2550;".repeat(MAX_LINE_LENGTH - (11 * 2))}&#x255D;`);
+            setElementContents("dos-setup-progress-bar-inner-frame-top", `&#x250C;${"&#x2500;".repeat(MAX_LINE_LENGTH - (PROGRESS_BAR_MARGIN * 2))}&#x2510;`);
+            setElementContents("dos-setup-progress-bar-inner-frame-bottom", `&#x2514;${"&#x2500;".repeat(MAX_LINE_LENGTH - (PROGRESS_BAR_MARGIN * 2))}&#x2518;`);
+        }
+
+        function rotateMarquee() {
+            currentMarqueeItem++;
+
+            if (currentMarqueeItem >= MARQUEE_ITEMS.length) {
+                currentMarqueeItem = 0;
+            }
+
+            setElementContents("marquee-text", MARQUEE_ITEMS[currentMarqueeItem]);
+
+            setTimeout(rotateMarquee, (currentMarqueeItem === 0 ? 30 : 15) * 1000);
+        }
+
+        function updateCounter() {
+            currentTime++;
+
+            if (currentTime >= TOTAL_TIME) {
+                clearInterval(countdownTimer);
+
+                setElementText("dos-setup-progress-bar-percent-indicator", `100%`);
+                setElementContents("dos-setup-progress-bar-indicator", "&nbsp;".repeat(MAX_LINE_LENGTH - ((PROGRESS_BAR_MARGIN + 1) * 2)));
+                setElementText("dos-setup-progress-bar-status-text", "Stream loaded! Starting soon...");
+            } else {
+                const percentComplete = Math.floor(currentTime * 100 / TOTAL_TIME);
+                const progressBarLength = Math.floor(percentComplete * (MAX_LINE_LENGTH - ((PROGRESS_BAR_MARGIN + 1) * 2)) / 100);
+
+                setElementContents("dos-setup-progress-bar-percent-indicator", `&nbsp;${percentComplete}%`);
+                setElementContents("dos-setup-progress-bar-indicator", "&nbsp;".repeat(progressBarLength));
+            }
+        }
+
+        function startCountdown() {
+            countdownTimer = setInterval(updateCounter, 1000);
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            setTimeout(powerOn, 2000);
+        });
+    </script>
+</body>
+
+</html>

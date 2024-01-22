@@ -1,0 +1,76 @@
+@font-face {
+    font-family: IBM-VGA;
+    src: url(../resources/Web437_IBM_VGA_8x16.woff);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --black: #000;
+    --blue: #00a;
+    --green: #0a0;
+    --cyan: #0aa;
+    --red: #a00;
+    --magenta: #a0a;
+    --brown: #950;
+    --white: #aaa;
+    --gray: #555;
+    --light-blue: #55f;
+    --light-green: #55ff40;
+    --light-cyan: #5ff;
+    --light-red: #f55;
+    --light-magenta: #f5f;
+    --yellow: #ff5;
+    --bright-white: #fff;
+}
+
+html {
+    width: 1920px;
+    height: 1080px;
+}
+
+body {
+    background-color: var(--black);
+    color: var(--white);
+    font-family: IBM-VGA;
+    font-size: 40px;
+    line-height: 40px;
+}
+
+.hide {
+    display: none;
+    visibility: hidden;
+}
+
+@keyframes cursorBlink {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.cursor-blink {
+    animation: cursorBlink 0.5s steps(1) 0s infinite forwards;
+}
+
+.blink-1s {
+    animation: cursorBlink 2s steps(1) 0s infinite forwards;
+}
+
+.bg-black {
+    background-color: var(--black);
+}
+
+.bg-blue {
+    background-color: var(--blue);
+}

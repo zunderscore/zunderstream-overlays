@@ -1,6 +1,6 @@
 ## zunderstream Overlays
 
-My stream overlays live here. If you wanna use/adapt it, go for it.
+My stream overlays live here. If you wanna use/adapt it, go for it. Just be decent and credit me, yeah? Point to my stream or something, I dunno. https://zunderscore.tv is probably best.
 
 Only thing of note:
 

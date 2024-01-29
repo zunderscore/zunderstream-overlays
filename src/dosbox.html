@@ -156,11 +156,8 @@
         }
 
         async function getLatestNewsBarItem() {
-            const currentItem = JSON.parse(await getFirebotCustomVariable("currentNewsBarItem"));
+            const currentItem = await getFirebotCustomVariable("currentNewsBarItem");
             setElementContents("footer-text", currentItem);
-            //const etherealElement = document.createElement("div");
-            //etherealElement.innerHTML = currentItem;
-            //setElementText("footer-text", etherealElement.innerText.replace(/^"/i, "").replace(/"$/i, ""));
         }
 
         function updateTimeParts() {

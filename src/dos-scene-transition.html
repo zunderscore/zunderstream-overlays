@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<!-- OPTIMAL RESOLUTION: 3840x2160 -->
+
+<html>
+
+<head>
+    <title>zunderstream DOS Scene Transition</title>
+    <link rel="stylesheet" type="text/css" href="./styles/dosbox.css">
+    <style type="text/css">
+        body {
+            zoom: 2;
+        }
+    </style>
+</head>
+
+<body>
+    <div>Z:\&gt;<span id="prompt"></span><span id="post-prompt" class="hide"><br />Changing scene...</span><span class="cursor-blink">_</span></div>
+
+    <script type="text/javascript">
+        const SCENE_CHANGE_TEXT = "OBS.EXE /CHANGESCENE";
+        let timer;
+        let currentChar = 0;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(() => {
+                timer = setInterval(() => {
+                    currentChar++;
+
+                    document.getElementById("prompt").innerText = SCENE_CHANGE_TEXT.substring(0, currentChar);
+
+                    if (currentChar >= SCENE_CHANGE_TEXT.length) {
+                        clearInterval(timer);
+                        setTimeout(() => {
+                            document.getElementById("post-prompt").classList.remove("hide");
+                        }, 250);
+                    }
+                }, 25);
+            }, 500);
+        });
+    </script>
+</body>
+
+</html>

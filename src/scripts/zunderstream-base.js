@@ -15,7 +15,7 @@ async function getFirebotCustomVariable(variableName) {
 
     const response = await fetch(url);
 
-    return await response.text();
+    return JSON.parse(await response.text());
 }
 
 async function setFirebotCustomVariable(variableName, value, ttl) {

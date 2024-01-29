@@ -205,6 +205,8 @@
         </div>
     </div>
 
+    <div id="mbr-boot" class="hide"><span id="starting-dos" class="hide"><br />Starting ZNDR-DOS setup...</span><span class="cursor-blink">_</span></div>
+
     <div id="dos-setup" class="hide">
         <div id="dos-setup-title"></div>
         <div id="dos-setup-contents">
@@ -230,7 +232,7 @@
                 <div id="dos-setup-progress-bar-indicator"></div>
             </div>
         </div>
-        <div id="dos-setup-footer">F1=Help&nbsp;&nbsp;F3=Exit<div class="right">&#x2502; Copying: PETLOAF.EXE</div>
+        <div id="dos-setup-footer">F1=Help&nbsp;&nbsp;F3=Exit<div class="right">&#x2502; Copying: <span id="filename">PETLOAF.EXE</span></div>
         </div>
     </div>
 
@@ -302,19 +304,26 @@
 
         function showMbrBoot() {
             document.getElementById("bios-post").classList.add("hide");
-            //TODO
-
-            setTimeout(showDOSSetup, 500);
+            document.getElementById("mbr-boot").classList.remove("hide");
+            setTimeout(() => {
+                document.getElementById("starting-dos").classList.remove("hide");
+            }, 1000);
+            setTimeout(showDOSSetup, 3000);
         }
 
         function showDOSSetup() {
-            document.getElementById("dos-setup").classList.remove("hide");
+            document.getElementById("mbr-boot").classList.add("hide");
 
-            setTitle();
-            setupProgressBarContainer();
-            rotateMarquee();
-            startCountdown();
-            setInterval(updateSpinners, 100);
+            setTimeout(() => {
+                document.getElementById("dos-setup").classList.remove("hide");
+
+                setTitle();
+                setupProgressBarContainer();
+                rotateMarquee();
+                startCountdown();
+                startFilenameLoop();
+                spinnerLoop = setInterval(updateSpinners, 100);
+            }, 500);
         }
 
         const PROGRESS_BAR_MARGIN = 21;
@@ -337,6 +346,8 @@
             '/': '-',
         };
 
+        let spinnerLoop;
+
         function updateSpinners() {
             const element = document.getElementById("status-text-spinner");
             const text = element.innerText;
@@ -353,6 +364,7 @@
         var currentTime = 0;
 
         let countdownTimer;
+        let filenameTimer;
 
         function setTitle() {
             setElementContents("dos-setup-title", `${TITLE}<br />${"&#x2550;".repeat(TITLE.length)}`);
@@ -382,6 +394,7 @@
 
             if (currentTime >= TOTAL_TIME) {
                 clearInterval(countdownTimer);
+                clearInterval(spinnerLoop);
 
                 setElementText("dos-setup-progress-bar-percent-indicator", `100%`);
                 setElementContents("dos-setup-progress-bar-indicator", "&nbsp;".repeat(MAX_LINE_LENGTH - ((PROGRESS_BAR_MARGIN + 1) * 2)));
@@ -399,8 +412,50 @@
             countdownTimer = setInterval(updateCounter, 1000);
         }
 
+        let lastChatter = "";
+        const fileExtensions = [
+            "EXE",
+            "DLL",
+            "COM",
+            "SYS",
+            "386",
+            "DRV",
+            "BAT",
+            "INI",
+            "DAT"
+        ];
+
+        async function updateFilename() {
+            let chatter = String(await getFirebotCustomVariable("lastChatter")).toUpperCase();
+            if (chatter !== lastChatter) {
+                lastChatter = chatter;
+                if (chatter.length > 8) {
+                    chatter = `${chatter.substring(0, 6)}~${Math.floor(Math.random() * 4) + 1}`;
+                }
+                setElementContents("filename", `${chatter}.${fileExtensions[Math.floor(Math.random() * fileExtensions.length)]}`);
+            }
+        }
+
+        function startFilenameLoop() {
+            filenameTimer = setInterval(updateFilename, 500);
+        }
+
+        let bootSignalLoop;
+
+        async function listenForBootSignal() {
+            const bootDOS = await getFirebotCustomVariable("bootDOS");
+
+            if (bootDOS === 1) {
+                clearInterval(bootSignalLoop);
+                bootSignalLoop = undefined;
+
+                await setFirebotCustomVariable("bootDOS", 0, 1);
+                powerOn();
+            }
+        }
+
         document.addEventListener("DOMContentLoaded", async () => {
-            setTimeout(powerOn, 2000);
+            bootSignalLoop = setInterval(listenForBootSignal, 1000);
         });
     </script>
 </body>

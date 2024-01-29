@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<!-- OPTIMAL RESOLUTION: 1920x1080 -->
+
+<html>
+
+<head>
+    <title>zunderstream Windows 98</title>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/98.css" />
+    <link rel="stylesheet" type="text/css" href="./styles/win98.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/pi0/clippyjs/assets/clippy.css">
+    <style type="text/css">
+        #desktop {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #008081;
+        }
+
+        .news-bar-blue {
+            color: #06f;
+        }
+
+        #taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 26px;
+            padding: 2px;
+            box-sizing: border-box;
+            background: silver;
+            box-shadow: 0 -1px #fff, 0 -2px #dfdfdf;
+        }
+
+        #taskbar>* {
+            height: 22px;
+            box-sizing: border-box;
+            display: inline-block;
+        }
+
+        #taskbar * {
+            vertical-align: middle;
+        }
+
+        #taskbar .button {
+            padding: 2px;
+            box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
+        }
+
+        #taskbar img {
+            height: 16px;
+        }
+
+        .taskbar-separator {
+            width: 2px;
+            box-shadow: inset -1px 0 #fff, inset 1px 0 #808080;
+        }
+
+        .taskbar-handle {
+            margin: 2px 0;
+            height: 18px !important;
+            width: 3px;
+            box-shadow: inset -1px -1px #808080, inset 1px 1px #fff;
+        }
+
+        .taskbar-application {
+            width: 160px;
+            max-width: 160px;
+            padding: 3px 4px;
+            margin-right: 3px;
+            box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
+        }
+
+        .taskbar-application>img {
+            width: 16px;
+        }
+
+        .taskbar-application>.title {
+            display: inline-block;
+            max-width: calc(100% - 26px);
+            margin-left: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .taskbar-application.active {
+            background-color: #e0e0e0;
+            box-shadow: inset -1px -1px #fff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px grey;
+            font-weight: bold;
+        }
+
+        #start-button {
+            font-weight: bold;
+            width: auto;
+            min-width: 0;
+            padding: 4px !important;
+        }
+
+        #start-button img {
+            height: 14px !important;
+            margin-right: 4px;
+            vertical-align: middle;
+        }
+
+        #taskbar-quick-launch {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        #taskbar-quick-launch>* {
+            margin: 0 3px;
+        }
+
+        #taskbar-applications {
+            display: inline-flex;
+            flex-shrink: 1;
+        }
+
+        #system-tray {
+            position: absolute;
+            right: 2px;
+            top: 2px;
+            display: flex;
+            padding: 3px 0 3px 3px;
+            box-shadow: inset -1px -1px #fff, inset 1px 1px #808080;
+        }
+
+        #system-tray-clock {
+            margin-top: 3px;
+            margin-right: 8px;
+            width: 52px;
+            text-align: right;
+        }
+
+        #discord-active-desktop {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 200px;
+            height: 300px;
+            background-color: #000;
+        }
+
+        #discord-active-desktop img {
+            width: 100%;
+        }
+    </style>
+    <script src="./scripts/zunderstream-base.js"></script>
+</head>
+
+<body>
+    <div id="desktop"></div>
+
+    <div id="taskbar">
+        <div id="start-button" class="button">
+            <img src="./images/z_icon.png"><span>Start</span>
+        </div>
+        <div class="taskbar-separator"></div>
+        <div class="taskbar-handle"></div>
+        <div id="taskbar-quick-launch">
+            <img src="./images/win98/edge_32x32.png">
+            <img src="./images/win98/obs_32x32.png">
+            <img src="./images/win98/firebot_32x32.png">
+        </div>
+        <div class="taskbar-separator"></div>
+        <div class="taskbar-handle"></div>
+        <div id="taskbar-applications">
+            <div class="taskbar-application active">
+                <img src="./images/win98/joystick_32x32.png">
+                <span class="title" id="taskbar-stream-title">zunderstream Content</span>
+            </div>
+            <div class="taskbar-application">
+                <img src="./images/win98/camera_32x32.png">
+                <span class="title">Camera Feed</span>
+            </div>
+        </div>
+        <div id="system-tray">
+            <div id="system-tray-icons">
+                <img src="./images/win98/loaf_32x32.png">
+                <img src="./images/win98/bean_32x32.png">
+                <img src="./images/win98/wow_32x32.png">
+            </div>
+            <div id="system-tray-clock"></div>
+        </div>
+    </div>
+
+    <div id="discord-active-desktop">
+        <img src="./images/win98/voice_header.png">
+    </div>
+
+    <script src="https://unpkg.com/jquery@3.2.1"></script>
+    <script src="https://unpkg.com/clippyjs@0.0.3/dist/clippy.js"></script>
+    <script type="text/javascript">
+        let streamTitle = "";
+        let agent;
+
+        function updateClock() {
+            const date = new Date();
+
+            setElementText("system-tray-clock", `${date.getHours() % 12}:${String(date.getMinutes()).padStart(2, "0")} ${date.getHours() > 11 ? "PM" : "AM"}`);
+        }
+
+        async function refreshLowerThird() {
+            const url = `${zunderstreamAdminRootUrl()}/lowerthird`;
+            const response = await fetch(url);
+
+            if (response.ok) {
+                const newStreamTitle = await response.text();
+                if (newStreamTitle !== streamTitle) {
+                    streamTitle = newStreamTitle;
+                    setElementContents("taskbar-stream-title", streamTitle);
+                }
+            }
+        }
+
+        window.CLIPPY_CDN = "https://cdn.jsdelivr.net/gh/pi0/clippyjs/assets/agents/";
+        function loadClippy() {
+            clippy.load("Clippy", (a) => {
+                agent = a;
+
+                agent.moveTo(780, 220);
+                agent.play("Greeting");
+
+                setInterval(() => {
+                    agent.animate();
+                }, 5 * 60 * 1000)
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            updateClock();
+            await refreshLowerThird();
+
+            setInterval(updateClock, 1000);
+            setInterval(refreshLowerThird, 5000);
+            setTimeout(loadClippy, 1 * 1000);
+        });
+    </script>
+</body>
+
+</html>

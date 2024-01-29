@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<!-- OPTIMAL RESOLUTION: 1920x1080 -->
+
+<html>
+
+<head>
+    <title>zunderstream Windows 98</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css" />
+    <link rel="stylesheet" href="./styles/win98.css" />
+    <style type="text/css">
+        #camera-window {
+            position: absolute;
+        }
+
+        #camera-window .window-body {
+            width: 224px;
+            height: 123px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="window" id="camera-window">
+        <div class="title-bar inactive">
+            <div class="title-bar-wrapper">
+                <div class="title-bar-icon">
+                    <img src="./images/win98/camera_32x32.png">
+                </div>
+                <div class="title-bar-text">
+                    <span id="window-stream-title">Camera Feed</span>
+                </div>
+            </div>
+            <div class="title-bar-controls">
+                <button aria-label="Close"></button>
+            </div>
+        </div>
+        <div class="window-body"></div>
+    </div>
+</body>
+
+</html>

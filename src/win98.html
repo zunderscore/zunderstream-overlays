@@ -221,10 +221,16 @@
                 agent.moveTo(780, 220);
                 agent.play("Greeting");
 
-                setInterval(() => {
-                    agent.animate();
-                }, 5 * 60 * 1000)
+                setInterval(checkRedemption, 5000);
             });
+        }
+
+        async function checkRedemption() {
+            const redemption = await getFirebotCustomVariable("win98RedemptionId");
+            if (redemption != null && redemption !== "") {
+                agent.animate();
+                await setFirebotCustomVariable("win98Redeemed", true, 5);
+            }
         }
 
         document.addEventListener("DOMContentLoaded", async () => {

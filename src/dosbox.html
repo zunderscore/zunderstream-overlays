@@ -156,7 +156,10 @@
         }
 
         async function getLatestNewsBarItem() {
-            const currentItem = await getFirebotCustomVariable("currentNewsBarItem");
+            let currentItem = await getFirebotCustomVariable("currentNewsBarItem");
+
+            currentItem = currentItem.replace("❤️", "&#x2665;");
+
             setElementContents("footer-text", currentItem);
         }
 

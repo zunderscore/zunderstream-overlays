@@ -156,9 +156,9 @@
         let enableCoworkShade = false;
 
         async function checkCoworkSetup() {
-            headerMessageRight = (await getFirebotCustomVariable("coworkHeaderMessageRight")).replace(/^"|"$/g, "");
-            footerMessageLeft = (await getFirebotCustomVariable("coworkFooterMessageLeft")).replace(/^"|"$/g, "");
-            footerMessageRight = (await getFirebotCustomVariable("coworkFooterMessageRight")).replace(/^"|"$/g, "");
+            headerMessageRight = await getFirebotCustomVariable("coworkHeaderMessageRight");
+            footerMessageLeft = await getFirebotCustomVariable("coworkFooterMessageLeft");
+            footerMessageRight = await getFirebotCustomVariable("coworkFooterMessageRight");
 
             if (headerMessageRight && headerMessageRight.toLowerCase() != "null") {
                 setElementContents("header-right", headerMessageRight);
@@ -172,7 +172,7 @@
                 setElementContents("footer-right", footerMessageRight);
             }
 
-            newEnableCoworkShade = (await getFirebotCustomVariable("enableCoworkShade")) == "true";
+            newEnableCoworkShade = (await getFirebotCustomVariable("enableCoworkShade")) === true;
 
             if (enableCoworkShade != newEnableCoworkShade) {
                 enableCoworkShade = newEnableCoworkShade;

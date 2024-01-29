@@ -71,7 +71,10 @@
         }
 
         async function getLatestNewsBarItem() {
-            const currentItem = JSON.parse(await getFirebotCustomVariable("currentNewsBarItem"));
+            let currentItem = await getFirebotCustomVariable("currentNewsBarItem");
+
+            currentItem = currentItem.replace("❤️", "");
+
             setElementContents("news-bar-text", currentItem);
         }
 

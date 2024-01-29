@@ -126,10 +126,10 @@
         }
 
         async function checkPromoImage() {
-            showPromoImage = await getFirebotCustomVariable("showPromoImage") === "true";
+            showPromoImage = await getFirebotCustomVariable("showPromoImage") === true;
 
             if (showPromoImage === true) {
-                let newPromoImagePath = (await getFirebotCustomVariable("promoImagePath")).replace(/(^"|"$)/g, "");
+                let newPromoImagePath = await getFirebotCustomVariable("promoImagePath");
                 let timeout = 0;
 
                 if (newPromoImagePath != promoImagePath) {
@@ -151,7 +151,7 @@
         document.addEventListener("DOMContentLoaded", async () => {
             updateTimeParts();
 
-            promoImagePath = (await getFirebotCustomVariable("promoImagePath")).replace(/(^"|"$)/g, "");
+            promoImagePath = await getFirebotCustomVariable("promoImagePath");
             checkPromoImage();
 
             setInterval(updateTimeParts, 1000);

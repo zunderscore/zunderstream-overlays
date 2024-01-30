@@ -50,7 +50,7 @@
         let streamTitle = "";
 
         async function refreshLowerThird() {
-            const url = `${zunderstreamAdminRootUrl()}/lowerthird`;
+            const url = `${zunderstreamAdminRootUrl()}/stream-title`;
             const response = await fetch(url);
 
             if (response.ok) {

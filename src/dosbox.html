@@ -143,20 +143,26 @@
         setElementContents("app-frame-bottom", `&#x255A;${"&#x2550;".repeat(MAX_LINE_LENGTH - 2)}&#x255D;`);
 
         async function refreshLowerThird() {
-            const url = `${zunderstreamAdminRootUrl()}/lowerthird`;
+            const url = `${zunderstreamAdminRootUrl()}/stream-title`;
             const response = await fetch(url);
 
             if (response.ok) {
                 const newStreamTitle = await response.text();
-                if (newStreamTitle !== streamTitle) {
-                    streamTitle = newStreamTitle;
+
+                // Create a fake element to strip out any HTML
+                const cleanElement = document.createElement("span");
+                cleanElement.innerHTML = newStreamTitle;
+                cleanTitle = cleanElement.innerText.trim();
+
+                if (cleanTitle !== streamTitle) {
+                    streamTitle = cleanTitle;
                     setTitle(streamTitle);
                 }
             }
         }
 
         async function getLatestNewsBarItem() {
-            let currentItem = await getFirebotCustomVariable("currentNewsBarItem");
+            let currentItem = await getFirebotCustomVariable("currentNewsBarItem") ?? "";
 
             currentItem = currentItem.replace("❤️", "&#x2665;");
 

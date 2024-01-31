@@ -126,10 +126,26 @@
         }
 
         async function checkPromoImage() {
-            showPromoImage = await getFirebotCustomVariable("showPromoImage") === true;
+            const url = `${zunderstreamAdminRootUrl()}/show-promo-image`;
+            const response = await fetch(url);
 
-            if (showPromoImage === true) {
-                let newPromoImagePath = await getFirebotCustomVariable("promoImagePath");
+            if (response.ok) {
+                showPromoImage = await response.json() === true;
+
+                if (showPromoImage === true) {
+                    await refreshPromoImage();
+                } else {
+                    document.getElementById("promo-image-container").classList.remove("show");
+                }
+            }
+        }
+
+        async function refreshPromoImage() {
+            const url = `${zunderstreamAdminRootUrl()}/promo-image-path`;
+            const response = await fetch(url);
+
+            if (response.ok) {
+                let newPromoImagePath = await response.text();
                 let timeout = 0;
 
                 if (newPromoImagePath != promoImagePath) {
@@ -143,16 +159,14 @@
 
                     document.getElementById("promo-image-container").classList.add("show");
                 }, timeout);
-            } else {
-                document.getElementById("promo-image-container").classList.remove("show");
             }
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
             updateTimeParts();
 
-            promoImagePath = await getFirebotCustomVariable("promoImagePath");
-            checkPromoImage();
+            await refreshPromoImage();
+            await checkPromoImage();
 
             setInterval(updateTimeParts, 1000);
             setInterval(checkPromoImage, 1000);

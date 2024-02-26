@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<!-- OPTIMAL RESOLUTION: 3840x2160 -->
+
+<html lang="en-US">
+
+<head>
+    <title>zunderstream Sidebar</title>
+    <style type="text/css">
+        @import url("./styles/typekit.css");
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Bebas Neue Pro';
+            background-color: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        @keyframes brbScroll {
+            to {
+                transform: translateY(-520px);
+            }
+        }
+
+        #brb-scroll {
+            position: fixed;
+            top: -260px;
+            left: 400px;
+            font-size: 280px;
+            font-weight: bold;
+            line-height: 260px;
+            animation: brbScroll 10s linear 0s infinite forwards;
+        }
+
+        #header,
+        #footer {
+            position: fixed;
+            left: 800px;
+            right: 0;
+            font-size: 144px;
+            text-align: center;
+        }
+
+        #header {
+            top: 40px;
+        }
+
+        #footer {
+            bottom: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="brb-scroll">BRB<br />BRB<br />BRB<br />BRB<br />BRB<br />BRB<br />BRB<br />BRB<br />BRB<br />BRB<br />BRB<br />BRB<br />BRB<br />BRB<br />BRB</div>
+    <div id="header">The zunderstream will be back soon</div>
+    <div id="footer">...or will it?</div>
+</body>
+
+</html>

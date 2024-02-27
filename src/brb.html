@@ -53,6 +53,56 @@
         #footer {
             bottom: 40px;
         }
+
+        .emote {
+            position: fixed;
+            max-width: 320px;
+            max-height: 320px;
+        }
+
+        .emote.top {
+            top: 240px;
+        }
+
+        .emote.bottom {
+            bottom: 160px;
+        }
+
+        .emote.left {
+            left: 880px;
+            transform: rotate(-10deg);
+        }
+
+        .emote.right {
+            right: 80px;
+            transform: rotate(10deg);
+        }
+
+        #center-emote-container {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 800px;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #center-emote-container .frame {
+            width: 1920px;
+            height: 1080px;
+            background-color: #000;
+            box-shadow: 0 0 50px 20px #fff9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #center-emote-container img {
+            max-height: 800px;
+            opacity: 0.25;
+        }
     </style>
 </head>
 
@@ -60,6 +110,15 @@
     <div id="brb-scroll">BRB<br />BRB<br />BRB<br />BRB<br />BRB<br />BRB<br />BRB<br />BRB<br />BRB<br />BRB<br />BRB<br />BRB<br />BRB<br />BRB<br />BRB</div>
     <div id="header">The zunderstream will be back soon</div>
     <div id="footer">...or will it?</div>
+    <img class="emote top left" src="./images/emotes/large/pog.png" />
+    <img class="emote bottom left" src="./images/emotes/large/loaf.png" />
+    <img class="emote top right" src="./images/emotes/large/lol.png" />
+    <img class="emote bottom right" src="./images/emotes/large/wow.png" />
+    <div id="center-emote-container">
+        <div class="frame">
+            <img src="./images/emotes/large/wut.png" />
+        </div>
+    </div>
 </body>
 
 </html>

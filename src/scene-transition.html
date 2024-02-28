@@ -17,7 +17,8 @@
         }
 
         body {
-            background-color: #000;
+            background-color: transparent;
+            overflow: hidden;
         }
 
         #left-side,
@@ -33,7 +34,7 @@
             border-top: 1080px solid var(--panel-color);
             border-left: 0px solid transparent;
             border-right: 480px solid transparent;
-            animation: leftSideSlide 3s ease-in-out 0s 1 forwards;
+            animation: leftSideSlide 3s ease-in-out 500ms 1 forwards;
         }
 
         #right-side {
@@ -42,7 +43,7 @@
             border-bottom: 1080px solid var(--panel-color);
             border-left: 480px solid transparent;
             border-right: 0px solid transparent;
-            animation: rightSideSlide 3s ease-in-out 0s 1 forwards;
+            animation: rightSideSlide 3s ease-in-out 500ms 1 forwards;
         }
 
         #image-container {
@@ -60,7 +61,7 @@
             height: 0;
             transform: rotate(-540deg);
             filter: drop-shadow(0 0 200px rgba(255, 255, 255, 0.75));
-            animation: imageSpin 3s ease-in-out 0s 1 forwards;
+            animation: imageSpin 3s ease-in-out 500ms 1 forwards;
         }
 
         @keyframes leftSideSlide {

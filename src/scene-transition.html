@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<!-- OPTIMAL RESOLUTION: 1920x1080 -->
+
+<html lang="en-US">
+
+<head>
+    <title>zunderstream Scene Transition</title>
+    <style>
+        :root {
+            --panel-color: #036;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #000;
+        }
+
+        #left-side,
+        #right-side {
+            position: fixed;
+            height: 0;
+            width: 720px;
+        }
+
+        #left-side {
+            top: 0;
+            left: -1200px;
+            border-top: 1080px solid var(--panel-color);
+            border-left: 0px solid transparent;
+            border-right: 480px solid transparent;
+            animation: leftSideSlide 3s ease-in-out 0s 1 forwards;
+        }
+
+        #right-side {
+            bottom: 0;
+            right: -1200px;
+            border-bottom: 1080px solid var(--panel-color);
+            border-left: 480px solid transparent;
+            border-right: 0px solid transparent;
+            animation: rightSideSlide 3s ease-in-out 0s 1 forwards;
+        }
+
+        #image-container {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #image-container>img {
+            height: 0;
+            transform: rotate(-540deg);
+            filter: drop-shadow(0 0 200px rgba(255, 255, 255, 0.75));
+            animation: imageSpin 3s ease-in-out 0s 1 forwards;
+        }
+
+        @keyframes leftSideSlide {
+            0% {
+                left: -1200px;
+            }
+
+            30% {
+                left: 0;
+            }
+
+            70% {
+                left: 0;
+            }
+
+            100% {
+                left: -1200px;
+            }
+        }
+
+        @keyframes rightSideSlide {
+            0% {
+                right: -1200px;
+            }
+
+            30% {
+                right: 0;
+            }
+
+            70% {
+                right: 0;
+            }
+
+            100% {
+                right: -1200px;
+            }
+        }
+
+        @keyframes imageSpin {
+            0% {
+                height: 0;
+                transform: rotate(-540deg);
+            }
+
+            40% {
+                height: 400px;
+                width: auto;
+                transform: rotate(0);
+            }
+
+            60% {
+                height: 400px;
+                width: auto;
+                transform: rotate(0);
+            }
+
+            100% {
+                height: 0;
+                transform: rotate(-540deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="left-side"></div>
+    <div id="right-side"></div>
+    <div id="image-container">
+        <img id="center-image" src="./images/emotes/large/pog.png" />
+    </div>
+
+    <script>
+        const IMAGE_NAMES = [
+            "bean",
+            "churkey",
+            "hi",
+            "loaf",
+            "lol",
+            "love",
+            "nom",
+            "pog",
+            "roll",
+            "shrug",
+            "wow",
+            "wut"
+        ];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const image = IMAGE_NAMES[Math.trunc(Math.random() * IMAGE_NAMES.length)];
+
+            document.getElementById("center-image").src = `./images/emotes/large/${image}.png`;
+        });
+    </script>
+</body>
+
+</html>

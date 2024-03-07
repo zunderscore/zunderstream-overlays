@@ -156,33 +156,35 @@
         let enableCoworkShade = false;
 
         async function checkCoworkSetup() {
-            let url = `${zunderstreamAdminRootUrl()}/cowork-messages`;
-            let response = await fetch(url);
-
-            if (response.ok) {
-                const coworkSetup = await response.json();
-
-                setElementContents("header-right", coworkSetup.headerMessageRight ?? "");
-                setElementContents("footer-left", coworkSetup.footerMessageLeft ?? "");
-                setElementContents("footer-right", coworkSetup.footerMessageRight ?? "");
-
-                url = `${zunderstreamAdminRootUrl()}/enable-cowork-shade`;
-                response = await fetch(url);
+            try {
+                let url = `${zunderstreamAdminRootUrl()}/cowork-messages`;
+                let response = await fetch(url);
 
                 if (response.ok) {
-                    newEnableCoworkShade = await response.json() === true;
+                    const coworkSetup = await response.json();
 
-                    if (enableCoworkShade != newEnableCoworkShade) {
-                        enableCoworkShade = newEnableCoworkShade;
+                    setElementContents("header-right", coworkSetup.headerMessageRight ?? "");
+                    setElementContents("footer-left", coworkSetup.footerMessageLeft ?? "");
+                    setElementContents("footer-right", coworkSetup.footerMessageRight ?? "");
 
-                        if (enableCoworkShade) {
-                            document.getElementById("main").classList.add("shade");
-                        } else {
-                            document.getElementById("main").classList.remove("shade");
+                    url = `${zunderstreamAdminRootUrl()}/enable-cowork-shade`;
+                    response = await fetch(url);
+
+                    if (response.ok) {
+                        newEnableCoworkShade = await response.json() === true;
+
+                        if (enableCoworkShade != newEnableCoworkShade) {
+                            enableCoworkShade = newEnableCoworkShade;
+
+                            if (enableCoworkShade) {
+                                document.getElementById("main").classList.add("shade");
+                            } else {
+                                document.getElementById("main").classList.remove("shade");
+                            }
                         }
                     }
                 }
-            }
+            } catch { }
         }
 
         document.addEventListener("DOMContentLoaded", async () => {

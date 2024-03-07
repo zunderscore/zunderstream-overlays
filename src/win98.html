@@ -201,16 +201,18 @@
         }
 
         async function refreshLowerThird() {
-            const url = `${zunderstreamAdminRootUrl()}/stream-title`;
-            const response = await fetch(url);
+            try {
+                const url = `${zunderstreamAdminRootUrl()}/stream-title`;
+                const response = await fetch(url);
 
-            if (response.ok) {
-                const newStreamTitle = await response.text();
-                if (newStreamTitle !== streamTitle) {
-                    streamTitle = newStreamTitle;
-                    setElementContents("taskbar-stream-title", streamTitle);
+                if (response.ok) {
+                    const newStreamTitle = await response.text();
+                    if (newStreamTitle !== streamTitle) {
+                        streamTitle = newStreamTitle;
+                        setElementContents("taskbar-stream-title", streamTitle);
+                    }
                 }
-            }
+            } catch { }
         }
 
         window.CLIPPY_CDN = "https://cdn.jsdelivr.net/gh/pi0/clippyjs/assets/agents/";

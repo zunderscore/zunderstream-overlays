@@ -56,16 +56,18 @@
         let streamTitle = "";
 
         async function refreshLowerThird() {
-            const url = `${zunderstreamAdminRootUrl()}/stream-title`;
-            const response = await fetch(url);
+            try {
+                const url = `${zunderstreamAdminRootUrl()}/stream-title`;
+                const response = await fetch(url);
 
-            if (response.ok) {
-                const newStreamTitle = await response.text();
-                if (newStreamTitle !== streamTitle) {
-                    streamTitle = newStreamTitle;
-                    setElementContents("window-stream-title", streamTitle);
+                if (response.ok) {
+                    const newStreamTitle = await response.text();
+                    if (newStreamTitle !== streamTitle) {
+                        streamTitle = newStreamTitle;
+                        setElementContents("window-stream-title", streamTitle);
+                    }
                 }
-            }
+            } catch { }
         }
 
         async function getLatestNewsBarItem() {

@@ -144,21 +144,23 @@
 
         async function refreshLowerThird() {
             const url = `${zunderstreamAdminRootUrl()}/stream-title`;
-            const response = await fetch(url);
+            try {
+                const response = await fetch(url);
 
-            if (response.ok) {
-                const newStreamTitle = await response.text();
+                if (response.ok) {
+                    const newStreamTitle = await response.text();
 
-                // Create a fake element to strip out any HTML
-                const cleanElement = document.createElement("span");
-                cleanElement.innerHTML = newStreamTitle;
-                cleanTitle = cleanElement.innerText.trim();
+                    // Create a fake element to strip out any HTML
+                    const cleanElement = document.createElement("span");
+                    cleanElement.innerHTML = newStreamTitle;
+                    cleanTitle = cleanElement.innerText.trim();
 
-                if (cleanTitle !== streamTitle) {
-                    streamTitle = cleanTitle;
-                    setTitle(streamTitle);
+                    if (cleanTitle !== streamTitle) {
+                        streamTitle = cleanTitle;
+                        setTitle(streamTitle);
+                    }
                 }
-            }
+            } catch { }
         }
 
         async function getLatestNewsBarItem() {

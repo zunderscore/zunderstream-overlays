@@ -126,40 +126,44 @@
         }
 
         async function checkPromoImage() {
-            const url = `${zunderstreamAdminRootUrl()}/show-promo-image`;
-            const response = await fetch(url);
+            try {
+                const url = `${zunderstreamAdminRootUrl()}/show-promo-image`;
+                const response = await fetch(url);
 
-            if (response.ok) {
-                showPromoImage = await response.json() === true;
+                if (response.ok) {
+                    showPromoImage = await response.json() === true;
 
-                if (showPromoImage === true) {
-                    await refreshPromoImage();
-                } else {
-                    document.getElementById("promo-image-container").classList.remove("show");
+                    if (showPromoImage === true) {
+                        await refreshPromoImage();
+                    } else {
+                        document.getElementById("promo-image-container").classList.remove("show");
+                    }
                 }
-            }
+            } catch { }
         }
 
         async function refreshPromoImage() {
-            const url = `${zunderstreamAdminRootUrl()}/promo-image-path`;
-            const response = await fetch(url);
+            try {
+                const url = `${zunderstreamAdminRootUrl()}/promo-image-path`;
+                const response = await fetch(url);
 
-            if (response.ok) {
-                let newPromoImagePath = await response.text();
-                let timeout = 0;
+                if (response.ok) {
+                    let newPromoImagePath = await response.text();
+                    let timeout = 0;
 
-                if (newPromoImagePath != promoImagePath) {
-                    promoImagePath = newPromoImagePath;
-                    document.getElementById("promo-image-container").classList.remove("show");
-                    timeout = 1000;
+                    if (newPromoImagePath != promoImagePath) {
+                        promoImagePath = newPromoImagePath;
+                        document.getElementById("promo-image-container").classList.remove("show");
+                        timeout = 1000;
+                    }
+
+                    setTimeout(() => {
+                        document.getElementById("promo-image").src = promoImagePath;
+
+                        document.getElementById("promo-image-container").classList.add("show");
+                    }, timeout);
                 }
-
-                setTimeout(() => {
-                    document.getElementById("promo-image").src = promoImagePath;
-
-                    document.getElementById("promo-image-container").classList.add("show");
-                }, timeout);
-            }
+            } catch { }
         }
 
         document.addEventListener("DOMContentLoaded", async () => {

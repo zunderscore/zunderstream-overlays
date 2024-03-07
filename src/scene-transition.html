@@ -9,6 +9,10 @@
     <style>
         :root {
             --panel-color: #036;
+            --offscreen-position: -2400px;
+            --image-height: 800px;
+            --top-bottom-border-height: 2160px;
+            --border-offset: 960px;
         }
 
         * {
@@ -25,23 +29,23 @@
         #right-side {
             position: fixed;
             height: 0;
-            width: 720px;
+            width: 1450px;
         }
 
         #left-side {
             top: 0;
-            left: -1200px;
-            border-top: 1080px solid var(--panel-color);
+            left: var(--offscreen-position);
+            border-top: var(--top-bottom-border-height) solid var(--panel-color);
             border-left: 0px solid transparent;
-            border-right: 480px solid transparent;
+            border-right: var(--border-offset) solid transparent;
             animation: leftSideSlide 3s ease-in-out 500ms 1 forwards;
         }
 
         #right-side {
             bottom: 0;
-            right: -1200px;
-            border-bottom: 1080px solid var(--panel-color);
-            border-left: 480px solid transparent;
+            right: var(--offscreen-position);
+            border-bottom: var(--top-bottom-border-height) solid var(--panel-color);
+            border-left: var(--border-offset) solid transparent;
             border-right: 0px solid transparent;
             animation: rightSideSlide 3s ease-in-out 500ms 1 forwards;
         }
@@ -66,7 +70,7 @@
 
         @keyframes leftSideSlide {
             0% {
-                left: -1200px;
+                left: var(--offscreen-position);
             }
 
             30% {
@@ -78,13 +82,13 @@
             }
 
             100% {
-                left: -1200px;
+                left: var(--offscreen-position);
             }
         }
 
         @keyframes rightSideSlide {
             0% {
-                right: -1200px;
+                right: var(--offscreen-position);
             }
 
             30% {
@@ -96,7 +100,7 @@
             }
 
             100% {
-                right: -1200px;
+                right: var(--offscreen-position);
             }
         }
 
@@ -107,13 +111,13 @@
             }
 
             40% {
-                height: 400px;
+                height: var(--image-height);
                 width: auto;
                 transform: rotate(0);
             }
 
             60% {
-                height: 400px;
+                height: var(--image-height);
                 width: auto;
                 transform: rotate(0);
             }

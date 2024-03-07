@@ -51,20 +51,23 @@
 
         async function refreshLowerThird() {
             const url = `${zunderstreamAdminRootUrl()}/stream-title`;
-            const response = await fetch(url);
+            try {
+                const response = await fetch(url);
 
-            if (response.ok) {
-                const newStreamTitle = await response.text();
-                if (newStreamTitle !== streamTitle) {
-                    const titleElement = document.getElementById("stream-title");
-                    titleElement.classList.add("hide");
-                    setTimeout(() => {
-                        streamTitle = newStreamTitle;
-                        titleElement.innerHTML = streamTitle;
-                        titleElement.classList.remove("hide");
-                    }, 500);
+                if (response.ok) {
+                    const newStreamTitle = await response.text();
+                    if (newStreamTitle !== streamTitle) {
+                        const titleElement = document.getElementById("stream-title");
+                        titleElement.classList.add("hide");
+                        setTimeout(() => {
+                            streamTitle = newStreamTitle;
+                            titleElement.innerHTML = streamTitle;
+                            titleElement.classList.remove("hide");
+                        }, 500);
+                    }
                 }
             }
+            catch { }
         }
 
         document.addEventListener("DOMContentLoaded", async () => {

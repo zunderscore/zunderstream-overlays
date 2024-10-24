@@ -13,7 +13,8 @@
         }
 
         :root {
-            --border-panel-bg-color: #d4af37;
+            --big-door-border-panel-bg-color: #3bb447;
+            --opening-border-panel-bg-color: #d4af37;
         }
 
         body {
@@ -36,36 +37,56 @@
             }
         }
 
-        .lights>* {
+        #big-doors>.lights>*,
+        #opening>.lights>* {
             position: fixed;
-            height: 30px;
-            width: 30px;
-            margin: -15px 0 0 -15px;
-            border: 2px solid #ccc;
             border-radius: 50%;
             background: radial-gradient(circle, #ffb, #ffb3);
             animation: light 0.4s ease-in-out 0s infinite;
         }
 
-        .lights>*:nth-child(4n+0) {
+        #big-doors>.lights>* {
+            height: 30px;
+            width: 30px;
+            margin: -15px 0 0 -15px;
+            border: 2px solid #ccc;
+        }
+
+        #opening>.lights>* {
+            height: 50px;
+            width: 50px;
+            margin: -25px 0 0 -25px;
+            border: 5px solid #ccc;
+        }
+
+        #big-doors>.lights>*:nth-child(4n+0),
+        #opening>.lights>*:nth-child(4n+0) {
             animation-delay: 0s;
         }
 
-        .lights>*:nth-child(4n+1) {
+        #big-doors>.lights>*:nth-child(4n+1),
+        #opening>.lights>*:nth-child(4n+1) {
             animation-delay: 0.1s;
         }
 
-        .lights>*:nth-child(4n+2) {
+        #big-doors>.lights>*:nth-child(4n+2),
+        #opening>.lights>*:nth-child(4n+2) {
             animation-delay: 0.2s;
         }
 
-        .lights>*:nth-child(4n+3) {
+        #big-doors>.lights>*:nth-child(4n+3),
+        #opening>.lights>*:nth-child(4n+3) {
             animation-delay: 0.3s;
         }
 
-        .border-panel {
+        #big-doors .border-panel {
             position: fixed;
-            background-color: var(--border-panel-bg-color);
+            background-color: var(--big-door-border-panel-bg-color);
+        }
+
+        #opening .border-panel {
+            position: fixed;
+            background-color: var(--opening-border-panel-bg-color);
         }
 
         @keyframes titleTextFlipInTransition {
@@ -207,122 +228,213 @@
 </head>
 
 <body>
-    <div id="border-panels">
-        <!-- BORDER PANELS -->
-        <!-- Inverted corners behind the other panels-->
-        <div class="border-panel" style="top: 800px; height: 80px; right: 0; width: 300px; background: radial-gradient(circle 40px at 0 0, transparent 0, transparent 80px, var(--border-panel-bg-color) 81px);"></div>
-        <div class="border-panel" style="top: 120px; height: 80px; right: 0; width: 300px; background: radial-gradient(circle 40px at 0 80px, transparent 0, transparent 80px, var(--border-panel-bg-color) 81px);"></div>
+    <div id="big-doors" style="display: none;">
+        <div id="big-doors-border-panels">
+            <!-- BORDER PANELS -->
+            <!-- Inverted corners behind the other panels-->
+            <div class="border-panel" style="top: 800px; height: 80px; right: 0; width: 220px; background: radial-gradient(circle 40px at 0 0, transparent 0, transparent 80px, var(--big-door-border-panel-bg-color) 81px);"></div>
+            <div class="border-panel" style="top: 120px; height: 80px; right: 0; width: 220px; background: radial-gradient(circle 40px at 0 80px, transparent 0, transparent 80px, var(--big-door-border-panel-bg-color) 81px);"></div>
 
-        <div class="border-panel" style="top: 800px; height: 80px; left: 0; width: 300px; background: radial-gradient(circle 40px at 300px 0, transparent 0, transparent 80px, var(--border-panel-bg-color) 81px);"></div>
-        <div class="border-panel" style="top: 120px; height: 80px; left: 0; width: 300px; background: radial-gradient(circle 40px at 300px 80px, transparent 0, transparent 80px, var(--border-panel-bg-color) 81px);"></div>
+            <div class="border-panel" style="top: 800px; height: 80px; left: 0; width: 220px; background: radial-gradient(circle 40px at 220px 0, transparent 0, transparent 80px, var(--big-door-border-panel-bg-color) 81px);"></div>
+            <div class="border-panel" style="top: 120px; height: 80px; left: 0; width: 220px; background: radial-gradient(circle 40px at 220px 80px, transparent 0, transparent 80px, var(--big-door-border-panel-bg-color) 81px);"></div>
 
-        <div class="border-panel" style="top: 880px; height: 200px; left: 1500px; width: 420px; border-top-left-radius: 80px;"></div>
-        <div class="border-panel" style="top: 880px; bottom: 1080px; height: 200px; left: 0px; right: 420px; width: 420px; border-top-right-radius: 80px;"></div>
+            <div class="border-panel" style="top: 880px; height: 200px; left: 1500px; width: 420px; border-top-left-radius: 80px;"></div>
+            <div class="border-panel" style="top: 880px; bottom: 1080px; height: 200px; left: 0px; right: 420px; width: 420px; border-top-right-radius: 80px;"></div>
 
-        <div class="border-panel" style="top: 200px; height: 600px; right: 0; width: 220px;"></div>
-        <div class="border-panel" style="top: 200px; height: 600px; left: 0; width: 220px;"></div>
-        <div class="border-panel" style="top: 0; height: 120px; left: 0; width: 1920px;"></div>
+            <div class="border-panel" style="top: 200px; height: 600px; right: 0; width: 140px;"></div>
+            <div class="border-panel" style="top: 200px; height: 600px; left: 0; width: 140px;"></div>
+            <div class="border-panel" style="top: 0; height: 120px; left: 0; width: 1920px;"></div>
+        </div>
+
+        <div class="lights">
+            <!-- BOTTOM RIGHT CORNER-->
+            <div style="top: 1060px; left: 1500px;"></div>
+            <div style="top: 1020px; left: 1500px;"></div>
+            <div style="top: 980px; left: 1500px;"></div>
+            <div style="top: 940px; left: 1500px;"></div>
+            <div style="top: 900px; left: 1520px;"></div>
+            <div style="top: 880px; left: 1560px;"></div>
+            <div style="top: 880px; left: 1600px;"></div>
+            <div style="top: 880px; left: 1640px;"></div>
+            <div style="top: 880px; left: 1680px;"></div>
+            <div style="top: 880px; left: 1720px;"></div>
+            <div style="top: 860px; left: 1760px;"></div>
+
+            <!-- RIGHT SIDE -->
+            <div style="top: 820px; left: 1780px;"></div>
+            <div style="top: 780px; left: 1780px;"></div>
+            <div style="top: 740px; left: 1780px;"></div>
+            <div style="top: 700px; left: 1780px;"></div>
+            <div style="top: 660px; left: 1780px;"></div>
+            <div style="top: 620px; left: 1780px;"></div>
+            <div style="top: 580px; left: 1780px;"></div>
+            <div style="top: 540px; left: 1780px;"></div>
+            <div style="top: 500px; left: 1780px;"></div>
+            <div style="top: 460px; left: 1780px;"></div>
+            <div style="top: 420px; left: 1780px;"></div>
+            <div style="top: 380px; left: 1780px;"></div>
+            <div style="top: 340px; left: 1780px;"></div>
+            <div style="top: 300px; left: 1780px;"></div>
+            <div style="top: 260px; left: 1780px;"></div>
+            <div style="top: 220px; left: 1780px;"></div>
+            <div style="top: 180px; left: 1780px;"></div>
+            <div style="top: 140px; left: 1760px;"></div>
+
+            <!-- TOP -->
+            <div style="top: 120px; left: 1720px;"></div>
+            <div style="top: 120px; left: 1680px;"></div>
+            <div style="top: 120px; left: 1640px;"></div>
+            <div style="top: 120px; left: 1600px;"></div>
+            <div style="top: 120px; left: 1560px;"></div>
+            <div style="top: 120px; left: 1520px;"></div>
+            <div style="top: 120px; left: 1480px;"></div>
+            <div style="top: 120px; left: 1440px;"></div>
+            <div style="top: 120px; left: 1400px;"></div>
+            <div style="top: 120px; left: 1360px;"></div>
+            <div style="top: 120px; left: 1320px;"></div>
+            <div style="top: 120px; left: 1280px;"></div>
+            <div style="top: 120px; left: 1240px;"></div>
+            <div style="top: 120px; left: 1200px;"></div>
+            <div style="top: 120px; left: 1160px;"></div>
+            <div style="top: 120px; left: 1120px;"></div>
+            <div style="top: 120px; left: 1080px;"></div>
+            <div style="top: 120px; left: 1040px;"></div>
+            <div style="top: 120px; left: 1000px;"></div>
+            <div style="top: 120px; left: 960px;"></div>
+            <div style="top: 120px; left: 920px;"></div>
+            <div style="top: 120px; left: 880px;"></div>
+            <div style="top: 120px; left: 840px;"></div>
+            <div style="top: 120px; left: 800px;"></div>
+            <div style="top: 120px; left: 760px;"></div>
+            <div style="top: 120px; left: 720px;"></div>
+            <div style="top: 120px; left: 680px;"></div>
+            <div style="top: 120px; left: 640px;"></div>
+            <div style="top: 120px; left: 600px;"></div>
+            <div style="top: 120px; left: 560px;"></div>
+            <div style="top: 120px; left: 520px;"></div>
+            <div style="top: 120px; left: 480px;"></div>
+            <div style="top: 120px; left: 440px;"></div>
+            <div style="top: 120px; left: 400px;"></div>
+            <div style="top: 120px; left: 360px;"></div>
+            <div style="top: 120px; left: 320px;"></div>
+            <div style="top: 120px; left: 280px;"></div>
+            <div style="top: 120px; left: 240px;"></div>
+            <div style="top: 120px; left: 200px;"></div>
+
+            <!-- LEFT SIDE -->
+            <div style="top: 140px; left: 160px;"></div>
+            <div style="top: 180px; left: 140px;"></div>
+            <div style="top: 220px; left: 140px;"></div>
+            <div style="top: 260px; left: 140px;"></div>
+            <div style="top: 300px; left: 140px;"></div>
+            <div style="top: 340px; left: 140px;"></div>
+            <div style="top: 380px; left: 140px;"></div>
+            <div style="top: 420px; left: 140px;"></div>
+            <div style="top: 460px; left: 140px;"></div>
+            <div style="top: 500px; left: 140px;"></div>
+            <div style="top: 540px; left: 140px;"></div>
+            <div style="top: 580px; left: 140px;"></div>
+            <div style="top: 620px; left: 140px;"></div>
+            <div style="top: 660px; left: 140px;"></div>
+            <div style="top: 700px; left: 140px;"></div>
+            <div style="top: 740px; left: 140px;"></div>
+            <div style="top: 780px; left: 140px;"></div>
+            <div style="top: 820px; left: 140px;"></div>
+
+            <!-- BOTTOM RIGHT CORNER-->
+            <div style="top: 860px; left: 160px;"></div>
+            <div style="top: 880px; left: 200px;"></div>
+            <div style="top: 880px; left: 240px;"></div>
+            <div style="top: 880px; left: 280px;"></div>
+            <div style="top: 880px; left: 320px;"></div>
+            <div style="top: 880px; left: 360px;"></div>
+            <div style="top: 900px; left: 400px;"></div>
+            <div style="top: 940px; left: 420px;"></div>
+            <div style="top: 980px; left: 420px;"></div>
+            <div style="top: 1020px; left: 420px;"></div>
+            <div style="top: 1060px; left: 420px;"></div>
+        </div>
     </div>
 
-    <div class="lights">
-        <!-- BOTTOM RIGHT CORNER-->
-        <div style="top: 1060px; left: 1500px;"></div>
-        <div style="top: 1020px; left: 1500px;"></div>
-        <div style="top: 980px; left: 1500px;"></div>
-        <div style="top: 940px; left: 1500px;"></div>
-        <div style="top: 900px; left: 1520px;"></div>
-        <div style="top: 880px; left: 1560px;"></div>
-        <div style="top: 880px; left: 1600px;"></div>
-        <div style="top: 880px; left: 1640px;"></div>
-        <div style="top: 860px; left: 1680px;"></div>
+    <div id="opening">
+        <div id="opening-border-panels" style="display: none;">
+            <div class="border-panel" style="top: 0; left: 0; height: 1080px; width: 150px;"></div>
+            <div class="border-panel" style="top: 0; right: 0; height: 1080px; width: 150px;"></div>
+            <div class="border-panel" style="top: 0; left: 0; height: 150px; width: 1920px;"></div>
+            <div class="border-panel" style="bottom: 0; left: 0; height: 150px; width: 1920px;"></div>
+        </div>
 
-        <!-- RIGHT SIDE -->
-        <div style="top: 820px; left: 1700px;"></div>
-        <div style="top: 780px; left: 1700px;"></div>
-        <div style="top: 740px; left: 1700px;"></div>
-        <div style="top: 700px; left: 1700px;"></div>
-        <div style="top: 660px; left: 1700px;"></div>
-        <div style="top: 620px; left: 1700px;"></div>
-        <div style="top: 580px; left: 1700px;"></div>
-        <div style="top: 540px; left: 1700px;"></div>
-        <div style="top: 500px; left: 1700px;"></div>
-        <div style="top: 460px; left: 1700px;"></div>
-        <div style="top: 420px; left: 1700px;"></div>
-        <div style="top: 380px; left: 1700px;"></div>
-        <div style="top: 340px; left: 1700px;"></div>
-        <div style="top: 300px; left: 1700px;"></div>
-        <div style="top: 260px; left: 1700px;"></div>
-        <div style="top: 220px; left: 1700px;"></div>
-        <div style="top: 180px; left: 1700px;"></div>
-        <div style="top: 140px; left: 1680px;"></div>
+        <div class="lights">
+            <!-- LEFT SIDE -->
+            <div style="top: 840px; left: 150px;"></div>
+            <div style="top: 765px; left: 150px;"></div>
+            <div style="top: 690px; left: 150px;"></div>
+            <div style="top: 615px; left: 150px;"></div>
+            <div style="top: 540px; left: 150px;"></div>
+            <div style="top: 465px; left: 150px;"></div>
+            <div style="top: 390px; left: 150px;"></div>
+            <div style="top: 315px; left: 150px;"></div>
+            <div style="top: 240px; left: 150px;"></div>
 
-        <!-- TOP -->
-        <div style="top: 120px; left: 1640px;"></div>
-        <div style="top: 120px; left: 1600px;"></div>
-        <div style="top: 120px; left: 1560px;"></div>
-        <div style="top: 120px; left: 1520px;"></div>
-        <div style="top: 120px; left: 1480px;"></div>
-        <div style="top: 120px; left: 1440px;"></div>
-        <div style="top: 120px; left: 1400px;"></div>
-        <div style="top: 120px; left: 1360px;"></div>
-        <div style="top: 120px; left: 1320px;"></div>
-        <div style="top: 120px; left: 1280px;"></div>
-        <div style="top: 120px; left: 1240px;"></div>
-        <div style="top: 120px; left: 1200px;"></div>
-        <div style="top: 120px; left: 1160px;"></div>
-        <div style="top: 120px; left: 1120px;"></div>
-        <div style="top: 120px; left: 1080px;"></div>
-        <div style="top: 120px; left: 1040px;"></div>
-        <div style="top: 120px; left: 1000px;"></div>
-        <div style="top: 120px; left: 960px;"></div>
-        <div style="top: 120px; left: 920px;"></div>
-        <div style="top: 120px; left: 880px;"></div>
-        <div style="top: 120px; left: 840px;"></div>
-        <div style="top: 120px; left: 800px;"></div>
-        <div style="top: 120px; left: 760px;"></div>
-        <div style="top: 120px; left: 720px;"></div>
-        <div style="top: 120px; left: 680px;"></div>
-        <div style="top: 120px; left: 640px;"></div>
-        <div style="top: 120px; left: 600px;"></div>
-        <div style="top: 120px; left: 560px;"></div>
-        <div style="top: 120px; left: 520px;"></div>
-        <div style="top: 120px; left: 480px;"></div>
-        <div style="top: 120px; left: 440px;"></div>
-        <div style="top: 120px; left: 400px;"></div>
-        <div style="top: 120px; left: 360px;"></div>
-        <div style="top: 120px; left: 320px;"></div>
-        <div style="top: 120px; left: 280px;"></div>
+            <!-- TOP -->
+            <div style="top: 180px; left: 180px;"></div>
+            <div style="top: 150px; left: 240px;"></div>
+            <div style="top: 150px; left: 315px;"></div>
+            <div style="top: 150px; left: 390px;"></div>
+            <div style="top: 150px; left: 465px;"></div>
+            <div style="top: 150px; left: 540px;"></div>
+            <div style="top: 150px; left: 615px;"></div>
+            <div style="top: 150px; left: 690px;"></div>
+            <div style="top: 150px; left: 765px;"></div>
+            <div style="top: 150px; left: 840px;"></div>
+            <div style="top: 150px; left: 915px;"></div>
+            <div style="top: 150px; left: 990px;"></div>
+            <div style="top: 150px; left: 1065px;"></div>
+            <div style="top: 150px; left: 1140px;"></div>
+            <div style="top: 150px; left: 1215px;"></div>
+            <div style="top: 150px; left: 1290px;"></div>
+            <div style="top: 150px; left: 1365px;"></div>
+            <div style="top: 150px; left: 1440px;"></div>
+            <div style="top: 150px; left: 1515px;"></div>
+            <div style="top: 150px; left: 1590px;"></div>
+            <div style="top: 150px; left: 1665px;"></div>
+            <div style="top: 180px; left: 1730px;"></div>
 
-        <!-- LEFT SIDE -->
-        <div style="top: 140px; left: 240px;"></div>
-        <div style="top: 180px; left: 220px;"></div>
-        <div style="top: 220px; left: 220px;"></div>
-        <div style="top: 260px; left: 220px;"></div>
-        <div style="top: 300px; left: 220px;"></div>
-        <div style="top: 340px; left: 220px;"></div>
-        <div style="top: 380px; left: 220px;"></div>
-        <div style="top: 420px; left: 220px;"></div>
-        <div style="top: 460px; left: 220px;"></div>
-        <div style="top: 500px; left: 220px;"></div>
-        <div style="top: 540px; left: 220px;"></div>
-        <div style="top: 580px; left: 220px;"></div>
-        <div style="top: 620px; left: 220px;"></div>
-        <div style="top: 660px; left: 220px;"></div>
-        <div style="top: 700px; left: 220px;"></div>
-        <div style="top: 740px; left: 220px;"></div>
-        <div style="top: 780px; left: 220px;"></div>
-        <div style="top: 820px; left: 220px;"></div>
+            <!-- RIGHT SIDE -->
+            <div style="top: 240px; left: 1770px;"></div>
+            <div style="top: 315px; left: 1770px;"></div>
+            <div style="top: 390px; left: 1770px;"></div>
+            <div style="top: 465px; left: 1770px;"></div>
+            <div style="top: 540px; left: 1770px;"></div>
+            <div style="top: 615px; left: 1770px;"></div>
+            <div style="top: 690px; left: 1770px;"></div>
+            <div style="top: 765px; left: 1770px;"></div>
+            <div style="top: 840px; left: 1770px;"></div>
 
-        <!-- BOTTOM RIGHT CORNER-->
-        <div style="top: 860px; left: 240px;"></div>
-        <div style="top: 880px; left: 280px;"></div>
-        <div style="top: 880px; left: 320px;"></div>
-        <div style="top: 880px; left: 360px;"></div>
-        <div style="top: 900px; left: 400px;"></div>
-        <div style="top: 940px; left: 420px;"></div>
-        <div style="top: 980px; left: 420px;"></div>
-        <div style="top: 1020px; left: 420px;"></div>
-        <div style="top: 1060px; left: 420px;"></div>
+            <!-- BOTTOM -->
+            <div style="top: 900px; left: 1730px;"></div>
+            <div style="top: 930px; left: 1665px;"></div>
+            <div style="top: 930px; left: 1590px;"></div>
+            <div style="top: 930px; left: 1515px;"></div>
+            <div style="top: 930px; left: 1440px;"></div>
+            <div style="top: 930px; left: 1365px;"></div>
+            <div style="top: 930px; left: 1290px;"></div>
+            <div style="top: 930px; left: 1215px;"></div>
+            <div style="top: 930px; left: 1140px;"></div>
+            <div style="top: 930px; left: 1065px;"></div>
+            <div style="top: 930px; left: 990px;"></div>
+            <div style="top: 930px; left: 915px;"></div>
+            <div style="top: 930px; left: 840px;"></div>
+            <div style="top: 930px; left: 765px;"></div>
+            <div style="top: 930px; left: 690px;"></div>
+            <div style="top: 930px; left: 615px;"></div>
+            <div style="top: 930px; left: 540px;"></div>
+            <div style="top: 930px; left: 465px;"></div>
+            <div style="top: 930px; left: 390px;"></div>
+            <div style="top: 930px; left: 315px;"></div>
+            <div style="top: 930px; left: 240px;"></div>
+            <div style="top: 900px; left: 180px;"></div>
+        </div>
     </div>
 
     <div id="title-text-container">

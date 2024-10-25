@@ -215,7 +215,8 @@
             color: #09f;
             text-align: center;
             text-transform: uppercase;
-            text-shadow: 3px 3px 0 #000;
+            text-shadow: 7px 7px 0 #000;
+            -webkit-text-stroke: 5px #000;
         }
 
         .title-text.flip-in {
@@ -231,6 +232,44 @@
 
         .title-text.zoom-in {
             animation: titleTextZoomInTransition 3s linear 0s 4 forwards;
+        }
+
+        #zunderstream-logo {
+            position: fixed;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            font-family: 'Pricedown';
+            /* -webkit-text-stroke: 2px #fff; */
+            animation: titleTextZoomInTransition 20s linear 0s 1 forwards;
+        }
+
+        #zunderstream-logo .logo-left {
+            margin-right: 0;
+        }
+
+        #zunderstream-logo .logo-left img {
+            max-height: 480px;
+            max-width: 300px;
+        }
+
+        #zunderstream-logo .logo-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-size: 120px;
+            line-height: 160px;
+            color: #fff;
+        }
+
+        #zunderstream-logo .large-logo-text {
+            font-size: 180px;
+            color: #fff;
         }
     </style>
     <script src="./scripts/zunderstream-base.js" type="text/javascript"></script>
@@ -443,8 +482,17 @@
 
     <div id="title-text-container">
         <div class="title-text flip-in hidden">Ridiculous<br />Shenanigans</div>
-        <div class="title-text flip-in-out">Ridiculous<br />Shenanigans</div>
+        <div class="title-text flip-in-out hidden">Ridiculous<br />Shenanigans</div>
         <div class="title-text zoom-in hidden">Ridiculous<br />Shenanigans</div>
+    </div>
+
+    <div id="zunderstream-logo">
+        <div class="logo-left"><img src="images/z-dollar.png"></div>
+        <div class="logo-right">
+            <div>the</div>
+            <div class="large-logo-text">zunder</div>
+            <div>stream</div>
+        </div>
     </div>
 </body>
 

@@ -84,6 +84,15 @@
             background-color: var(--big-door-border-panel-bg-color);
         }
 
+        #opening-border {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            box-shadow: inset 0px 0px 150px 120px var(--opening-border-panel-bg-color);
+        }
+
         #opening .border-panel {
             position: fixed;
             background-color: var(--opening-border-panel-bg-color);
@@ -357,12 +366,7 @@
     </div>
 
     <div id="opening">
-        <div id="opening-border-panels" style="display: none;">
-            <div class="border-panel" style="top: 0; left: 0; height: 1080px; width: 150px;"></div>
-            <div class="border-panel" style="top: 0; right: 0; height: 1080px; width: 150px;"></div>
-            <div class="border-panel" style="top: 0; left: 0; height: 150px; width: 1920px;"></div>
-            <div class="border-panel" style="bottom: 0; left: 0; height: 150px; width: 1920px;"></div>
-        </div>
+        <div id="opening-border"></div>
 
         <div class="lights">
             <!-- LEFT SIDE -->

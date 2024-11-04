@@ -37,3 +37,11 @@ function setElementContents(elementId, contents) {
 function setElementText(elementId, contents) {
     document.getElementById(elementId).innerText = contents;
 }
+
+function addClassToElement(elementId, className) {
+    document.getElementById(elementId).classList.add(className);
+}
+
+function removeClassFromElement(elementId, className) {
+    document.getElementById(elementId).classList.remove(className);
+}

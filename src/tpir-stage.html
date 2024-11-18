@@ -524,14 +524,24 @@
         </div>
     </div>
 
-    <script type="text/javascript">
-        async function checkForUpdates() {
-            const url = `${zunderstreamAdminRootUrl()}/tpir-config`;
-            try {
-                const response = await fetch(url);
+    <div id="contestants">
+        <div id="contestant-1" class="hidden"></div>
+        <div id="contestant-2" class="hidden"></div>
+        <div id="contestant-3" class="hidden"></div>
+        <div id="contestant-4" class="hidden"></div>
+    </div>
 
-                if (response.ok) {
-                    const tpirConfig = await response.json();
+    <script type="text/javascript">
+        var contestants = [];
+
+        async function checkForUpdates() {
+            const configUrl = `${zunderstreamAdminRootUrl()}/tpir-config`;
+            const contestantUrl = `${zunderstreamAdminRootUrl()}/tpir-contestants`;
+            try {
+                const configResponse = await fetch(configUrl);
+
+                if (configResponse.ok) {
+                    const tpirConfig = await configResponse.json();
 
                     if (tpirConfig != null) {
                         if (tpirConfig.showTitleText === true) {
@@ -551,13 +561,51 @@
                         }
                     }
                 }
+
+                const contestantResponse = await fetch(contestantUrl);
+
+                if (contestantResponse.ok) {
+                    let newContestants = await contestantResponse.json();
+
+                    if (newContestants.length > 0) {
+                        for (let x = 0; x < 4; x++) {
+                            if ((contestants[x] == null && newContestants[x] == null) ||
+                                (contestants[x]?.name === newContestants[x]?.name &&
+                                    contestants[x]?.avatarUrl === newContestants[x]?.avatarUrl &&
+                                    contestants[x]?.show === newContestants[x]?.show)) {
+                                continue;
+                            }
+
+                            contestants[x] = newContestants[x];
+
+                            if (contestants[x] != null) {
+                                setElementContents(`contestant-${x + 1}`, `<img src="${contestants[x].avatarUrl}" />`);
+                            } else {
+                                setElementContents(`contestant-${x + 1}`, "");
+                            }
+
+                            if (contestants[x]?.show === true) {
+                                removeClassFromElement(`contestant-${x + 1}`, "hidden");
+                            } else {
+                                addClassToElement(`contestant-${x + 1}`, "hidden");
+                            }
+                        }
+                    } else {
+                        contestants = [];
+
+                        addClassToElement("contestant-1", "hidden");
+                        addClassToElement("contestant-2", "hidden");
+                        addClassToElement("contestant-3", "hidden");
+                        addClassToElement("contestant-4", "hidden");
+                    }
+                }
             }
             catch { }
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
             checkForUpdates();
-            setInterval(checkForUpdates, 2000);
+            setInterval(checkForUpdates, 1000);
         });
     </script>
 </body>

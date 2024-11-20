@@ -246,7 +246,9 @@
             right: 0;
             font-family: 'Pricedown';
             /* -webkit-text-stroke: 2px #fff; */
-            animation: logoZoomInTransition 10s ease-out 0s 1 forwards;
+            transform: scale(0.1);
+            opacity: 0;
+            animation: logoZoomInTransition 10s ease-out 1s 1 forwards;
         }
 
         #zunderstream-logo .logo-left {
@@ -299,6 +301,108 @@
             }
 
             100% {
+                opacity: 0;
+            }
+        }
+
+        #contestants {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        #contestants.hide-contestants {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s 0.3s, opacity 0.3s linear;
+        }
+
+        #contestants>div {
+            height: 640px;
+            width: 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #contestants>div.hide-contestant {
+            opacity: 0;
+        }
+
+        #contestants img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: solid 8px;
+            background: #fff;
+            animation: contestantAvatarFlipIn 1s linear 0s forwards;
+        }
+
+        #contestants>div.hidecontestant img {
+            animation: none !important;
+        }
+
+        #contestants .name {
+            display: inline-block;
+            width: 240px;
+            height: 140px;
+            margin-top: 20px;
+            padding: 10px 20px;
+            box-sizing: border-box;
+            color: white;
+            font-family: 'Sports Type';
+            font-weight: bold;
+            font-size: 80px;
+            text-align: right;
+            border: solid 10px #999 !important;
+        }
+
+        #contestant-1 img,
+        #contestant-1 .name {
+            background-color: #c00;
+            border-color: #c00;
+        }
+
+        #contestant-2 img,
+        #contestant-2 .name {
+            background-color: #00c;
+            border-color: #00c;
+        }
+
+        #contestant-3 img,
+        #contestant-3 .name {
+            background-color: #cc0;
+            border-color: #cc0;
+        }
+
+        #contestant-4 img,
+        #contestant-4 .name {
+            background-color: #0c0;
+            border-color: #0c0;
+        }
+
+        @keyframes contestantAvatarFlipIn {
+            from {
+                transform: scale(0) rotate3d(0, 1, 0, -180deg) translateY(100px);
+                opacity: 1;
+            }
+
+            to {
+                transform: scale(1) rotate3d(0, 1, 0, 360deg) translateY(400px);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
                 opacity: 0;
             }
         }
@@ -525,10 +629,10 @@
     </div>
 
     <div id="contestants">
-        <div id="contestant-1" class="hidden"></div>
-        <div id="contestant-2" class="hidden"></div>
-        <div id="contestant-3" class="hidden"></div>
-        <div id="contestant-4" class="hidden"></div>
+        <div id="contestant-1" class="hide-contestant"></div>
+        <div id="contestant-2" class="hide-contestant"></div>
+        <div id="contestant-3" class="hide-contestant"></div>
+        <div id="contestant-4" class="hide-contestant"></div>
     </div>
 
     <script type="text/javascript">
@@ -544,14 +648,20 @@
                     const tpirConfig = await configResponse.json();
 
                     if (tpirConfig != null) {
+                        if (tpirConfig.titleText != null && tpirConfig.titleText != "") {
+                            setElementContents("title-text", tpirConfig.titleText);
+                        }
+
                         if (tpirConfig.showTitleText === true) {
                             removeClassFromElement("title-text", "hidden");
                         } else {
                             addClassToElement("title-text", "hidden");
                         }
 
-                        if (tpirConfig.titleText != null && tpirConfig.titleText != "") {
-                            setElementContents("title-text", tpirConfig.titleText);
+                        if (tpirConfig.showContestants === true) {
+                            removeClassFromElement("contestants", "hide-contestants");
+                        } else {
+                            addClassToElement("contestants", "hide-contestants");
                         }
 
                         if (tpirConfig.showLogo === true) {
@@ -585,18 +695,18 @@
                             }
 
                             if (contestants[x]?.show === true) {
-                                removeClassFromElement(`contestant-${x + 1}`, "hidden");
+                                removeClassFromElement(`contestant-${x + 1}`, "hide-contestant");
                             } else {
-                                addClassToElement(`contestant-${x + 1}`, "hidden");
+                                addClassToElement(`contestant-${x + 1}`, "hide-contestant");
                             }
                         }
                     } else {
                         contestants = [];
 
-                        addClassToElement("contestant-1", "hidden");
-                        addClassToElement("contestant-2", "hidden");
-                        addClassToElement("contestant-3", "hidden");
-                        addClassToElement("contestant-4", "hidden");
+                        addClassToElement("contestant-1", "hide-contestant");
+                        addClassToElement("contestant-2", "hide-contestant");
+                        addClassToElement("contestant-3", "hide-contestant");
+                        addClassToElement("contestant-4", "hide-contestant");
                     }
                 }
             }

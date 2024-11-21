@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+<!-- OPTIMAL RESOLUTION: 1920x1080 -->
+
+<head>
+    <title>zunderstream TPIR Overlay</title>
+    <link href="./styles/shared.css" rel="stylesheet" type="text/css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #000;
+            width: 1920px;
+            height: 1080px;
+            font-family: 'Pricedown';
+            color: #fff;
+        }
+
+        #bottom-bar,
+        #side-bar-left,
+        #side-bar-right {
+            position: fixed;
+            background-color: #26c;
+            overflow: hidden;
+        }
+
+        #bottom-bar {
+            top: 972px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        #side-bar-left,
+        #side-bar-right {
+            display: fixed;
+            top: 0;
+            bottom: 108px;
+            width: 96px;
+        }
+
+        #side-bar-left {
+            left: 0;
+        }
+
+        #side-bar-right {
+            right: 0;
+        }
+
+        #title-container {
+            position: absolute;
+            top: 0;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            font-size: 60px;
+        }
+
+        #stream-title {
+            transition: opacity .5s ease-in-out;
+        }
+
+        .hide {
+            opacity: 0;
+        }
+
+        .flower {
+            opacity: 0.3;
+        }
+
+        #bottom-flower-1 {
+            position: absolute;
+            left: -80px;
+            bottom: -80px;
+            height: 180px;
+            animation: fullRotate 30s linear 0s infinite;
+        }
+
+        #bottom-flower-2 {
+            position: absolute;
+            left: 760px;
+            top: -125px;
+            height: 400px;
+            animation: fullRotate 60s linear 0s infinite reverse;
+        }
+
+        #bottom-flower-3 {
+            position: absolute;
+            right: -80px;
+            bottom: -80px;
+            height: 180px;
+            animation: fullRotate 30s linear 0s infinite reverse;
+        }
+
+        #left-side-flower {
+            position: absolute;
+            right: -80px;
+            top: 100px;
+            height: 500px;
+            animation: fullRotate 60s linear 0s infinite reverse;
+        }
+
+        #right-side-flower {
+            position: absolute;
+            left: -80px;
+            bottom: 100px;
+            height: 500px;
+            animation: fullRotate 60s linear 0s infinite;
+        }
+
+        @keyframes fullRotate {
+            from {
+                transform: rotate(0);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <script src="./scripts/zunderstream-base.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <div id="side-bar-left">
+        <img id="left-side-flower" class="flower" src="images/retro-flower.svg">
+    </div>
+    <div id="side-bar-right">
+        <img id="right-side-flower" class="flower" src="images/retro-flower.svg">
+    </div>
+
+    <div id="bottom-bar">
+        <img id="bottom-flower-1" class="flower" src="images/retro-flower.svg">
+        <img id="bottom-flower-2" class="flower" src="images/retro-flower.svg">
+        <img id="bottom-flower-3" class="flower" src="images/retro-flower.svg">
+        <div id="title-container">
+            <div id="stream-title"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        let streamTitle = "";
+
+        async function refreshLowerThird() {
+            const url = `${zunderstreamAdminRootUrl()}/stream-title`;
+            try {
+                const response = await fetch(url);
+
+                if (response.ok) {
+                    const newStreamTitle = await response.text();
+                    if (newStreamTitle !== streamTitle) {
+                        const titleElement = document.getElementById("stream-title");
+                        titleElement.classList.add("hide");
+                        setTimeout(() => {
+                            streamTitle = newStreamTitle;
+                            titleElement.innerHTML = streamTitle;
+                            titleElement.classList.remove("hide");
+                        }, 500);
+                    }
+                }
+            }
+            catch { }
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            refreshLowerThird();
+            setInterval(refreshLowerThird, 5000);
+        });
+    </script>
+</body>
+
+</html>

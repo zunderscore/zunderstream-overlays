@@ -51,7 +51,7 @@
             right: 0;
         }
 
-        #title-container {
+        #stream-title {
             position: absolute;
             top: 0;
             bottom: 20px;
@@ -62,14 +62,11 @@
             justify-content: center;
             align-items: center;
             font-size: 60px;
+            transition: bottom 1s ease-in-out;
         }
 
-        #stream-title {
-            transition: opacity .5s ease-in-out;
-        }
-
-        .hide {
-            opacity: 0;
+        .slide-down {
+            bottom: -200px !important;
         }
 
         .flower {
@@ -141,9 +138,7 @@
         <img id="bottom-flower-1" class="flower" src="images/retro-flower.svg">
         <img id="bottom-flower-2" class="flower" src="images/retro-flower.svg">
         <img id="bottom-flower-3" class="flower" src="images/retro-flower.svg">
-        <div id="title-container">
-            <div id="stream-title"></div>
-        </div>
+        <div id="stream-title"></div>
     </div>
 
     <script type="text/javascript">
@@ -158,12 +153,12 @@
                     const newStreamTitle = await response.text();
                     if (newStreamTitle !== streamTitle) {
                         const titleElement = document.getElementById("stream-title");
-                        titleElement.classList.add("hide");
+                        titleElement.classList.add("slide-down");
                         setTimeout(() => {
                             streamTitle = newStreamTitle;
                             titleElement.innerHTML = streamTitle;
-                            titleElement.classList.remove("hide");
-                        }, 500);
+                            titleElement.classList.remove("slide-down");
+                        }, 1000);
                     }
                 }
             }

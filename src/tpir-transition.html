@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+<!-- OPTIMAL RESOLUTION: 1920x1080 -->
+
+<head>
+    <title>zunderstream TPIR Transition</title>
+    <link href="./styles/shared.css" rel="stylesheet" type="text/css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: transparent;
+            width: 1920px;
+            height: 1080px;
+            font-family: 'Pricedown';
+            font-size: 40px;
+            color: #fff;
+        }
+
+        #big-doors>div {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 240px;
+            opacity: 0;
+            background: #09f;
+            transition: translate 0.25s ease-in;
+            animation-duration: 0.2s;
+            animation-timing-function: linear;
+            animation-fill-mode: forwards;
+            animation-iteration-count: 1;
+        }
+
+        #big-doors>.left {
+            border-right: 2px solid #000;
+            animation-name: slideRight, reset;
+            box-shadow: 0px 0 20px #000;
+        }
+
+        #big-doors>.right {
+            border-left: 2px solid #000;
+            animation-name: slideLeft, reset;
+            box-shadow: 0px 0 20px #000;
+        }
+
+        #big-doors>.panel-1 {
+            animation-delay: 0s, 2s;
+        }
+
+        #big-doors>.panel-2 {
+            animation-delay: 0.2s, 1.8s;
+        }
+
+        #big-doors>.panel-3 {
+            animation-delay: 0.4s, 1.6s;
+        }
+
+        #big-doors>.panel-4 {
+            animation-delay: 0.6s, 1.4s;
+            box-shadow: none !important;
+        }
+
+        #door-panel-left-1 {
+            left: -240px;
+        }
+
+        #door-panel-left-2 {
+            left: 0;
+        }
+
+        #door-panel-left-3 {
+            left: 240px;
+        }
+
+        #door-panel-left-4 {
+            left: 480px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: end;
+        }
+
+        #door-panel-right-1 {
+            right: -240px;
+        }
+
+        #door-panel-right-2 {
+            right: 0;
+        }
+
+        #door-panel-right-3 {
+            right: 240px;
+        }
+
+        #door-panel-right-4 {
+            right: 480px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: start;
+            padding-left: 20px;
+        }
+
+        #logo {
+            height: 240px;
+            padding-right: 20px;
+        }
+
+        .large-logo-text {
+            font-size: 72px;
+        }
+
+        @keyframes slideRight {
+            0% {
+                opacity: 0;
+            }
+
+            1% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(240px);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideLeft {
+            0% {
+                opacity: 0;
+            }
+
+            1% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(-240px);
+                opacity: 1;
+            }
+        }
+
+        @keyframes reset {
+            0% {
+                opacity: 1;
+            }
+
+            99% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(0);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="big-doors">
+        <div class="left panel-4" id="door-panel-left-4">
+            <img id="logo" src="./images/z-dollar.png" />
+        </div>
+        <div class="right panel-4" id="door-panel-right-4">
+            <div>the</div>
+            <div class="large-logo-text">zunder</div>
+            <div>stream</div>
+        </div>
+        <div class="left panel-3" id="door-panel-left-3"></div>
+        <div class="right panel-3" id="door-panel-right-3"></div>
+        <div class="left panel-2" id="door-panel-left-2"></div>
+        <div class="right panel-2" id="door-panel-right-2"></div>
+        <div class="left panel-1" id="door-panel-left-1"></div>
+        <div class="right panel-1" id="door-panel-right-1"></div>
+    </div>
+
+    <script type="text/javascript">
+        window.addEventListener("obsSceneChanged", function (event) {
+            document.getElementById("big-doors").classList.remove("hidden");
+            setTimeout(() => {
+                document.getElementById("big-doors").classList.add("hidden");
+            }, 2500)
+        })
+    </script>
+</body>
+
+</html>

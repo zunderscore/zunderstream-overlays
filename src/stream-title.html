@@ -38,6 +38,7 @@
             filter: drop-shadow(3px 3px 0 white) drop-shadow(-3px 3px 0 white) drop-shadow(3px -3px 0 white) drop-shadow(-3px -3px 0 white);
         }
     </style>
+    <script src="./scripts/reconnecting-websocket.js" type="text/javascript"></script>
     <script src="./scripts/zunderstream-base.js" type="text/javascript"></script>
 </head>
 
@@ -49,30 +50,26 @@
     <script type="text/javascript">
         let streamTitle = "";
 
-        async function refreshLowerThird() {
-            const url = `${zunderstreamAdminRootUrl()}/stream-title`;
+        function refreshLowerThird(newStreamTitle) {
             try {
-                const response = await fetch(url);
-
-                if (response.ok) {
-                    const newStreamTitle = await response.text();
-                    if (newStreamTitle !== streamTitle) {
-                        const titleElement = document.getElementById("stream-title");
-                        titleElement.classList.add("hide");
-                        setTimeout(() => {
-                            streamTitle = newStreamTitle;
-                            titleElement.innerHTML = streamTitle;
-                            titleElement.classList.remove("hide");
-                        }, 500);
-                    }
+                if (newStreamTitle != null && newStreamTitle !== streamTitle) {
+                    const titleElement = document.getElementById("stream-title");
+                    titleElement.classList.add("hide");
+                    setTimeout(() => {
+                        streamTitle = newStreamTitle;
+                        titleElement.innerHTML = streamTitle;
+                        titleElement.classList.remove("hide");
+                    }, 500);
                 }
             }
             catch { }
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
-            refreshLowerThird();
-            setInterval(refreshLowerThird, 5000);
+            refreshLowerThird(await getStreamTitle());
+            zunderstreamEvents.on(zunderstreamTitleUpdatedEventName, (data) => {
+                refreshLowerThird(data.title);
+            })
         });
     </script>
 </body>

@@ -639,8 +639,8 @@
         var contestants = [];
 
         async function checkForUpdates() {
-            const configUrl = `${zunderstreamAdminRootUrl()}/tpir-config`;
-            const contestantUrl = `${zunderstreamAdminRootUrl()}/tpir-contestants`;
+            const configUrl = `${zunderstreamAdminRootUrl}/tpir-config`;
+            const contestantUrl = `${zunderstreamAdminRootUrl}/tpir-contestants`;
             try {
                 const configResponse = await fetch(configUrl);
 

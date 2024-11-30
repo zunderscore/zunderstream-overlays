@@ -98,6 +98,7 @@
             opacity: 0;
         }
     </style>
+    <script src="./scripts/reconnecting-websocket.js" type="text/javascript"></script>
     <script src="./scripts/zunderstream-base.js" type="text/javascript"></script>
 </head>
 
@@ -142,14 +143,9 @@
         setElementContents("app-frame-right", appFrameSideContent.join("<br/>"));
         setElementContents("app-frame-bottom", `&#x255A;${"&#x2550;".repeat(MAX_LINE_LENGTH - 2)}&#x255D;`);
 
-        async function refreshLowerThird() {
-            const url = `${zunderstreamAdminRootUrl()}/stream-title`;
+        function refreshLowerThird(newStreamTitle) {
             try {
-                const response = await fetch(url);
-
-                if (response.ok) {
-                    const newStreamTitle = await response.text();
-
+                if (newStreamTitle != null) {
                     // Create a fake element to strip out any HTML
                     const cleanElement = document.createElement("span");
                     cleanElement.innerHTML = newStreamTitle;
@@ -181,13 +177,17 @@
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
+            refreshLowerThird(await getStreamTitle());
+
             updateTimeParts();
-            refreshLowerThird();
             await getLatestNewsBarItem();
 
             setInterval(updateTimeParts, 1000);
-            setInterval(refreshLowerThird, 5000);
             setInterval(getLatestNewsBarItem, 1000);
+
+            zunderstreamEvents.on(zunderstreamTitleUpdatedEventName, (data) => {
+                refreshLowerThird(data.title);
+            })
         });
     </script>
 </body>

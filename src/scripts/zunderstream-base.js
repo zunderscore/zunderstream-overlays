@@ -1,17 +1,62 @@
-function firebotRootUrl() {
-    return `http://localhost:7472/`;
+// URLs
+const firebotRootUrl = `http://localhost:7472/`;
+const firebotApiRootUrl = `${firebotRootUrl}api/v1`;
+const zunderstreamAdminRootUrl = `${firebotRootUrl}integrations/zunderstream`;
+const firebotWsUrl = `ws://localhost:7472/`;
+
+// EventEmitter implemetation
+class EventEmitter {
+    constructor() {
+        this.events = {};
+    }
+
+    on(event, listener) {
+        if (typeof this.events[event] !== 'object') {
+            this.events[event] = [];
+        }
+
+        this.events[event].push(listener);
+    }
+
+    removeListener(event, listener) {
+        if (typeof this.events[event] === 'object') {
+            let index = this.events[event].indexOf(listener);
+
+            if (index > -1) {
+                this.events[event].splice(index, 1);
+            }
+        }
+    }
+
+    emit(event) {
+        if (typeof this.events[event] === 'object') {
+            let listeners = this.events[event].slice();
+            let args = [].slice.call(arguments, 1);
+
+            for (let i = 0; i < listeners.length; i++) {
+                listeners[i].apply(this, args);
+            }
+        }
+    }
+
+    once(event, listener) {
+        this.on(event, function g() {
+            this.removeListener(event, g);
+            listener.apply(this, arguments);
+        });
+    }
 }
 
-function firebotApiRootUrl() {
-    return firebotRootUrl() + 'api/v1';
-}
+// WebSocket Events
+const zunderstreamEvents = new EventEmitter();
 
-function zunderstreamAdminRootUrl() {
-    return firebotRootUrl() + 'integrations/zunderstream';
-}
+const zunderstreamTitleUpdatedEventName = "zunderstream:stream-title-updated";
+const zunderstreamTpirConfigUpdatedEventName = "zunderstream:tpir-config-updated";
+const zunderstreamTpirTitleUpdatedEventName = "zunderstream:tpir-title-updated";
 
+// Helper functions
 async function getFirebotCustomVariable(variableName) {
-    let url = `${firebotApiRootUrl()}/custom-variables/${variableName}`;
+    let url = `${firebotApiRootUrl}/custom-variables/${variableName}`;
 
     const response = await fetch(url);
 
@@ -19,7 +64,7 @@ async function getFirebotCustomVariable(variableName) {
 }
 
 async function setFirebotCustomVariable(variableName, value, ttl) {
-    let url = `${firebotApiRootUrl()}/custom-variables/${variableName}`;
+    let url = `${firebotApiRootUrl}/custom-variables/${variableName}`;
 
     const response = await fetch(url, {
         method: 'POST',
@@ -44,4 +89,57 @@ function addClassToElement(elementId, className) {
 
 function removeClassFromElement(elementId, className) {
     document.getElementById(elementId).classList.remove(className);
+}
+
+async function getStreamTitle() {
+    const url = `${zunderstreamAdminRootUrl}/stream-title`;
+    try {
+        const response = await fetch(url);
+
+        if (response.ok) {
+            return await response.text();
+        }
+    }
+    catch { }
+
+    return undefined;
+}
+
+if (ReconnectingWebSocket != null) {
+    var ws = new ReconnectingWebSocket(firebotWsUrl);
+
+    ws.onopen = () => {
+        ws.send(JSON.stringify({
+            type: "invoke",
+            name: "subscribe-events"
+        }));
+    };
+
+    ws.onmessage = (event) => {
+        try {
+            const message = JSON.parse(event.data);
+            if (message.type !== "event") {
+                return;
+            }
+
+            const eventName = message.name.toLowerCase();
+            switch (eventName) {
+                case `custom-event:${zunderstreamTitleUpdatedEventName}`:
+                    zunderstreamEvents.emit(zunderstreamTitleUpdatedEventName, message.data);
+                    break;
+
+                default:
+                    console.debug(`Ignoring event ${eventName}`);
+                    break;
+            }
+        } catch (error) {
+            console.error(`Error processing WebSocket message: ${error}`);
+        }
+    };
+
+    ws.onerror = (error) => {
+        console.error(`Unable to connect to WebSocket: ${error}`);
+    };
+
+    ws.open();
 }

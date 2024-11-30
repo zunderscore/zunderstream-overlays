@@ -157,7 +157,7 @@
 
         async function checkCoworkSetup() {
             try {
-                let url = `${zunderstreamAdminRootUrl()}/cowork-messages`;
+                let url = `${zunderstreamAdminRootUrl}/cowork-messages`;
                 let response = await fetch(url);
 
                 if (response.ok) {
@@ -167,7 +167,7 @@
                     setElementContents("footer-left", coworkSetup.footerMessageLeft ?? "");
                     setElementContents("footer-right", coworkSetup.footerMessageRight ?? "");
 
-                    url = `${zunderstreamAdminRootUrl()}/enable-cowork-shade`;
+                    url = `${zunderstreamAdminRootUrl}/enable-cowork-shade`;
                     response = await fetch(url);
 
                     if (response.ok) {

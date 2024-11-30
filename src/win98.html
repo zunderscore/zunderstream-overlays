@@ -145,6 +145,7 @@
             width: 100%;
         }
     </style>
+    <script src="./scripts/reconnecting-websocket.js"></script>
     <script src="./scripts/zunderstream-base.js"></script>
 </head>
 
@@ -200,17 +201,11 @@
             setElementText("system-tray-clock", `${date.getHours() % 12}:${String(date.getMinutes()).padStart(2, "0")} ${date.getHours() > 11 ? "PM" : "AM"}`);
         }
 
-        async function refreshLowerThird() {
+        function refreshLowerThird(newStreamTitle) {
             try {
-                const url = `${zunderstreamAdminRootUrl()}/stream-title`;
-                const response = await fetch(url);
-
-                if (response.ok) {
-                    const newStreamTitle = await response.text();
-                    if (newStreamTitle !== streamTitle) {
-                        streamTitle = newStreamTitle;
-                        setElementContents("taskbar-stream-title", streamTitle);
-                    }
+                if (newStreamTitle != null && newStreamTitle !== streamTitle) {
+                    streamTitle = newStreamTitle;
+                    setElementContents("taskbar-stream-title", streamTitle);
                 }
             } catch { }
         }
@@ -237,11 +232,14 @@
 
         document.addEventListener("DOMContentLoaded", async () => {
             updateClock();
-            await refreshLowerThird();
+            refreshLowerThird(await getStreamTitle());
 
             setInterval(updateClock, 1000);
-            setInterval(refreshLowerThird, 5000);
             setTimeout(loadClippy, 1 * 1000);
+
+            zunderstreamEvents.on(zunderstreamTitleUpdatedEventName, (data) => {
+                refreshLowerThird(data.title);
+            })
         });
     </script>
 </body>

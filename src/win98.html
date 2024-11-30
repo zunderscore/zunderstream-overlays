@@ -222,11 +222,10 @@
             });
         }
 
-        async function checkRedemption() {
-            const redemption = await getFirebotCustomVariable("win98RedemptionId");
+        function checkRedemption(redemption) {
             if (redemption != null && redemption !== "") {
                 agent.animate();
-                await setFirebotCustomVariable("win98Redeemed", true, 5);
+                setFirebotCustomVariable("win98Redeemed", true, 5);
             }
         }
 
@@ -239,7 +238,8 @@
 
             zunderstreamEvents.on(zunderstreamTitleUpdatedEventName, (data) => {
                 refreshLowerThird(data.title);
-            })
+            });
+            zunderstreamEvents.on(`${customVariableEventName}:win98RedemptionId`, checkRedemption)
         });
     </script>
 </body>

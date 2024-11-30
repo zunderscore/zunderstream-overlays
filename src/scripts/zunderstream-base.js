@@ -29,6 +29,7 @@ class EventEmitter {
     }
 
     emit(event) {
+        console.debug(`zunderstream event ${event}`);
         if (typeof this.events[event] === 'object') {
             let listeners = this.events[event].slice();
             let args = [].slice.call(arguments, 1);
@@ -53,6 +54,8 @@ const zunderstreamEvents = new EventEmitter();
 const zunderstreamTitleUpdatedEventName = "zunderstream:stream-title-updated";
 const zunderstreamTpirConfigUpdatedEventName = "zunderstream:tpir-config-updated";
 const zunderstreamTpirTitleUpdatedEventName = "zunderstream:tpir-title-updated";
+const zunderstreamTpirContestantsUpdatedEventName = "zunderstream:tpir-contestants-updated";
+const customVariableEventName = "custom-variable";
 
 // Helper functions
 async function getFirebotCustomVariable(variableName) {
@@ -105,7 +108,35 @@ async function getStreamTitle() {
     return undefined;
 }
 
-if (ReconnectingWebSocket != null) {
+async function getTpirConfig() {
+    const url = `${zunderstreamAdminRootUrl}/tpir-config`;
+    try {
+        const response = await fetch(url);
+
+        if (response.ok) {
+            return await response.json();
+        }
+    }
+    catch { }
+
+    return undefined;
+}
+
+async function getTpirContestants() {
+    const url = `${zunderstreamAdminRootUrl}/tpir-contestants`;
+    try {
+        const response = await fetch(url);
+
+        if (response.ok) {
+            return await response.json();
+        }
+    }
+    catch { }
+
+    return undefined;
+}
+
+if (typeof ReconnectingWebSocket != "undefined") {
     var ws = new ReconnectingWebSocket(firebotWsUrl);
 
     ws.onopen = () => {
@@ -123,23 +154,23 @@ if (ReconnectingWebSocket != null) {
             }
 
             const eventName = message.name.toLowerCase();
-            switch (eventName) {
-                case `custom-event:${zunderstreamTitleUpdatedEventName}`:
-                    zunderstreamEvents.emit(zunderstreamTitleUpdatedEventName, message.data);
-                    break;
-
-                default:
-                    console.debug(`Ignoring event ${eventName}`);
-                    break;
+            if (eventName.startsWith("custom-event:zunderstream:")) {
+                zunderstreamEvents.emit(eventName.substring(13), message.data);
+            } else if (eventName === "custom-variable:created" || eventName === "custom-variable:updated") {
+                zunderstreamEvents.emit(`${customVariableEventName}:${message.data.name}`, message.data.value);
+            } else {
+                console.debug(`Ignoring Firebot event ${eventName}`);
             }
         } catch (error) {
             console.error(`Error processing WebSocket message: ${error}`);
         }
     };
 
+    ws.onclose = () => {
+        console.debug("Firebot WebSocket connection closed");
+    };
+
     ws.onerror = (error) => {
         console.error(`Unable to connect to WebSocket: ${error}`);
     };
-
-    ws.open();
 }

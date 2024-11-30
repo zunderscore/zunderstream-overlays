@@ -407,6 +407,7 @@
             }
         }
     </style>
+    <script src="./scripts/reconnecting-websocket.js" type="text/javascript"></script>
     <script src="./scripts/zunderstream-base.js" type="text/javascript"></script>
 </head>
 
@@ -638,84 +639,73 @@
     <script type="text/javascript">
         var contestants = [];
 
-        async function checkForUpdates() {
-            const configUrl = `${zunderstreamAdminRootUrl}/tpir-config`;
-            const contestantUrl = `${zunderstreamAdminRootUrl}/tpir-contestants`;
-            try {
-                const configResponse = await fetch(configUrl);
-
-                if (configResponse.ok) {
-                    const tpirConfig = await configResponse.json();
-
-                    if (tpirConfig != null) {
-                        if (tpirConfig.titleText != null && tpirConfig.titleText != "") {
-                            setElementContents("title-text", tpirConfig.titleText);
-                        }
-
-                        if (tpirConfig.showTitleText === true) {
-                            removeClassFromElement("title-text", "hidden");
-                        } else {
-                            addClassToElement("title-text", "hidden");
-                        }
-
-                        if (tpirConfig.showContestants === true) {
-                            removeClassFromElement("contestants", "hide-contestants");
-                        } else {
-                            addClassToElement("contestants", "hide-contestants");
-                        }
-
-                        if (tpirConfig.showLogo === true) {
-                            removeClassFromElement("zunderstream-logo", "hidden");
-                        } else {
-                            addClassToElement("zunderstream-logo", "hidden");
-                        }
-                    }
+        function updateConfig(tpirConfig) {
+            if (tpirConfig != null) {
+                if (tpirConfig.titleText != null && tpirConfig.titleText != "") {
+                    setElementContents("title-text", tpirConfig.titleText);
                 }
 
-                const contestantResponse = await fetch(contestantUrl);
+                if (tpirConfig.showTitleText === true) {
+                    removeClassFromElement("title-text", "hidden");
+                } else {
+                    addClassToElement("title-text", "hidden");
+                }
 
-                if (contestantResponse.ok) {
-                    let newContestants = await contestantResponse.json();
+                if (tpirConfig.showContestants === true) {
+                    removeClassFromElement("contestants", "hide-contestants");
+                } else {
+                    addClassToElement("contestants", "hide-contestants");
+                }
 
-                    if (newContestants.length > 0) {
-                        for (let x = 0; x < 4; x++) {
-                            if ((contestants[x] == null && newContestants[x] == null) ||
-                                (contestants[x]?.name === newContestants[x]?.name &&
-                                    contestants[x]?.avatarUrl === newContestants[x]?.avatarUrl &&
-                                    contestants[x]?.show === newContestants[x]?.show)) {
-                                continue;
-                            }
-
-                            contestants[x] = newContestants[x];
-
-                            if (contestants[x] != null) {
-                                setElementContents(`contestant-${x + 1}`, `<img src="${contestants[x].avatarUrl}" />`);
-                            } else {
-                                setElementContents(`contestant-${x + 1}`, "");
-                            }
-
-                            if (contestants[x]?.show === true) {
-                                removeClassFromElement(`contestant-${x + 1}`, "hide-contestant");
-                            } else {
-                                addClassToElement(`contestant-${x + 1}`, "hide-contestant");
-                            }
-                        }
-                    } else {
-                        contestants = [];
-
-                        addClassToElement("contestant-1", "hide-contestant");
-                        addClassToElement("contestant-2", "hide-contestant");
-                        addClassToElement("contestant-3", "hide-contestant");
-                        addClassToElement("contestant-4", "hide-contestant");
-                    }
+                if (tpirConfig.showLogo === true) {
+                    removeClassFromElement("zunderstream-logo", "hidden");
+                } else {
+                    addClassToElement("zunderstream-logo", "hidden");
                 }
             }
-            catch { }
+        }
+
+        function updateContestants(contestantData) {
+            const newContestants = contestantData?.contestants ?? [];
+            if (newContestants.length > 0) {
+                for (let x = 0; x < 4; x++) {
+                    if ((contestants[x] == null && newContestants[x] == null) ||
+                        (contestants[x]?.name === newContestants[x]?.name &&
+                            contestants[x]?.avatarUrl === newContestants[x]?.avatarUrl &&
+                            contestants[x]?.show === newContestants[x]?.show)) {
+                        continue;
+                    }
+
+                    contestants[x] = newContestants[x];
+
+                    if (contestants[x] != null) {
+                        setElementContents(`contestant-${x + 1}`, `<img src="${contestants[x].avatarUrl}" />`);
+                    } else {
+                        setElementContents(`contestant-${x + 1}`, "");
+                    }
+
+                    if (contestants[x]?.show === true) {
+                        removeClassFromElement(`contestant-${x + 1}`, "hide-contestant");
+                    } else {
+                        addClassToElement(`contestant-${x + 1}`, "hide-contestant");
+                    }
+                }
+            } else {
+                contestants = [];
+
+                addClassToElement("contestant-1", "hide-contestant");
+                addClassToElement("contestant-2", "hide-contestant");
+                addClassToElement("contestant-3", "hide-contestant");
+                addClassToElement("contestant-4", "hide-contestant");
+            }
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
-            checkForUpdates();
-            setInterval(checkForUpdates, 1000);
+            updateConfig(await getTpirConfig());
+            updateContestants(await getTpirContestants());
+
+            zunderstreamEvents.on(zunderstreamTpirConfigUpdatedEventName, updateConfig);
+            zunderstreamEvents.on(zunderstreamTpirContestantsUpdatedEventName, updateContestants);
         });
     </script>
 </body>

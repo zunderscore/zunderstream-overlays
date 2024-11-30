@@ -65,25 +65,17 @@
             } catch { }
         }
 
-        async function getLatestNewsBarItem() {
-            try {
-                let currentItem = await getFirebotCustomVariable("currentNewsBarItem");
-
-                currentItem = currentItem.replace("❤️", "");
-
-                setElementContents("news-bar-text", currentItem);
-            } catch { }
+        function getLatestNewsBarItem(currentItem) {
+            setElementContents("news-bar-text", currentItem.replace("❤️", ""));
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
             refreshLowerThird(await getStreamTitle());
-            await getLatestNewsBarItem();
-
-            setInterval(getLatestNewsBarItem, 1000);
 
             zunderstreamEvents.on(zunderstreamTitleUpdatedEventName, (data) => {
                 refreshLowerThird(data.title);
-            })
+            });
+            zunderstreamEvents.on(`${customVariableEventName}:currentNewsBarItem`, getLatestNewsBarItem);
         });
     </script>
 </body>

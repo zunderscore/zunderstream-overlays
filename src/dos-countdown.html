@@ -175,6 +175,7 @@
             padding: 0 20px;
         }
     </style>
+    <script src="./scripts/reconnecting-websocket.js" type="text/javascript"></script>
     <script src="./scripts/zunderstream-base.js" type="text/javascript"></script>
 </head>
 
@@ -321,7 +322,6 @@
                 setupProgressBarContainer();
                 rotateMarquee();
                 startCountdown();
-                startFilenameLoop();
                 spinnerLoop = setInterval(updateSpinners, 100);
             }, 500);
         }
@@ -425,8 +425,8 @@
             "DAT"
         ];
 
-        async function updateFilename() {
-            let chatter = String(await getFirebotCustomVariable("lastChatter")).toUpperCase();
+        function updateFilename(chatter) {
+            chatter = chatter.toUpperCase();
             if (chatter !== lastChatter) {
                 lastChatter = chatter;
                 if (chatter.length > 8) {
@@ -436,26 +436,19 @@
             }
         }
 
-        function startFilenameLoop() {
-            filenameTimer = setInterval(updateFilename, 500);
-        }
-
         let bootSignalLoop;
 
-        async function listenForBootSignal() {
-            const bootDOS = await getFirebotCustomVariable("bootDOS");
-
+        function listenForBootSignal(bootDOS) {
             if (bootDOS === 1) {
-                clearInterval(bootSignalLoop);
-                bootSignalLoop = undefined;
-
-                await setFirebotCustomVariable("bootDOS", 0, 1);
+                zunderstreamEvents.removeListener(`${customVariableEventName}:bootDOS`, listenForBootSignal);
+                setFirebotCustomVariable("bootDOS", 0, 1);
                 powerOn();
             }
         }
 
-        document.addEventListener("DOMContentLoaded", async () => {
-            bootSignalLoop = setInterval(listenForBootSignal, 1000);
+        document.addEventListener("DOMContentLoaded", () => {
+            zunderstreamEvents.on(`${customVariableEventName}:bootDOS`, listenForBootSignal);
+            zunderstreamEvents.on(`${customVariableEventName}:lastChatter`, updateFilename);
         });
     </script>
 </body>

@@ -159,12 +159,8 @@
             } catch { }
         }
 
-        async function getLatestNewsBarItem() {
-            let currentItem = await getFirebotCustomVariable("currentNewsBarItem") ?? "";
-
-            currentItem = currentItem.replace("❤️", "&#x2665;");
-
-            setElementContents("footer-text", currentItem);
+        function updateNewsBar(currentItem) {
+            setElementContents("footer-text", currentItem.replace("❤️", "&#x2665;"));
         }
 
         function updateTimeParts() {
@@ -180,14 +176,12 @@
             refreshLowerThird(await getStreamTitle());
 
             updateTimeParts();
-            await getLatestNewsBarItem();
-
             setInterval(updateTimeParts, 1000);
-            setInterval(getLatestNewsBarItem, 1000);
 
             zunderstreamEvents.on(zunderstreamTitleUpdatedEventName, (data) => {
                 refreshLowerThird(data.title);
-            })
+            });
+            zunderstreamEvents.on(`${customVariableEventName}:currentNewsBarItem`, updateNewsBar);
         });
     </script>
 </body>

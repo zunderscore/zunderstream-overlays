@@ -381,12 +381,7 @@
         var totalCoinCounter = 0;
         var currentCoinHundreds = 0;
 
-        function startCoinCounterCheck() {
-            setInterval(coinCounterCheck, 500);
-        }
-
-        async function coinCounterCheck() {
-            let coinsString = await getFirebotCustomVariable("coinCount");
+        function coinCounterCheck(coinsString) {
             let coins = Number(coinsString);
 
             if (coins > totalCoinCounter) {
@@ -425,7 +420,7 @@
             extraLifeSound.play();
 
             setTimeout(startCountdown, 8000);
-            setTimeout(startCoinCounterCheck, 8000);
+            zunderstreamEvents.on(`${customVariableEventName}:coinCount`, coinCounterCheck);
         });
     </script>
 </body>

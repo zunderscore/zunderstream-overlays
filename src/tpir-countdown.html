@@ -93,6 +93,7 @@
             }
         }
     </style>
+    <script src="./scripts/reconnecting-websocket.js" type="text/javascript"></script>
     <script src="./scripts/zunderstream-base.js" type="text/javascript"></script>
 </head>
 
@@ -110,33 +111,26 @@
     <script type="text/javascript">
         let comeOnDownDone = false;
 
-        async function refreshCountdown() {
-            const contestantUrl = `${zunderstreamAdminRootUrl}/tpir-contestants`;
-
+        function updateCountdown(contestantData) {
             try {
                 if (comeOnDownDone !== true) {
-                    const contestantResposne = await fetch(contestantUrl);
-
-                    if (contestantResposne.ok) {
-                        const contestants = await contestantResposne.json();
-                        if (contestants.length >= 4) {
-                            comeOnDownDone = true;
-                            const comeOnDownElement = document.getElementById("come-on-down-text");
-                            comeOnDownElement.classList.add("slide-down");
-                            setTimeout(() => {
-                                comeOnDownElement.innerHTML = "That's everyone! The show will start soon!";
-                                comeOnDownElement.classList.remove("slide-down");
-                            }, 1000);
-                        }
+                    if (contestantData.count >= 4) {
+                        zunderstreamEvents.removeListener(zunderstreamTpirContestantsUpdatedEventName, updateCountdown);
+                        comeOnDownDone = true;
+                        const comeOnDownElement = document.getElementById("come-on-down-text");
+                        comeOnDownElement.classList.add("slide-down");
+                        setTimeout(() => {
+                            comeOnDownElement.innerHTML = "That's everyone! The show will start soon!";
+                            comeOnDownElement.classList.remove("slide-down");
+                        }, 1000);
                     }
                 }
             }
             catch { }
         }
 
-        document.addEventListener("DOMContentLoaded", async () => {
-            refreshCountdown();
-            setInterval(refreshCountdown, 5000);
+        document.addEventListener("DOMContentLoaded", () => {
+            zunderstreamEvents.on(zunderstreamTpirContestantsUpdatedEventName, updateCountdown);
         });
     </script>
 </body>

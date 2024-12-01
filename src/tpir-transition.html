@@ -78,10 +78,6 @@
 
         #door-panel-left-4 {
             left: 480px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: end;
         }
 
         #door-panel-right-1 {
@@ -98,11 +94,47 @@
 
         #door-panel-right-4 {
             right: 480px;
+        }
+
+        .panel-tile-1,
+        .panel-tile-2 {
             display: flex;
-            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            align-items: start;
-            padding-left: 20px;
+            width: 240px;
+            height: 240px;
+        }
+
+        .panel-tile-1>div,
+        .panel-tile-2>div {
+            width: 180px;
+            height: 180px;
+            border-radius: 20px;
+        }
+
+        .panel-tile-1 {
+            background-color: #06f;
+        }
+
+        .panel-tile-1>div {
+            background-color: #06f;
+            box-shadow: inset 0px 0px 30px 30px #69f;
+        }
+
+        .panel-tile-2 {
+            background-color: #39f;
+        }
+
+        .panel-tile-2>div {
+            background-color: #06f;
+        }
+
+        .panel-overlay {
+            display: none;
+            visibility: collapse;
+            position: absolute;
+            top: 50%;
+            transform: translate(0, -50%);
         }
 
         #logo {
@@ -164,19 +196,149 @@
 <body>
     <div id="big-doors">
         <div class="left panel-4" id="door-panel-left-4">
-            <img id="logo" src="./images/z-dollar.png" />
+            <div class="panel-tile-1">
+                <div></div>
+            </div>
+            <div class="panel-tile-2">
+                <div></div>
+            </div>
+            <div class="panel-tile-1">
+                <div></div>
+            </div>
+            <div class="panel-tile-2">
+                <div></div>
+            </div>
+            <div class="panel-tile-1">
+                <div></div>
+            </div>
+            <!-- <div class="panel-overlay">
+                <img id="logo" src="./images/z-dollar.png" />
+            </div> -->
         </div>
         <div class="right panel-4" id="door-panel-right-4">
-            <div>the</div>
-            <div class="large-logo-text">zunder</div>
-            <div>stream</div>
+            <div class="panel-tile-2">
+                <div></div>
+            </div>
+            <div class="panel-tile-1">
+                <div></div>
+            </div>
+            <div class="panel-tile-2">
+                <div></div>
+            </div>
+            <div class="panel-tile-1">
+                <div></div>
+            </div>
+            <div class="panel-tile-2">
+                <div></div>
+            </div>
+            <!-- <div class="panel-overlay">
+                <div>the</div>
+                <div class="large-logo-text">zunder</div>
+                <div>stream</div>
+            </div> -->
         </div>
-        <div class="left panel-3" id="door-panel-left-3"></div>
-        <div class="right panel-3" id="door-panel-right-3"></div>
-        <div class="left panel-2" id="door-panel-left-2"></div>
-        <div class="right panel-2" id="door-panel-right-2"></div>
-        <div class="left panel-1" id="door-panel-left-1"></div>
-        <div class="right panel-1" id="door-panel-right-1"></div>
+        <div class="left panel-3" id="door-panel-left-3">
+            <div class="panel-tile-2">
+                <div></div>
+            </div>
+            <div class="panel-tile-1">
+                <div></div>
+            </div>
+            <div class="panel-tile-2">
+                <div></div>
+            </div>
+            <div class="panel-tile-1">
+                <div></div>
+            </div>
+            <div class="panel-tile-2">
+                <div></div>
+            </div>
+        </div>
+        <div class="right panel-3" id="door-panel-right-3">
+            <div class="panel-tile-1">
+                <div></div>
+            </div>
+            <div class="panel-tile-2">
+                <div></div>
+            </div>
+            <div class="panel-tile-1">
+                <div></div>
+            </div>
+            <div class="panel-tile-2">
+                <div></div>
+            </div>
+            <div class="panel-tile-1">
+                <div></div>
+            </div>
+        </div>
+        <div class="left panel-2" id="door-panel-left-2">
+            <div class="panel-tile-1">
+                <div></div>
+            </div>
+            <div class="panel-tile-2">
+                <div></div>
+            </div>
+            <div class="panel-tile-1">
+                <div></div>
+            </div>
+            <div class="panel-tile-2">
+                <div></div>
+            </div>
+            <div class="panel-tile-1">
+                <div></div>
+            </div>
+        </div>
+        <div class="right panel-2" id="door-panel-right-2">
+            <div class="panel-tile-2">
+                <div></div>
+            </div>
+            <div class="panel-tile-1">
+                <div></div>
+            </div>
+            <div class="panel-tile-2">
+                <div></div>
+            </div>
+            <div class="panel-tile-1">
+                <div></div>
+            </div>
+            <div class="panel-tile-2">
+                <div></div>
+            </div>
+        </div>
+        <div class="left panel-1" id="door-panel-left-1">
+            <div class="panel-tile-2">
+                <div></div>
+            </div>
+            <div class="panel-tile-1">
+                <div></div>
+            </div>
+            <div class="panel-tile-2">
+                <div></div>
+            </div>
+            <div class="panel-tile-1">
+                <div></div>
+            </div>
+            <div class="panel-tile-2">
+                <div></div>
+            </div>
+        </div>
+        <div class="right panel-1" id="door-panel-right-1">
+            <div class="panel-tile-1">
+                <div></div>
+            </div>
+            <div class="panel-tile-2">
+                <div></div>
+            </div>
+            <div class="panel-tile-1">
+                <div></div>
+            </div>
+            <div class="panel-tile-2">
+                <div></div>
+            </div>
+            <div class="panel-tile-1">
+                <div></div>
+            </div>
+        </div>
     </div>
 
     <script type="text/javascript">

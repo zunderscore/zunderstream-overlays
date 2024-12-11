@@ -48,6 +48,31 @@ class EventEmitter {
     }
 }
 
+// Alert logic
+var isAlertRunning = false;
+var zunderstreamAlertQueue = [];
+
+class ZunderstreamAlert {
+    constructor(alertText = "", duration = 5, metadata = {}) {
+        this.alertText = alertText;
+        this.duration = duration;
+
+        this.metadata = metadata;
+    }
+}
+
+function runAlertLoop(alertHandler) {
+    if (isAlertRunning !== true) {
+        if (zunderstreamAlertQueue.length > 0) {
+            isAlertRunning = true;
+
+            alertHandler(zunderstreamAlertQueue.shift());
+
+            isAlertRunning = false;
+        }
+    }
+}
+
 // WebSocket Events
 const zunderstreamEvents = new EventEmitter();
 

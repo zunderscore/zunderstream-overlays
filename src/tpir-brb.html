@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<!-- OPTIMAL RESOLUTION: 1920x1080 -->
+
+<head>
+    <title>zunderstream TPIR BRB</title>
+    <link href="./styles/shared.css" rel="stylesheet" type="text/css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #26c;
+            width: 1920px;
+            height: 1080px;
+            font-family: 'Pricedown';
+            color: #fff;
+        }
+
+        #flowers {
+            opacity: 0.3;
+        }
+
+        #flower-1 {
+            position: fixed;
+            left: -550px;
+            top: -60px;
+            height: 1200px;
+            animation: fullRotate 60s linear 0s infinite;
+        }
+
+        #flower-2 {
+            position: fixed;
+            left: 1000px;
+            bottom: -120px;
+            height: 400px;
+            animation: fullRotate 60s linear 0s infinite reverse;
+        }
+
+        #flower-3 {
+            position: fixed;
+            left: 1400px;
+            top: -200px;
+            height: 800px;
+            animation: fullRotate 60s linear 0s infinite;
+        }
+
+        #brb-title-text {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            font-size: 80px;
+            text-align: center;
+            -webkit-text-stroke: 0px #000;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        @keyframes fullRotate {
+            from {
+                transform: rotate(0);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="flowers">
+        <img id="flower-1" src="images/retro-flower.svg">
+        <img id="flower-2" src="images/retro-flower.svg">
+        <img id="flower-3" src="images/retro-flower.svg">
+    </div>
+
+    <div id="brb-title-text">We'll be back right after this!</div>
+</body>
+
+</html>

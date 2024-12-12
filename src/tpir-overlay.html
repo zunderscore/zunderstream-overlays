@@ -13,47 +13,15 @@
         }
 
         body {
-            background-color: #000;
+            background-color: #26c;
             width: 1920px;
             height: 1080px;
             font-family: 'Pricedown';
             color: #fff;
         }
 
-        #bottom-bar,
-        #side-bar-left,
-        #side-bar-right {
-            position: fixed;
-            background-color: #26c;
-            overflow: hidden;
-        }
-
-        #bottom-bar {
-            top: 972px;
-            bottom: 0;
-            left: 0;
-            right: 0;
-        }
-
-        #side-bar-left,
-        #side-bar-right {
-            display: fixed;
-            top: 0;
-            bottom: 108px;
-            width: 96px;
-        }
-
-        #side-bar-left {
-            left: 0;
-        }
-
-        #side-bar-right {
-            right: 0;
-        }
-
         #stream-title {
-            position: absolute;
-            top: 0;
+            position: fixed;
             bottom: 20px;
             left: 0;
             right: 0;
@@ -74,7 +42,7 @@
         }
 
         #bottom-flower-1 {
-            position: absolute;
+            position: fixed;
             left: -80px;
             bottom: -80px;
             height: 180px;
@@ -82,15 +50,15 @@
         }
 
         #bottom-flower-2 {
-            position: absolute;
-            left: 760px;
-            top: -125px;
+            position: fixed;
+            left: 780px;
+            bottom: -180px;
             height: 400px;
             animation: fullRotate 60s linear 0s infinite reverse;
         }
 
         #bottom-flower-3 {
-            position: absolute;
+            position: fixed;
             right: -80px;
             bottom: -80px;
             height: 180px;
@@ -98,19 +66,27 @@
         }
 
         #left-side-flower {
-            position: absolute;
-            right: -80px;
+            position: fixed;
+            left: -280px;
             top: 100px;
             height: 500px;
             animation: fullRotate 60s linear 0s infinite reverse;
         }
 
         #right-side-flower {
-            position: absolute;
-            left: -80px;
-            bottom: 100px;
+            position: fixed;
+            right: -280px;
+            bottom: 200px;
             height: 500px;
             animation: fullRotate 60s linear 0s infinite;
+        }
+
+        #top-flower {
+            position: fixed;
+            top: -240px;
+            left: 700px;
+            height: 800px;
+            animation: fullRotate 90s linear 0s infinite;
         }
 
         @keyframes fullRotate {
@@ -128,19 +104,16 @@
 </head>
 
 <body>
-    <div id="side-bar-left">
-        <img id="left-side-flower" class="flower" src="images/retro-flower.svg">
-    </div>
-    <div id="side-bar-right">
-        <img id="right-side-flower" class="flower" src="images/retro-flower.svg">
-    </div>
+    <img id="top-flower" class="flower" src="images/retro-flower.svg">
 
-    <div id="bottom-bar">
-        <img id="bottom-flower-1" class="flower" src="images/retro-flower.svg">
-        <img id="bottom-flower-2" class="flower" src="images/retro-flower.svg">
-        <img id="bottom-flower-3" class="flower" src="images/retro-flower.svg">
-        <div id="stream-title"></div>
-    </div>
+    <img id="left-side-flower" class="flower" src="images/retro-flower.svg">
+    <img id="right-side-flower" class="flower" src="images/retro-flower.svg">
+
+    <img id="bottom-flower-1" class="flower" src="images/retro-flower.svg">
+    <img id="bottom-flower-2" class="flower" src="images/retro-flower.svg">
+    <img id="bottom-flower-3" class="flower" src="images/retro-flower.svg">
+
+    <div id="stream-title"></div>
 
     <script type="text/javascript">
         let streamTitle = "";

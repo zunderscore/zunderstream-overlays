@@ -138,11 +138,11 @@
         }
 
         .countdown {
-            position: absolute;
-            top: calc(50% - 200px);
-            left: calc(50% - 800px);
-            height: 400px;
-            width: 1600px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -322,12 +322,13 @@
             }
         }
     </style>
+    <script src="./scripts/reconnecting-websocket.js" type="text/javascript"></script>
     <script src="./scripts/zunderstream-base.js" type="text/javascript"></script>
 </head>
 
 <body>
     <div class="sky"></div>
-    <div class="loading-text">LOADING</div>
+    <div class="loading-text">LOADING...</div>
     <div class="ground">PLAYERS, GET READY!</div>
     <div class="ground-gradient one"></div>
     <div class="ground-gradient two"></div>
@@ -341,7 +342,9 @@
         <img src="./images/retro/coin.png" class="animated-coin" />x<span id="coin-count">00</span>
     </div>
 
-    <div class="countdown" id="countdown">05:00</div>
+    <div class="countdown">
+        <div id="countdown">05:00</div>
+    </div>
     <div class="countdown press-start">PRESS START</div>
 
     <div class="title">
@@ -381,36 +384,31 @@
         var totalCoinCounter = 0;
         var currentCoinHundreds = 0;
 
-        function coinCounterCheck(coinsString) {
-            let coins = Number(coinsString);
+        function coinCounterCheck(coins) {
+            console.debug(`Increasing coin counter by ${coins}`);
+            totalCoinCounter += Number(coins);
 
-            if (coins > totalCoinCounter) {
-                let hundreds = Math.floor(coins / 100);
-                totalCoinCounter = coins;
-                currentCoinCounter = coins - (hundreds * 100);
+            let hundreds = Math.floor(totalCoinCounter / 100);
+            currentCoinCounter = totalCoinCounter - (hundreds * 100);
 
-                if (hundreds > currentCoinHundreds) {
-                    currentCoinHundreds = hundreds;
+            if (hundreds > currentCoinHundreds) {
+                currentCoinHundreds = hundreds;
 
-                    let livesString = String(Math.min(currentCoinHundreds + 5, 99)).padStart(2, "0");
-                    setElementText("lives-count", livesString);
+                let livesString = String(Math.min(currentCoinHundreds + 5, 99)).padStart(2, "0");
+                setElementText("lives-count", livesString);
 
-                    let extraLifeSound = new Audio("./sounds/SMB3_1-up.mp3");
-                    extraLifeSound.play();
-                } else {
-                    let coinSound = new Audio("./sounds/SMB3_coin.mp3");
-                    coinSound.play();
-                }
-
-                let coinsString = String(currentCoinCounter).padStart(2, "0");
-                setElementText("coin-count", coinsString);
+                let extraLifeSound = new Audio("./sounds/SMB3_1-up.mp3");
+                extraLifeSound.play();
+            } else {
+                let coinSound = new Audio("./sounds/SMB3_coin.mp3");
+                coinSound.play();
             }
+
+            let coinsString = String(currentCoinCounter).padStart(2, "0");
+            setElementText("coin-count", coinsString);
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
-            // Reset coin count on start
-            await setFirebotCustomVariable("coinCount", 0);
-
             let coinSound = new Audio("./sounds/SMB3_coin.mp3");
             coinSound.volume = 0;
             coinSound.play();
@@ -419,8 +417,8 @@
             extraLifeSound.volume = 0;
             extraLifeSound.play();
 
-            setTimeout(startCountdown, 8000);
-            zunderstreamEvents.on(`${customVariableEventName}:coinCount`, coinCounterCheck);
+            setTimeout(startCountdown, 8500);
+            zunderstreamEvents.on(`zunderstream:retro-coin-add`, coinCounterCheck);
         });
     </script>
 </body>

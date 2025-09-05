@@ -41,6 +41,7 @@
             height: 720px;
             width: 3840px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             background-color: #090;
@@ -321,6 +322,35 @@
                 opacity: 0;
             }
         }
+
+        .coin-popup {
+            position: fixed;
+            top: 240px;
+            right: 40px;
+            text-align: right;
+            font-size: 0.4em;
+            animation: coinPopup 1s linear 0s forwards;
+        }
+
+        @keyframes coinPopup {
+            50% {
+                top: 160px;
+            }
+
+            90% {
+                top: 160px;
+                opacity: 1;
+            }
+
+            100% {
+                top: 160px;
+                opacity: 0;
+            }
+        }
+
+        .smaller-text {
+            font-size: 0.6em;
+        }
     </style>
     <script src="./scripts/reconnecting-websocket.js" type="text/javascript"></script>
     <script src="./scripts/zunderstream-base.js" type="text/javascript"></script>
@@ -329,7 +359,7 @@
 <body>
     <div class="sky"></div>
     <div class="loading-text">LOADING...</div>
-    <div class="ground">PLAYERS, GET READY!</div>
+    <div class="ground">PLAYERS, GET READY!<br /><span class="smaller-text">Use !coin in chat!</span></div>
     <div class="ground-gradient one"></div>
     <div class="ground-gradient two"></div>
     <div class="ground-gradient three"></div>
@@ -384,6 +414,22 @@
         var totalCoinCounter = 0;
         var currentCoinHundreds = 0;
 
+        function showCoinPopup(username, amount) {
+            console.debug(`Showing ${amount} coin popup from ${username}`);
+
+            const newElementId = self.crypto.randomUUID();
+            const newElement = document.createElement("div");
+            newElement.setAttribute("id", newElementId);
+            newElement.classList.add("coin-popup");
+            newElement.innerHTML = `${username} <span class="smaller-text">x</span>${amount}`;
+
+            document.getElementsByTagName("body")[0].appendChild(newElement);
+
+            setTimeout(() => {
+                document.getElementById(newElementId).remove();
+            }, 2000);
+        }
+
         function coinCounterCheck(coins) {
             console.debug(`Increasing coin counter by ${coins}`);
             totalCoinCounter += Number(coins);
@@ -418,7 +464,10 @@
             extraLifeSound.play();
 
             setTimeout(startCountdown, 8500);
-            zunderstreamEvents.on(`zunderstream:retro-coin-add`, coinCounterCheck);
+            zunderstreamEvents.on(`zunderstream:retro-coin-add`, (coinData) => {
+                showCoinPopup(coinData.username, coinData.coins);
+                coinCounterCheck(coinData.coins);
+            });
         });
     </script>
 </body>

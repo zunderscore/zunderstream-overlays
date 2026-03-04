@@ -21,6 +21,15 @@ body {
     justify-content: center;
 }
 
+.window.maximized {
+    padding: 0;
+    box-shadow: none;
+}
+
+.window.maximized .status-bar {
+    padding: 2px 0;
+}
+
 .title-bar-wrapper {
     display: flex;
     align-items: center;

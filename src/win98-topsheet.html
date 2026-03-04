@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<!-- OPTIMAL RESOLUTION: 1920x1080 -->
+
+<html>
+
+<head>
+    <title>zunderstream Windows 98</title>
+    <link rel="stylesheet" type="text/css" href="./styles/shared.css" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/98.css" />
+    <link rel="stylesheet" type="text/css" href="./styles/win98.css" />
+    <style type="text/css">
+        #chat-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #chat-container>div {
+            box-sizing: border-box;
+            width: 100%;
+            border: solid 1px black;
+            background-color: #FFFF99;
+            color: black;
+            padding: 8px;
+            font-size: 10px;
+            display: flex;
+            flex-direction: row;
+            align-items: start;
+            justify-content: start;
+        }
+
+        /* Message envelope icon */
+        #chat-container>div>div>img {
+            padding-right: 8px;
+        }
+
+        /* Message content */
+        #chat-container>div>div+div>img {
+            height: 10px;
+        }
+
+        #chat-container>div+div {
+            margin-top: 16px;
+        }
+    </style>
+    <script src="./scripts/reconnecting-websocket.js"></script>
+    <script src="./scripts/zunderstream-base.js"></script>
+</head>
+
+<body>
+    <div id="chat-container">
+
+    </div>
+
+    <script type="module">
+        import { initAgent } from "https://cdn.jsdelivr.net/npm/clippyjs/dist/index.mjs";
+        import * as agents from "https://cdn.jsdelivr.net/npm/clippyjs/dist/agents/index.mjs";
+        let agent;
+
+        async function loadClippy() {
+            agent = await initAgent(agents.Clippy);
+
+            agent.moveTo(780, 220);
+            agent.show();
+            agent.play("Greeting");
+
+            setInterval(checkRedemption, 5000);
+        }
+
+        function checkRedemption(redemption) {
+            if (redemption != null && redemption !== "") {
+                agent.animate();
+                setFirebotCustomVariable("win98Redeemed", true, 5);
+            }
+        }
+
+        function deleteChatMessage(messageId) {
+            document.getElementById(messageId)?.remove();
+        }
+
+        function showChatMessage(message) {
+            const elem = document.createElement("div");
+            elem.id = message.id;
+            elem.innerHTML = `<div><img src="./images/win98/message_envelope_open_16x16.png"></div><div><strong>${message.sender}</strong><br/>${message.message}</div>`;
+
+            document.getElementById("chat-container").appendChild(elem);
+
+            setTimeout(() => {
+                deleteChatMessage(message.id);
+            }, 5000)
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            setTimeout(loadClippy, 1 * 1000);
+
+            zunderstreamEvents.on(`${customVariableEventName}:win98RedemptionId`, checkRedemption);
+
+            zunderstreamEvents.on(chatMessageEventName, showChatMessage);
+
+            zunderstreamEvents.on(chatMessageDeletedEventName, (message) => {
+                deleteChatMessage(message.id);
+            });
+        });
+    </script>
+</body>
+
+</html>

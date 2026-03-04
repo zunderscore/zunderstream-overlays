@@ -6,9 +6,9 @@
 
 <head>
     <title>zunderstream Windows 98</title>
+    <link rel="stylesheet" type="text/css" href="./styles/shared.css" />
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/98.css" />
     <link rel="stylesheet" type="text/css" href="./styles/win98.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/pi0/clippyjs/assets/clippy.css">
     <style type="text/css">
         #desktop {
             position: fixed;
@@ -166,13 +166,17 @@
         <div class="taskbar-separator"></div>
         <div class="taskbar-handle"></div>
         <div id="taskbar-applications">
-            <div class="taskbar-application active">
-                <img src="./images/win98/joystick_32x32.png">
+            <div id="Win98 Content Group" class="taskbar-application active">
+                <img src="./images/win98/input_devices_32x32.png">
                 <span class="title" id="taskbar-stream-title">zunderstream Content</span>
             </div>
-            <div class="taskbar-application">
+            <div id="Win98 Camera Group" class="taskbar-application">
                 <img src="./images/win98/camera_32x32.png">
                 <span class="title">Camera Feed</span>
+            </div>
+            <div id="Win98 Media Player" class="taskbar-application">
+                <img src="./images/win98/media_player_32x32.png">
+                <span class="title">Media Player</span>
             </div>
         </div>
         <div id="system-tray">
@@ -185,20 +189,20 @@
         </div>
     </div>
 
-    <div id="discord-active-desktop">
+    <div id="discord-active-desktop" class="hidden">
         <img src="./images/win98/voice_header.png">
     </div>
 
-    <script src="https://unpkg.com/jquery@3.2.1"></script>
-    <script src="https://unpkg.com/clippyjs@0.0.3/dist/clippy.js"></script>
     <script type="text/javascript">
         let streamTitle = "";
-        let agent;
 
         function updateClock() {
             const date = new Date();
 
-            setElementText("system-tray-clock", `${date.getHours() % 12}:${String(date.getMinutes()).padStart(2, "0")} ${date.getHours() > 11 ? "PM" : "AM"}`);
+            const hourDiff = date.getHours() % 12;
+            const hours = hourDiff === 0 ? 12 : hourDiff;
+
+            setElementText("system-tray-clock", `${hours}:${String(date.getMinutes()).padStart(2, "0")} ${date.getHours() > 11 ? "PM" : "AM"}`);
         }
 
         function refreshLowerThird(newStreamTitle) {
@@ -210,23 +214,14 @@
             } catch { }
         }
 
-        window.CLIPPY_CDN = "https://cdn.jsdelivr.net/gh/pi0/clippyjs/assets/agents/";
-        function loadClippy() {
-            clippy.load("Clippy", (a) => {
-                agent = a;
+        function setActiveWindow(windowId) {
+            let appList = document.getElementById("taskbar-applications").getElementsByClassName("taskbar-application");
 
-                agent.moveTo(780, 220);
-                agent.play("Greeting");
-
-                setInterval(checkRedemption, 5000);
-            });
-        }
-
-        function checkRedemption(redemption) {
-            if (redemption != null && redemption !== "") {
-                agent.animate();
-                setFirebotCustomVariable("win98Redeemed", true, 5);
+            for (const item of appList) {
+                item.classList.remove("active");
             }
+
+            document.getElementById(windowId)?.classList?.add("active");
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
@@ -234,12 +229,14 @@
             refreshLowerThird(await getStreamTitle());
 
             setInterval(updateClock, 1000);
-            setTimeout(loadClippy, 1 * 1000);
 
             zunderstreamEvents.on(zunderstreamTitleUpdatedEventName, (data) => {
                 refreshLowerThird(data.title);
             });
-            zunderstreamEvents.on(`${customVariableEventName}:win98RedemptionId`, checkRedemption)
+
+            zunderstreamEvents.on(zunderstreamWin98SetActiveWindowEventName, (data) => {
+                setActiveWindow(data.windowId);
+            });
         });
     </script>
 </body>

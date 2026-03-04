@@ -10,19 +10,43 @@
     <link rel="stylesheet" href="./styles/win98.css" />
     <style type="text/css">
         #camera-window {
-            position: absolute;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
         }
 
         #camera-window .window-body {
-            width: 224px;
-            height: 123px;
+            width: calc(100% - 16px);
+            height: calc(100% - 32px);
+        }
+
+        #camera-disabled {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #camera-disabled>*+* {
+            margin-top: 8px;
+        }
+
+        #camera-disabled img {
+            max-height: 48px;
+            image-rendering: pixelated;
         }
     </style>
+    <script src="./scripts/reconnecting-websocket.js"></script>
+    <script src="./scripts/zunderstream-base.js"></script>
 </head>
 
 <body>
     <div class="window" id="camera-window">
-        <div class="title-bar inactive">
+        <div id="title-bar" class="title-bar inactive">
             <div class="title-bar-wrapper">
                 <div class="title-bar-icon">
                     <img src="./images/win98/camera_32x32.png">
@@ -32,12 +56,45 @@
                 </div>
             </div>
             <div class="title-bar-controls">
-                <button aria-label="Help"></button>
+                <button aria-label="Minimize"></button>
+                <button id="maximize-button" aria-label="Maximize"></button>
                 <button aria-label="Close"></button>
             </div>
         </div>
-        <div class="window-body"></div>
+        <div class="window-body">
+            <div id="camera-disabled">
+                <div><img src="./images/win98/wut_48x48.png" /></div>
+                <div><strong>Camera not found!</strong></div>
+            </div>
+        </div>
     </div>
+
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", async () => {
+            zunderstreamEvents.on(zunderstreamWin98SetActiveWindowEventName, (data) => {
+                const elem = document.getElementById("title-bar");
+                if (data.windowId === "Win98 Camera Group") {
+                    elem.classList.remove("inactive");
+                } else {
+                    elem.classList.add("inactive");
+                }
+            });
+
+            zunderstreamEvents.on(zunderstreamWin98SetMaximizeButtonStateEventName, (data) => {
+                const elem = document.getElementById("maximize-button");
+                if (data.windowId === "Win98 Camera Group") {
+                    elem.ariaLabel = data.maximizeState;
+
+                    const windowElem = document.getElementById("camera-window");
+                    if (data.maximizeState === "Restore") {
+                        windowElem.classList.add("maximized");
+                    } else {
+                        windowElem.classList.remove("maximized");
+                    }
+                }
+            })
+        });
+    </script>
 </body>
 
 </html>

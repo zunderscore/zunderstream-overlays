@@ -10,12 +10,16 @@
     <link rel="stylesheet" href="./styles/win98.css" />
     <style type="text/css">
         #content-window {
-            position: absolute;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
         }
 
         #content-window .window-body {
-            width: 707px;
-            height: 396px;
+            width: calc(100% - 16px);
+            height: calc(100% - 52px);
         }
 
         #content-window .status-bar img,
@@ -23,17 +27,17 @@
             display: none;
         }
     </style>
-    <script src="./scripts/reconnecting-websocket.js" type="text/javascript"></script>
-    <script src="./scripts/zunderstream-base.js" type="text/javascript"></script>
+    <script src="./scripts/reconnecting-websocket.js"></script>
+    <script src="./scripts/zunderstream-base.js"></script>
 </head>
 
 <body>
 
     <div class="window" id="content-window">
-        <div class="title-bar">
+        <div id="title-bar" class="title-bar">
             <div class="title-bar-wrapper">
                 <div class="title-bar-icon">
-                    <img src="./images/win98/joystick_32x32.png">
+                    <img src="./images/win98/input_devices_32x32.png">
                 </div>
                 <div class="title-bar-text">
                     <span id="window-stream-title">zunderstream Content</span>
@@ -41,7 +45,7 @@
             </div>
             <div class="title-bar-controls">
                 <button aria-label="Minimize"></button>
-                <button aria-label="Maximize"></button>
+                <button id="maximize-button" aria-label="Maximize"></button>
                 <button aria-label="Close"></button>
             </div>
         </div>
@@ -75,7 +79,31 @@
             zunderstreamEvents.on(zunderstreamTitleUpdatedEventName, (data) => {
                 refreshLowerThird(data.title);
             });
+
             zunderstreamEvents.on(`${customVariableEventName}:currentNewsBarItem`, getLatestNewsBarItem);
+
+            zunderstreamEvents.on(zunderstreamWin98SetActiveWindowEventName, (data) => {
+                const elem = document.getElementById("title-bar");
+                if (data.windowId === "Win98 Content Group") {
+                    elem.classList.remove("inactive");
+                } else {
+                    elem.classList.add("inactive");
+                }
+            });
+
+            zunderstreamEvents.on(zunderstreamWin98SetMaximizeButtonStateEventName, (data) => {
+                const elem = document.getElementById("maximize-button");
+                if (data.windowId === "Win98 Content Group") {
+                    elem.ariaLabel = data.maximizeState;
+
+                    const windowElem = document.getElementById("content-window");
+                    if (data.maximizeState === "Restore") {
+                        windowElem.classList.add("maximized");
+                    } else {
+                        windowElem.classList.remove("maximized");
+                    }
+                }
+            })
         });
     </script>
 </body>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<!-- OPTIMAL RESOLUTION: 1080x1920 -->
+
+<html>
+
+<head>
+    <title>zunderstream Windows CE Countdown</title>
+    <link rel="stylesheet" type="text/css" href="./styles/shared.css" />
+    <link rel="stylesheet" type="text/css" href="./styles/wince.css" />
+
+    <style type="text/css">
+        #main {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #000;
+            color: #fff;
+        }
+
+        #icon>img {
+            height: 72px;
+        }
+
+        #progress-bar {
+            height: 16px;
+            width: 128px;
+            margin: 16px 0;
+            border: 2px solid #fff;
+        }
+
+        #progress-bar-progress {
+            background-color: white;
+            height: 12px;
+            margin: 2px;
+            max-width: 124px;
+            width: 0;
+        }
+
+        #marquee-text {
+            margin: 16px 8px;
+            height: 32px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .countdown {
+            animation: progressBarProgress 300s linear 0s forwards;
+        }
+
+        @keyframes progressBarProgress {
+            0% {
+                width: 0;
+            }
+
+            100% {
+                width: 124px;
+            }
+        }
+
+        .link-text {
+            text-decoration: underline;
+        }
+
+        .hide {
+            visibility: hidden;
+        }
+    </style>
+    <script src="./scripts/reconnecting-websocket.js"></script>
+    <script src="./scripts/zunderstream-base.js"></script>
+</head>
+
+<body>
+    <div id="main">
+        <div id="icon"><img src="./images/z_icon.png"></div>
+        <div id="main-text">Waiting to power on stream</div>
+        <div id="progress-bar" class="hide">
+            <div id="progress-bar-progress" class="hide"></div>
+        </div>
+        <div id="marquee-text" class="hide"></div>
+    </div>
+
+    <script type="text/javascript">
+        const MARQUEE_ITEMS = [
+            `The zunderstream is about to begin!`,
+            `To see the stream schedule, including special events, go to <span class="link-text">zunderscore.tv/schedule</span>`,
+            //`You can get your own zunderstream merch at <span class="link-text">zunderscore.tv/merch</span>!`,
+            `Be sure to follow the channel so you know when zunder is live!`
+        ];
+        let currentMarqueeItem = -1;
+
+        function rotateMarquee() {
+            currentMarqueeItem++;
+
+            if (currentMarqueeItem >= MARQUEE_ITEMS.length) {
+                currentMarqueeItem = 0;
+            }
+
+            setElementContents("marquee-text", MARQUEE_ITEMS[currentMarqueeItem]);
+
+            setTimeout(rotateMarquee, (currentMarqueeItem === 0 ? 30 : 15) * 1000);
+        }
+
+        function startProgressBar() {
+            removeClassFromElement("progress-bar-progress", "hide");
+            addClassToElement("progress-bar-progress", "countdown");
+
+            removeClassFromElement("marquee-text", "hide");
+            rotateMarquee();
+
+            setTimeout(() => {
+                setElementText("main-text", "Stream loaded! Starting soon...")
+            }, 1000 * 60 * 5);
+        }
+
+        function showProgressBar() {
+            removeClassFromElement("progress-bar", "hide");
+
+            setTimeout(() => {
+                startProgressBar();
+            }, 1000 * 10)
+        }
+
+        function powerOn() {
+            setElementText("main-text", "Stream loading...")
+            showProgressBar();
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            zunderstreamEvents.on(zunderstreamDosBootEventName, powerOn);
+        });
+    </script>
+</body>
+
+</html>

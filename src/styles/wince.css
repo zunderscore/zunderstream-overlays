@@ -1,0 +1,12 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "fs Tahoma 8px Regular";
+    background-color: #c6c3c6;
+    font-size: 20px;
+    letter-spacing: 0.1ch;
+    zoom: 4;
+}

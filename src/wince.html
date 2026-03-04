@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<!-- OPTIMAL RESOLUTION: 1080x1920 -->
+
+<html>
+
+<head>
+    <title>zunderstream Windows CE</title>
+    <link rel="stylesheet" type="text/css" href="./styles/shared.css" />
+    <link rel="stylesheet" type="text/css" href="./styles/wince.css" />
+
+    <style type="text/css">
+        #taskbar {
+            position: fixed;
+            display: flex;
+            flex-direction: row;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 32px;
+            line-height: 30px;
+            background-color: #00309c;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        #start-button {
+            margin-right: 4px;
+        }
+
+        #start-button>img {
+            height: 32px;
+        }
+
+        #taskbar-stream-title {
+            max-width: 180px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #system-tray-clock {
+            position: fixed;
+            top: 0;
+            right: 4px;
+            height: 48px;
+        }
+
+        #content {
+            position: fixed;
+            top: 32px;
+            left: 0;
+            right: 0;
+            height: 152px;
+            background-color: #fff;
+        }
+
+        #tab-bar {
+            position: fixed;
+            top: 184px;
+            left: 0;
+            right: 0;
+            height: 32px;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .tab {
+            border: 0px solid #000;
+            border-right-width: 1px;
+            padding: 0 4px;
+            line-height: 32px;
+            box-sizing: border-box;
+        }
+
+        .tab.content {
+            border-bottom-width: 1px;
+            border-top: 1px solid transparent;
+            background-color: #fff;
+        }
+
+        .tab.chat {
+            border-top-width: 1px;
+            border-bottom: 1px solid transparent;
+        }
+
+        .tab.filler {
+            border-top: 1px solid transparent;
+            border-bottom-width: 1px;
+            border-right-width: 0;
+            flex-grow: 99;
+        }
+    </style>
+    <script src="./scripts/reconnecting-websocket.js"></script>
+    <script src="./scripts/zunderstream-base.js"></script>
+</head>
+
+<body>
+    <div id="taskbar">
+        <div id="start-button"><img src="./images/z_icon.png"></div>
+        <div id="taskbar-stream-title">Start</div>
+        <div id="system-tray-clock"></div>
+    </div>
+
+    <div id="content"></div>
+
+    <div id="tab-bar">
+        <div class="tab content">Content</div>
+        <div class="tab chat">Chat</div>
+        <div class="tab filler"></div>
+    </div>
+
+    <script src="https://unpkg.com/jquery@3.2.1"></script>
+    <script src="https://unpkg.com/clippyjs@0.0.3/dist/clippy.js"></script>
+    <script type="text/javascript">
+        let streamTitle = "";
+        let agent;
+
+        function updateClock() {
+            const date = new Date();
+
+            const hourDiff = date.getHours() % 12;
+            const hours = hourDiff === 0 ? 12 : hourDiff;
+
+            setElementText("system-tray-clock", `${hours}:${String(date.getMinutes()).padStart(2, "0")}`);
+        }
+
+        function refreshLowerThird(newStreamTitle) {
+            try {
+                if (newStreamTitle != null && newStreamTitle !== streamTitle) {
+                    streamTitle = newStreamTitle;
+                    setElementContents("taskbar-stream-title", streamTitle);
+                }
+            } catch { }
+        }
+
+        window.CLIPPY_CDN = "https://cdn.jsdelivr.net/gh/pi0/clippyjs/assets/agents/";
+        function loadClippy() {
+            clippy.load("Clippy", (a) => {
+                agent = a;
+
+                agent.moveTo(780, 220);
+                agent.play("Greeting");
+
+                setInterval(checkRedemption, 5000);
+            });
+        }
+
+        function checkRedemption(redemption) {
+            if (redemption != null && redemption !== "") {
+                agent.animate();
+                setFirebotCustomVariable("win98Redeemed", true, 5);
+            }
+        }
+
+        function setActiveWindow(windowId) {
+
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            updateClock();
+            refreshLowerThird(await getStreamTitle());
+
+            setInterval(updateClock, 1000);
+            setTimeout(loadClippy, 1 * 1000);
+
+            zunderstreamEvents.on(zunderstreamTitleUpdatedEventName, (data) => {
+                refreshLowerThird(data.title);
+            });
+
+            zunderstreamEvents.on(`${customVariableEventName}:win98RedemptionId`, checkRedemption);
+
+            zunderstreamEvents.on(zunderstreamWin98SetActiveWindowEventName, (data) => {
+                setActiveWindow(data.windowId);
+            });
+        });
+    </script>
+</body>
+
+</html>

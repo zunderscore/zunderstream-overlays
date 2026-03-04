@@ -436,18 +436,8 @@
             }
         }
 
-        let bootSignalLoop;
-
-        function listenForBootSignal(bootDOS) {
-            if (bootDOS === 1) {
-                zunderstreamEvents.removeListener(`${customVariableEventName}:bootDOS`, listenForBootSignal);
-                setFirebotCustomVariable("bootDOS", 0, 1);
-                powerOn();
-            }
-        }
-
         document.addEventListener("DOMContentLoaded", () => {
-            zunderstreamEvents.on(`${customVariableEventName}:bootDOS`, listenForBootSignal);
+            zunderstreamEvents.on(zunderstreamDosBootEventName, powerOn);
             zunderstreamEvents.on(`${customVariableEventName}:lastChatter`, updateFilename);
         });
     </script>

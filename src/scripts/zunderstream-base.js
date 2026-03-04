@@ -81,6 +81,14 @@ const zunderstreamTpirConfigUpdatedEventName = "zunderstream:tpir-config-updated
 const zunderstreamTpirTitleUpdatedEventName = "zunderstream:tpir-title-updated";
 const zunderstreamTpirContestantsUpdatedEventName = "zunderstream:tpir-contestants-updated";
 const customVariableEventName = "custom-variable";
+const chatMessageEventName = "zunderstream:chat-message";
+const chatMessageDeletedEventName = "zunderstream:chat-message-deleted";
+
+const zunderstreamDosBootEventName = "zunderstream:bootdos";
+
+const WIN98_EVENT_PREFIX = "zunderstream:win98";
+const zunderstreamWin98SetActiveWindowEventName = `${WIN98_EVENT_PREFIX}:set-active-window`;
+const zunderstreamWin98SetMaximizeButtonStateEventName = `${WIN98_EVENT_PREFIX}:set-maximize-button-state`;
 
 // Helper functions
 async function getFirebotCustomVariable(variableName) {

@@ -2,6 +2,7 @@
 
 <!-- OPTIMAL RESOLUTION: 1920x1080 -->
 <!-- FONT REFERENCE: https://int10h.org/oldschool-pc-fonts/fontlist/font?ibm_vga_8x16 -->
+<!-- TEXT GRID SIZE: 96x27 -->
 
 <html>
 
@@ -9,6 +10,36 @@
     <title>zunderstream DOS Boot Sequence</title>
     <style type="text/css">
         @import url(./styles/dosbox.css);
+
+        #preboot-border-top {
+            position: fixed;
+            top: calc(12 * 40px);
+            left: calc(24 * 20px);
+        }
+
+        #preboot-border-left {
+            position: fixed;
+            top: calc(13 * 40px);
+            left: calc(24 * 20px);
+        }
+
+        #preboot-border-right {
+            position: fixed;
+            top: calc(13 * 40px);
+            right: calc(24 * 20px);
+        }
+
+        #preboot-border-bottom {
+            position: fixed;
+            top: calc(14 * 40px);
+            left: calc(24 * 20px);
+        }
+
+        #waiting-text {
+            position: fixed;
+            top: calc(13 * 40px);
+            left: calc(26 * 20px);
+        }
 
         #bios-post {
             position: fixed;
@@ -180,7 +211,13 @@
 </head>
 
 <body>
-    <div id="initial-waiting">Waiting to boot stream...<span id="powering-on" class="hide">&nbsp;Powering on now</span><span class="cursor-blink">_</span></div>
+    <div id="initial-waiting">
+        <div id="preboot-border-top"></div>
+        <div id="preboot-border-left">&#x2551;</div>
+        <div id="preboot-border-right">&#x2551;</div>
+        <div id="preboot-border-bottom"></div>
+        <div id="waiting-text">Waiting to boot stream...<span id="powering-on" class="hide">&nbsp;Powering on now!</span><span class="cursor-blink">_</span></div>
+    </div>
 
     <div id="bios-post" class="hide">
         <div id="bios-logo"><img src="./images/z_icon.png"></div>
@@ -436,7 +473,15 @@
             }
         }
 
+        function setupPreboot() {
+            const prebootLineLength = 48;
+            setElementContents("preboot-border-top", `&#x2554;${"&#x2550;".repeat(prebootLineLength - 2)}&#x2557;`)
+            setElementContents("preboot-border-bottom", `&#x255A;${"&#x2550;".repeat(prebootLineLength - 2)}&#x255D;`)
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
+            setupPreboot();
+
             zunderstreamEvents.on(zunderstreamDosBootEventName, powerOn);
             zunderstreamEvents.on(`${customVariableEventName}:lastChatter`, updateFilename);
         });

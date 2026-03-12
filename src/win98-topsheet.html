@@ -34,12 +34,23 @@
         }
 
         /* Message envelope icon */
-        #chat-container>div>div>img {
+        #chat-container .envelope {
             padding-right: 8px;
         }
 
         /* Message content */
-        #chat-container>div>div+div>img {
+        #chat-container .message-container {
+            max-width: 155px;
+            overflow-wrap: break-word;
+        }
+
+        #chat-container .username {
+            display: block;
+            margin: 2px 0 4px;
+            font-weight: bold;
+        }
+
+        #chat-container .message-container>img {
             height: 10px;
         }
 
@@ -85,13 +96,13 @@
         function showChatMessage(message) {
             const elem = document.createElement("div");
             elem.id = message.id;
-            elem.innerHTML = `<div><img src="./images/win98/message_envelope_open_16x16.png"></div><div><strong>${message.sender}</strong><br/>${message.message}</div>`;
+            elem.innerHTML = `<div><img class="envelope" src="./images/win98/message_envelope_open_16x16.png"></div><div class="message-container"><span class="username">${message.sender}</span>${message.message}</div>`;
 
             document.getElementById("chat-container").appendChild(elem);
 
             setTimeout(() => {
                 deleteChatMessage(message.id);
-            }, 5000)
+            }, 8000)
         }
 
         document.addEventListener("DOMContentLoaded", async () => {

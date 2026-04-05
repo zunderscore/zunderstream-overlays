@@ -91,9 +91,12 @@
             display: inline-flex;
             flex: 1;
             padding: 0 2px;
-        }  
+        }
 
         .taskbar-application {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
             max-width: 160px;
             padding: 3px 4px;
             margin-right: 3px;
@@ -106,9 +109,10 @@
         }
 
         .taskbar-application>.title {
+            position: absolute;
             display: inline-block;
-            max-width: calc(100% - 26px);
-            margin-left: 3px;
+            width: calc(100% - 26px);
+            margin-left: 20px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;

@@ -56,6 +56,93 @@
         #chat-container>div+div {
             margin-top: 16px;
         }
+
+        #alert-popup {
+            position: fixed;
+            width: 500px;
+            height: 200px;
+            z-index: 100000;
+        }
+
+        #alert-content-container {
+            width: 100%;
+            height: calc(100% - 22px);
+            margin-top: 2px;
+            /** Emulate same border as pressed button **/
+            box-shadow: inset -1px -1px #fff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px grey;
+        }
+
+        #alert-content {
+            position: absolute;
+            top: 27px;
+            bottom: 5px;
+            left: 5px;
+            right: 5px;
+            padding: 16px;
+            font-family: "Comic Sans MS";
+            font-size: 24px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        #alert-content a {
+            text-decoration: underline;
+        }
+
+        #alert-image {
+            max-height: 100px;
+            max-width: 100px;
+            width: 100px;
+            margin-right: 16px;
+        }
+
+        #alert-text>.small {
+            font-size: 14px;
+        }
+
+        .alert-colors-1 {
+            background-color: darkblue;
+            color: gold
+        }
+
+        .alert-colors-2 {
+            background-color: gold;
+            color: darkred
+        }
+
+        .alert-colors-3 {
+            background-color: hotpink;
+            color: blue
+        }
+
+        .alert-colors-4 {
+            background-color: gold;
+            color: darkslateblue
+        }
+
+        .alert-colors-5 {
+            background-color: darkred;
+            color: white
+        }
+
+        .animated {
+            animation: animated 1s step-end 0s infinite;
+        }
+
+        @keyframes animated {
+            0% {
+                filter: none;
+            }
+
+            50% {
+                filter: invert();
+            }
+
+            100% {
+                filter: none;
+            }
+        }
     </style>
     <script src="./scripts/reconnecting-websocket.js"></script>
     <script src="./scripts/zunderstream-base.js"></script>
@@ -64,6 +151,27 @@
 <body>
     <div id="chat-container">
 
+    </div>
+
+    <div id="alert-popup" class="window hidden">
+        <div id="title-bar" class="title-bar">
+            <div class="title-bar-wrapper">
+                <div class="title-bar-text">
+                    <span id="alert-title">ALERT</span>
+                </div>
+            </div>
+            <div class="title-bar-controls">
+                <button aria-label="Close"></button>
+            </div>
+        </div>
+        <div id="alert-content-container">
+            <div id="alert-content">
+                <div>
+                    <img id="alert-image" />
+                </div>
+                <div id="alert-text"></div>
+            </div>
+        </div>
     </div>
 
     <script type="module">
@@ -104,6 +212,63 @@
             }, 8000)
         }
 
+        const POPUP_TITLE_TEMPLATES = [
+            "ALERT",
+            "Check This Out!",
+            "ADVERTISEMENT",
+            "Advertisement",
+            "ad",
+            "LOOK!!!!11!1!"
+        ];
+
+        const POPUP_TEXT_TEMPLATES = [
+            "$$USER dropped a hot $$ITEM in your area!",
+            "$$USER just came in with a $$ITEM and you won't BELIEVE what happens next!",
+            "Congrats, you just won a $$ITEM from $$USER! <a>Click here</a> to claim!",
+            "YESTERDAY ONLY: Get a FREE $$ITEM! Contact $$USER to learn more"
+        ];
+
+        function generatePopupText(user, item) {
+            let template = POPUP_TEXT_TEMPLATES[Math.floor(Math.random() * POPUP_TEXT_TEMPLATES.length)];
+
+            template = template.replaceAll("$$USER", `<strong>${user}</strong>`);
+            template = template.replaceAll("$$ITEM", `<strong>${item}</strong>`);
+
+            return template;
+        }
+
+        function showAlertPopup(alertData) {
+            setElementStyleProperty("alert-popup", "top", `${Math.floor(Math.random() * 320)}px`);
+            setElementStyleProperty("alert-popup", "left", `${Math.floor(Math.random() * 440)}px`);
+
+            setElementText("alert-title", POPUP_TITLE_TEMPLATES[Math.floor(Math.random() * POPUP_TITLE_TEMPLATES.length)]);
+
+            let alertText = generatePopupText(alertData.user, alertData.item);
+            if (alertData.userMessage?.length) {
+                alertText = `${alertText}<div class="small">${alertData.userMessage}</div>`;
+            }
+            setElementContents("alert-text", alertText);
+
+            setImageSource("alert-image", alertData.image);
+
+            const colorScheme = Math.floor(Math.random() * 6);
+            addClassToElement("alert-content", `alert-colors-${colorScheme}`);
+
+            if (alertData.animated === "true") {
+                addClassToElement("alert-content", "animated");
+            }
+
+            removeClassFromElement("alert-popup", "hidden");
+
+            setTimeout(() => {
+                addClassToElement("alert-popup", "hidden");
+                removeClassFromElement("alert-popup", `alert-colors-${colorScheme}`);
+                removeClassFromElement("alert-content", "animated");
+            }, (alertData?.duration ?? 5) * 1000);
+        }
+
+        window.showAlertPopup = showAlertPopup;
+
         document.addEventListener("DOMContentLoaded", async () => {
             setTimeout(loadClippy, 1 * 1000);
 
@@ -114,6 +279,10 @@
             zunderstreamEvents.on(chatMessageDeletedEventName, (message) => {
                 deleteChatMessage(message.id);
             });
+
+            zunderstreamEvents.on(customAlertEventName, (alertData) => {
+                showAlertPopup(alertData);
+            })
         });
     </script>
 </body>

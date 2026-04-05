@@ -76,13 +76,18 @@ function runAlertLoop(alertHandler) {
 // WebSocket Events
 const zunderstreamEvents = new EventEmitter();
 
+const customVariableEventName = "custom-variable";
+
 const zunderstreamTitleUpdatedEventName = "zunderstream:stream-title-updated";
+
 const zunderstreamTpirConfigUpdatedEventName = "zunderstream:tpir-config-updated";
 const zunderstreamTpirTitleUpdatedEventName = "zunderstream:tpir-title-updated";
 const zunderstreamTpirContestantsUpdatedEventName = "zunderstream:tpir-contestants-updated";
-const customVariableEventName = "custom-variable";
+
 const chatMessageEventName = "zunderstream:chat-message";
 const chatMessageDeletedEventName = "zunderstream:chat-message-deleted";
+
+const customAlertEventName = "zunderstream:custom-alert";
 
 const zunderstreamDosBootEventName = "zunderstream:bootdos";
 
@@ -117,6 +122,14 @@ function setElementContents(elementId, contents) {
 
 function setElementText(elementId, contents) {
     document.getElementById(elementId).innerText = contents;
+}
+
+function setElementStyleProperty(elementId, propName, value) {
+    document.getElementById(elementId).style[propName] = value;
+}
+
+function setImageSource(elementId, url) {
+    document.getElementById(elementId).src = url;
 }
 
 function addClassToElement(elementId, className) {

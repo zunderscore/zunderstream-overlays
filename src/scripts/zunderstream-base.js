@@ -94,6 +94,7 @@ const zunderstreamDosBootEventName = "zunderstream:bootdos";
 const WIN98_EVENT_PREFIX = "zunderstream:win98";
 const zunderstreamWin98SetActiveWindowEventName = `${WIN98_EVENT_PREFIX}:set-active-window`;
 const zunderstreamWin98SetMaximizeButtonStateEventName = `${WIN98_EVENT_PREFIX}:set-maximize-button-state`;
+const zunderstreamWin98PopupEventName = `${WIN98_EVENT_PREFIX}:show-popup`;
 
 // Helper functions
 async function getFirebotCustomVariable(variableName) {

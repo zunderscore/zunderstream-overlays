@@ -229,6 +229,38 @@
             document.getElementById(windowId)?.classList?.add("active");
         }
 
+        function openWindow(windowData, active = false) {
+            const newWindow = document.createElement("div");
+            newWindow.classList.add("taskbar-application");
+            newWindow.id = windowData.id;
+            newWindow.innerHTML = `<img src="${windowData.icon ?? "./images/win98/executable_32x32.png"}" /><span class="title">${windowData.title}</span>`;
+
+            document.getElementById("taskbar-applications").appendChild(newWindow);
+            if (active) {
+                setActiveWindow(windowData.id);
+            }
+        }
+
+        function closeWindow(windowId) {
+            document.getElementById(windowId).remove();
+        }
+        
+        function showPopup(popupData) {
+            lastActiveWindow = document.getElementsByClassName("active")[0].id;
+            const id = new Date().getTime();
+
+            openWindow({
+                id: id,
+                icon: popupData.icon,
+                title: popupData.title
+            }, true);
+
+            setTimeout(() => {
+                closeWindow(id);
+                setActiveWindow(lastActiveWindow);
+            }, popupData.duration * 1000);
+        }
+
         document.addEventListener("DOMContentLoaded", async () => {
             updateClock();
             refreshLowerThird(await getStreamTitle());
@@ -241,6 +273,10 @@
 
             zunderstreamEvents.on(zunderstreamWin98SetActiveWindowEventName, (data) => {
                 setActiveWindow(data.windowId);
+            });
+
+            zunderstreamEvents.on(zunderstreamWin98PopupEventName, (popupData) => {
+                showPopup(popupData);
             });
         });
     </script>

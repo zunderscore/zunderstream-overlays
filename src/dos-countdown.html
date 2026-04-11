@@ -483,7 +483,9 @@
             setupPreboot();
 
             zunderstreamEvents.on(zunderstreamDosBootEventName, powerOn);
-            zunderstreamEvents.on(`${customVariableEventName}:lastChatter`, updateFilename);
+            zunderstreamEvents.on(chatMessageEventName, (event) => {
+                updateFilename(event.sender);
+            });
         });
     </script>
 </body>

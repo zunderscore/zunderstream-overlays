@@ -143,6 +143,29 @@
                 filter: none;
             }
         }
+
+        #dialup-window {
+            position: fixed;
+            top: 160px;
+            left: 330px;
+            width: 300px;
+            height: 100px;
+        }
+
+        #dialup-window .window-body {
+            display: flex;
+        }
+
+        #dialup-text {
+            margin-left: 8px;
+            vertical-align: top;
+        }
+
+        #dialup-buttons {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+        }
     </style>
     <script src="./scripts/reconnecting-websocket.js"></script>
     <script src="./scripts/zunderstream-base.js"></script>
@@ -170,6 +193,31 @@
                     <img id="alert-image" />
                 </div>
                 <div id="alert-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="dialup-window" class="window hidden">
+        <div id="title-bar" class="title-bar">
+            <div class="title-bar-wrapper">
+                <div class="title-bar-icon">
+                    <img src="./images/win98/dial_up_32x32.png">
+                </div>
+                <div class="title-bar-text">
+                    <span id="dialup-title">Connecting to My Connection</span>
+                </div>
+            </div>
+            <div class="title-bar-controls">
+                <button aria-label="Close"></button>
+            </div>
+        </div>
+        <div class="window-body">
+            <div id="dialup-animation">
+                <img src="./images/win98/dial_up_anim.png" />
+            </div>
+            <div id="dialup-text">Connecting to Twitch raid...</div>
+            <div id="dialup-buttons">
+                <button>Cancel</button>
             </div>
         </div>
     </div>
@@ -212,49 +260,18 @@
             }, 8000)
         }
 
-        const POPUP_TITLE_TEMPLATES = [
-            "ALERT",
-            "Check This Out!",
-            "ADVERTISEMENT",
-            "Advertisement",
-            "ad",
-            "LOOK!!!!11!1!"
-        ];
-
-        const POPUP_TEXT_TEMPLATES = [
-            "$$USER dropped a hot $$ITEM in your area!",
-            "$$USER just came in with a $$ITEM and you won't BELIEVE what happens next!",
-            "Congrats, you just won a $$ITEM from $$USER! <a>Click here</a> to claim!",
-            "YESTERDAY ONLY: Get a FREE $$ITEM! Contact $$USER to learn more"
-        ];
-
-        function generatePopupText(user, item) {
-            let template = POPUP_TEXT_TEMPLATES[Math.floor(Math.random() * POPUP_TEXT_TEMPLATES.length)];
-
-            template = template.replaceAll("$$USER", `<strong>${user}</strong>`);
-            template = template.replaceAll("$$ITEM", `<strong>${item}</strong>`);
-
-            return template;
-        }
-
-        function showAlertPopup(alertData) {
+        function showPopup(popupData) {
             setElementStyleProperty("alert-popup", "top", `${Math.floor(Math.random() * 320)}px`);
             setElementStyleProperty("alert-popup", "left", `${Math.floor(Math.random() * 440)}px`);
 
-            setElementText("alert-title", POPUP_TITLE_TEMPLATES[Math.floor(Math.random() * POPUP_TITLE_TEMPLATES.length)]);
-
-            let alertText = generatePopupText(alertData.user, alertData.item);
-            if (alertData.userMessage?.length) {
-                alertText = `${alertText}<div class="small">${alertData.userMessage}</div>`;
-            }
-            setElementContents("alert-text", alertText);
-
-            setImageSource("alert-image", alertData.image);
+            setElementText("alert-title", popupData.title);
+            setElementContents("alert-text", popupData.message);
+            setImageSource("alert-image", popupData.image);
 
             const colorScheme = Math.floor(Math.random() * 6);
             addClassToElement("alert-content", `alert-colors-${colorScheme}`);
 
-            if (alertData.animated === "true") {
+            if (popupData.animated === true || popupData.animated === "true") {
                 addClassToElement("alert-content", "animated");
             }
 
@@ -264,10 +281,25 @@
                 addClassToElement("alert-popup", "hidden");
                 removeClassFromElement("alert-popup", `alert-colors-${colorScheme}`);
                 removeClassFromElement("alert-content", "animated");
-            }, (alertData?.duration ?? 5) * 1000);
+            }, (popupData?.duration ?? 5) * 1000);
         }
 
-        window.showAlertPopup = showAlertPopup;
+        function showDialupWindow(data) {
+            const title = data?.connName?.length
+                ? data.connName
+                : "My Connection";
+
+            setElementText("dialup-title", `Connecting to ${title}`)
+            removeClassFromElement("dialup-window", "hidden");
+        }
+
+        function hideDialupWindow() {
+            addClassToElement("dialup-window", "hidden");
+        }
+
+        function setDialupText(text) {
+            setElementContents("dialup-text", text);
+        }
 
         document.addEventListener("DOMContentLoaded", async () => {
             setTimeout(loadClippy, 1 * 1000);
@@ -280,9 +312,21 @@
                 deleteChatMessage(message.id);
             });
 
-            zunderstreamEvents.on(customAlertEventName, (alertData) => {
-                showAlertPopup(alertData);
-            })
+            zunderstreamEvents.on(zunderstreamWin98PopupEventName, (popupData) => {
+                showPopup(popupData);
+            });
+
+            zunderstreamEvents.on(zunderstreamWin98ShowDialupWindowEventName, (data) => {
+                showDialupWindow(data);
+            });
+
+            zunderstreamEvents.on(zunderstreamWin98HideDialupWindowEventName, () => {
+                hideDialupWindow();
+            });
+
+            zunderstreamEvents.on(zunderstreamWin98SetDialupTextEventName, (data) => {
+                setDialupText(data.text);
+            });
         });
     </script>
 </body>

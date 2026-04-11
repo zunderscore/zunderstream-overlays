@@ -95,6 +95,9 @@ const WIN98_EVENT_PREFIX = "zunderstream:win98";
 const zunderstreamWin98SetActiveWindowEventName = `${WIN98_EVENT_PREFIX}:set-active-window`;
 const zunderstreamWin98SetMaximizeButtonStateEventName = `${WIN98_EVENT_PREFIX}:set-maximize-button-state`;
 const zunderstreamWin98PopupEventName = `${WIN98_EVENT_PREFIX}:show-popup`;
+const zunderstreamWin98ShowDialupWindowEventName = `${WIN98_EVENT_PREFIX}:show-dialup-window`;
+const zunderstreamWin98HideDialupWindowEventName = `${WIN98_EVENT_PREFIX}:hide-dialup-window`;
+const zunderstreamWin98SetDialupTextEventName = `${WIN98_EVENT_PREFIX}:set-dialup-text`;
 
 // Helper functions
 async function getFirebotCustomVariable(variableName) {
@@ -220,4 +223,21 @@ if (typeof ReconnectingWebSocket != "undefined") {
     ws.onerror = (error) => {
         console.error(`Unable to connect to WebSocket: ${error}`);
     };
+}
+
+function sendWebsocketMessage(message) {
+    ws.send(JSON.stringify(message));
+}
+
+function sendWebsocketEvent(eventName, eventData) {
+    sendWebsocketMessage({
+        type: "invoke",
+        name: "plugin",
+        pluginName: "zunderstream",
+        data: {
+            type: "event",
+            event: eventName,
+            data: eventData
+        }
+    });
 }

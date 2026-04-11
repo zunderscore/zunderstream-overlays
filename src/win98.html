@@ -219,7 +219,31 @@
             } catch { }
         }
 
-        function setActiveWindow(windowId) {
+        let windowStack = [
+            "Win98 Camera Group",
+            "Win98 Media Player",
+            "Win98 Content Group"
+        ];
+
+        function addWindowToStack(windowId) {
+            if (windowStack.indexOf(windowId) < 0) {
+                windowStack.push(windowId);
+                setActiveWindow(windowId);
+            }
+        };
+
+        function removeWindowFromStack(windowId) {
+            if (windowStack.indexOf(windowId) === windowStack.length - 1) {
+                setActiveWindow(windowStack[windowStack.length - 2]);
+            }
+            windowStack = windowStack.filter(w => w !== windowId);
+        };
+
+        function moveWindowToTopOfStack(windowId) {
+            windowStack.push(windowStack.splice(windowStack.indexOf(windowId), 1)[0]);
+        }
+
+        function setActiveWindow(windowId, emit = true) {
             let appList = document.getElementById("taskbar-applications").getElementsByClassName("taskbar-application");
 
             for (const item of appList) {
@@ -227,38 +251,76 @@
             }
 
             document.getElementById(windowId)?.classList?.add("active");
+            moveWindowToTopOfStack(windowId);
+
+            if (emit === true) {
+                sendWebsocketEvent("win98:set-active-window", {
+                    windowId,
+                    setFromTaskbar: true
+                });
+            }
         }
 
-        function openWindow(windowData, active = false) {
-            const newWindow = document.createElement("div");
-            newWindow.classList.add("taskbar-application");
-            newWindow.id = windowData.id;
-            newWindow.innerHTML = `<img src="${windowData.icon ?? "./images/win98/executable_32x32.png"}" /><span class="title">${windowData.title}</span>`;
+        function openWindow(windowData) {
+            const icon = windowData.icon?.length
+                ? windowData.icon
+                : "./images/win98/executable_32x32.png";
+            const innerHTML = `<img src="${icon}" /><span class="title">${windowData.title}</span>`;
 
-            document.getElementById("taskbar-applications").appendChild(newWindow);
-            if (active) {
-                setActiveWindow(windowData.id);
+            if (windowStack.indexOf(windowData.id) < 0) {
+                const newWindow = document.createElement("div");
+                newWindow.classList.add("taskbar-application");
+                newWindow.id = windowData.id;
+                newWindow.innerHTML = innerHTML;
+
+                document.getElementById("taskbar-applications").appendChild(newWindow);
+
+                addWindowToStack(windowData.id);
+            } else {
+                setElementContents(windowData.id, innerHTML);
             }
         }
 
         function closeWindow(windowId) {
             document.getElementById(windowId).remove();
+            removeWindowFromStack(windowId);
         }
-        
+
+        function updateTaskbarAppTitle(windowId, title) {
+            try {
+                const elem = document.getElementById(windowId).getElementsByClassName("title")[0];
+                elem.innerText = title;
+            } catch { }
+        }
+
         function showPopup(popupData) {
-            lastActiveWindow = document.getElementsByClassName("active")[0].id;
             const id = new Date().getTime();
 
             openWindow({
                 id: id,
                 icon: popupData.icon,
                 title: popupData.title
-            }, true);
+            });
 
             setTimeout(() => {
                 closeWindow(id);
-                setActiveWindow(lastActiveWindow);
             }, popupData.duration * 1000);
+        }
+
+        function showDialupWindow(data) {
+            const title = data?.connName?.length
+                ? data.connName
+                : "My Connection";
+
+            openWindow({
+                id: "dialup-window",
+                icon: "./images/win98/dial_up_32x32.png",
+                title: `Connecting to ${title}`
+            });
+        }
+
+        function hideDialupWindow() {
+            closeWindow("dialup-window");
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
@@ -272,11 +334,22 @@
             });
 
             zunderstreamEvents.on(zunderstreamWin98SetActiveWindowEventName, (data) => {
-                setActiveWindow(data.windowId);
+                console.log(data);
+                if (data.setFromTaskbar !== true) {
+                    setActiveWindow(data.windowId);
+                }
             });
 
             zunderstreamEvents.on(zunderstreamWin98PopupEventName, (popupData) => {
                 showPopup(popupData);
+            });
+
+            zunderstreamEvents.on(zunderstreamWin98ShowDialupWindowEventName, (data) => {
+                showDialupWindow(data);
+            });
+
+            zunderstreamEvents.on(zunderstreamWin98HideDialupWindowEventName, () => {
+                hideDialupWindow();
             });
         });
     </script>

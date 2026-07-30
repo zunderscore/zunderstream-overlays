@@ -1,7 +1,7 @@
 // URLs
 const firebotRootUrl = `http://localhost:7472/`;
 const firebotApiRootUrl = `${firebotRootUrl}api/v1`;
-const zunderstreamAdminRootUrl = `${firebotRootUrl}integrations/zunderstream`;
+const zunderstreamAdminRootUrl = `${firebotRootUrl}plugins/zunderstream`;
 const firebotWsUrl = `ws://localhost:7472/`;
 
 // EventEmitter implemetation

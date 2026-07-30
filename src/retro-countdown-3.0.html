@@ -12,6 +12,28 @@
             src: url(resources/Pixel_NES.woff);
         }
 
+        :root {
+            --underground-background-color: #000;
+            --underground-color: #fff;
+            --underground-ground-background-color: #0cf;
+            --underground-ground-color: #000;
+            --underground-ground-gradient-one-background-color: #09c;
+            --underground-ground-gradient-two-background-color: #069;
+            --underground-ground-gradient-three-background-color: #036;
+            --underground-background-color: #000;
+
+            --night-background-color: #003;
+            --night-color: #aaa;
+
+            --castle-background-color: #000;
+            --castle-color: #fff;
+            --castle-ground-background-color: #ccc;
+            --castle-ground-color: #000;
+            --castle-ground-gradient-one-background-color: #999;
+            --castle-ground-gradient-two-background-color: #666;
+            --castle-ground-gradient-three-background-color: #333;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -26,16 +48,76 @@
             color: #000;
             overflow: hidden;
             font-size: 192px;
+            transition: background-color 1s;
+            transition: color 1s;
         }
 
-        .sky {
+        body.underground {
+            background-color: var(--underground-background-color);
+            color: #fff;
+        }
+
+        body.night {
+            background-color: var(--night-background-color);
+            color: var(--night-color);
+        }
+
+        body.castle {
+            background-color: #000;
+            color: #fff;
+        }
+
+        #banner {
+            position: fixed;
+            width: 3840px;
+            height: 160px;
+            top: 0;
+            background-color: transparent;
+            transition: background-color 1s;
+        }
+
+        .underground #banner {
+            background-color: var(--underground-ground-gradient-three-background-color);
+        }
+
+        .castle #banner {
+            background-color: var(--castle-ground-gradient-three-background-color);
+        }
+
+        #sky {
             position: fixed;
             width: 3840px;
             height: 2160px;
             background-color: #3cf;
+            transition: background-color 1s;
         }
 
-        .ground {
+        .underground #sky {
+            background-color: var(--underground-background-color);
+        }
+
+        .night #sky {
+            background-color: var(--night-background-color);
+        }
+
+        .castle #sky {
+            background-color: var(--castle-background-color);
+        }
+
+        #sky .star {
+            position: fixed;
+            height: 16px;
+            width: 16px;
+            background-color: #cf9a;
+            visibility: hidden;
+            transition: visibility 1s;
+        }
+
+        .night #sky .star {
+            visibility: visible;
+        }
+
+        #ground {
             position: fixed;
             top: 1440px;
             height: 720px;
@@ -46,6 +128,17 @@
             justify-content: center;
             background-color: #090;
             color: #fff;
+            transition: background-color 1s, color 1s;
+        }
+
+        .underground #ground {
+            background-color: var(--underground-ground-background-color);
+            color: var(--underground-ground-color);
+        }
+
+        .castle #ground {
+            background-color: var(--castle-ground-background-color);
+            color: var(--castle-ground-color);
         }
 
         .ground-gradient {
@@ -57,16 +150,43 @@
         .ground-gradient.one {
             top: 1520px;
             background-color: #00802b;
+            transition: background-color 1s;
+        }
+
+        .underground .ground-gradient.one {
+            background-color: var(--underground-ground-gradient-one-background-color);
+        }
+
+        .castle .ground-gradient.one {
+            background-color: var(--castle-ground-gradient-one-background-color);
         }
 
         .ground-gradient.two {
             top: 1480px;
             background-color: #062;
+            transition: background-color 1s;
+        }
+
+        .underground .ground-gradient.two {
+            background-color: var(--underground-ground-gradient-two-background-color);
+        }
+
+        .castle .ground-gradient.two {
+            background-color: var(--castle-ground-gradient-two-background-color);
         }
 
         .ground-gradient.three {
             top: 1440px;
             background-color: #004d1a;
+            transition: background-color 1s;
+        }
+
+        .underground .ground-gradient.three {
+            background-color: var(--underground-ground-gradient-three-background-color);
+        }
+
+        .castle .ground-gradient.three {
+            background-color: var(--castle-ground-gradient-three-background-color);
         }
 
         .hud {
@@ -77,24 +197,24 @@
             align-items: center;
         }
 
-        .world-indicator {
+        #world-indicator {
             position: fixed;
             top: 20px;
             left: 30px;
         }
 
-        .lives-indicator {
+        #lives-indicator {
             position: fixed;
             top: 20px;
             left: 3120px;
         }
 
-        .lives-indicator>img {
+        #lives-indicator > img {
             height: 120px;
             margin-right: 20px;
         }
 
-        .coin-indicator {
+        #coin-indicator {
             position: fixed;
             top: 20px;
             left: 3480px;
@@ -136,6 +256,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 1000;
         }
 
         .countdown {
@@ -148,7 +269,7 @@
             align-items: center;
             justify-content: center;
             font-size: 480px;
-            animation: countdownStart 5s step-end 4s forwards, countdownEnd 5s step-end 309s forwards;
+            animation: countdownStart 5s step-end 4s forwards;
         }
 
         @keyframes countdownStart {
@@ -231,18 +352,11 @@
             }
         }
 
-        .press-start {
+        #press-start {
             width: 100%;
             left: 0;
             font-size: 360px;
             visibility: hidden;
-            animation: pressStartAppear 0s step-end 313s forwards, pressStartBlink 5s step-end 319s forwards infinite;
-        }
-
-        @keyframes pressStartAppear {
-            to {
-                visibility: visible;
-            }
         }
 
         @keyframes pressStartBlink {
@@ -250,20 +364,20 @@
                 opacity: 1;
             }
 
-            5% {
-                opacity: 0;
-            }
-
-            10% {
+            80% {
                 opacity: 1;
             }
 
-            15% {
+            85% {
                 opacity: 0;
             }
 
-            20% {
+            90% {
                 opacity: 1;
+            }
+
+            95% {
+                opacity: 0;
             }
 
             100% {
@@ -280,6 +394,7 @@
             justify-content: center;
             background-color: #000;
             color: #fff;
+            z-index: 10000;
             animation: titleDisappear 0s linear 4s forwards;
         }
 
@@ -325,11 +440,26 @@
 
         .coin-popup {
             position: fixed;
+            background-color: #3cf;
+            min-width: 2000px;
             top: 240px;
             right: 40px;
             text-align: right;
             font-size: 0.4em;
             animation: coinPopup 1s linear 0s forwards;
+            transition: background-color 1s;
+        }
+
+        .underground .coin-popup {
+            background-color: var(--underground-background-color);
+        }
+
+        .night .coin-popup {
+            background-color: var(--night-background-color);
+        }
+
+        .castle .coin-popup {
+            background-color: var(--castle-background-color);
         }
 
         @keyframes coinPopup {
@@ -351,31 +481,44 @@
         .smaller-text {
             font-size: 0.6em;
         }
+
+        .smaller-text img {
+            max-height: 0.6em;
+            min-height: 0.6em;
+        }
     </style>
     <script src="./scripts/reconnecting-websocket.js" type="text/javascript"></script>
     <script src="./scripts/zunderstream-base.js" type="text/javascript"></script>
 </head>
 
 <body>
-    <div class="sky"></div>
+    <div id="sky">
+        <div class="star" style="top: 960px; left: 200px;"></div>
+        <div class="star" style="top: 320px; left: 600px;"></div>
+        <div class="star" style="top: 640px; left: 800px;"></div>
+        <div class="star" style="top: 480px; right: 200px;"></div>
+        <div class="star" style="top: 720px; right: 800px;"></div>
+        <div class="star" style="top: 1120px; right: 400px;"></div>
+    </div>
+    <div id="banner"></div>
     <div class="loading-text">LOADING...</div>
-    <div class="ground">PLAYERS, GET READY!<br /><span class="smaller-text">Use !coin in chat!</span></div>
+    <div id="ground">PLAYERS, GET READY!<br /><span class="smaller-text">Redeem &quot;<img src="./images/retro/coin.png" style="margin-right: 32px;" />COIN&quot; or type !coin in chat!</span></div>
     <div class="ground-gradient one"></div>
     <div class="ground-gradient two"></div>
     <div class="ground-gradient three"></div>
 
-    <div class="hud world-indicator">ZNDR 1-1</div>
-    <div class="hud lives-indicator">
+    <div id="world-indicator" class="hud">ZNDR 1-1</div>
+    <div id="lives-indicator" class="hud">
         <img src="./images/retro/icebear.png" />x<span id="lives-count">05</span>
     </div>
-    <div class="hud coin-indicator">
+    <div id="coin-indicator" class="hud">
         <img src="./images/retro/coin.png" class="animated-coin" />x<span id="coin-count">00</span>
     </div>
 
     <div class="countdown">
-        <div id="countdown">05:00</div>
+        <div id="countdown"></div>
     </div>
-    <div class="countdown press-start">PRESS START</div>
+    <div id="press-start" class="countdown">PRESS START</div>
 
     <div class="title">
         <div class="title-logo">
@@ -385,22 +528,26 @@
     </div>
 
     <script type="text/javascript">
-        const totalTime = 300;
+        const totalTime = 600;
+        var countdownTimer;
         var currentTime = totalTime;
         var countdownTime = 0;
 
-        function startCountdown() {
-            countdownTimer = setInterval(setTimerText, 1000);
+        function endTimer() {
+            clearInterval(countdownTimer);
+            currentTime = 0;
+
+            const countdownContainerElement = document.getElementsByClassName("countdown")[0];
+            countdownContainerElement.style.animation = "countdownEnd 5s step-end 0s forwards";
+
+            setTimeout(() => {
+                const pressStartElement = document.getElementById("press-start");
+                pressStartElement.style.animation = "pressStartBlink 5s step-end 0s forwards infinite";
+                pressStartElement.style.visibility = "visible";
+            }, 5000);
         }
 
         function setTimerText() {
-            currentTime--;
-
-            if (currentTime < 0) {
-                clearInterval(countdownTimer);
-                currentTime = 0;
-            }
-
             let currentMinuteValue = Math.floor(currentTime / 60);
             let formattedMinutes = String(currentMinuteValue).padStart(2, "0");
 
@@ -410,18 +557,30 @@
             setElementText("countdown", `${formattedMinutes}:${formattedSeconds}`);
         }
 
+        function startCountdown() {
+            countdownTimer = setInterval(() => {
+                currentTime--;
+
+                if (currentTime < 0) {
+                    endTimer();
+                }
+
+                setTimerText();
+            }, 1000);
+        }
+
         var currentCoinCounter = 0;
         var totalCoinCounter = 0;
         var currentCoinHundreds = 0;
 
-        function showCoinPopup(username, amount) {
-            console.debug(`Showing ${amount} coin popup from ${username}`);
+        function showCoinPopup(username, amount, triggeredExtraLife) {
+            console.debug(`Showing ${amount} coin popup from ${username} (extra life: ${triggeredExtraLife})`);
 
             const newElementId = self.crypto.randomUUID();
             const newElement = document.createElement("div");
             newElement.setAttribute("id", newElementId);
             newElement.classList.add("coin-popup");
-            newElement.innerHTML = `${username} <span class="smaller-text">x</span>${amount}`;
+            newElement.innerHTML = `${triggeredExtraLife === true ? "1-UP! " : ""}${username} <span class="smaller-text">x</span>${amount}`;
 
             document.getElementsByTagName("body")[0].appendChild(newElement);
 
@@ -434,6 +593,8 @@
             console.debug(`Increasing coin counter by ${coins}`);
             totalCoinCounter += Number(coins);
 
+            let triggeredExtraLife = false;
+
             let hundreds = Math.floor(totalCoinCounter / 100);
             currentCoinCounter = totalCoinCounter - (hundreds * 100);
 
@@ -443,30 +604,81 @@
                 let livesString = String(Math.min(currentCoinHundreds + 5, 99)).padStart(2, "0");
                 setElementText("lives-count", livesString);
 
-                let extraLifeSound = new Audio("./sounds/SMB3_1-up.mp3");
+                let extraLifeSound = new Audio("./sounds/retro/SMB3_1-up.mp3");
                 extraLifeSound.play();
+                triggeredExtraLife = true;
             } else {
-                let coinSound = new Audio("./sounds/SMB3_coin.mp3");
+                let coinSound = new Audio("./sounds/retro/SMB3_coin.mp3");
                 coinSound.play();
             }
 
             let coinsString = String(currentCoinCounter).padStart(2, "0");
             setElementText("coin-count", coinsString);
+            return triggeredExtraLife;
         }
 
+        let currentLevel = "day";
+
         document.addEventListener("DOMContentLoaded", async () => {
-            let coinSound = new Audio("./sounds/SMB3_coin.mp3");
+            let coinSound = new Audio("./sounds/retro/SMB3_coin.mp3");
             coinSound.volume = 0;
             coinSound.play();
 
-            let extraLifeSound = new Audio("./sounds/SMB3_1-up.mp3");
+            let extraLifeSound = new Audio("./sounds/retro/SMB3_1-up.mp3");
             extraLifeSound.volume = 0;
             extraLifeSound.play();
 
+            let pipeSound = new Audio("./sounds/retro/SMB3_pipe.mp3");
+            pipeSound.volume = 0;
+            pipeSound.play();
+
+            setTimerText();
+
             setTimeout(startCountdown, 8500);
             zunderstreamEvents.on(`zunderstream:retro-coin-add`, (coinData) => {
-                showCoinPopup(coinData.username, coinData.coins);
-                coinCounterCheck(coinData.coins);
+                const extraLife = coinCounterCheck(coinData.coins);
+                showCoinPopup(coinData.username, coinData.coins, extraLife);
+            });
+
+            zunderstreamEvents.on("zunderstream:retro-countdown-level", (level) => {
+                level = level?.length ? level : "day";
+
+                if (level !== currentLevel) {
+                    currentLevel = level;
+
+                    let pipeSound = new Audio("./sounds/retro/SMB3_pipe.mp3");
+                    pipeSound.play();
+
+                    switch (level) {
+                        case "underground":
+                            document.body.classList.add("underground");
+                            document.body.classList.remove("night");
+                            document.body.classList.remove("castle");
+                            document.getElementById("world-indicator").innerText = "ZNDR 1-2";
+                            break;
+
+                        case "night":
+                            document.body.classList.add("night");
+                            document.body.classList.remove("underground");
+                            document.body.classList.remove("castle");
+                            document.getElementById("world-indicator").innerText = "ZNDR 1-3";
+                            break;
+
+                        case "castle":
+                            document.body.classList.add("castle");
+                            document.body.classList.remove("underground");
+                            document.body.classList.remove("night");
+                            document.getElementById("world-indicator").innerText = "ZNDR 1-4";
+                            break;
+
+                        default:
+                            document.body.classList.remove("underground");
+                            document.body.classList.remove("night");
+                            document.body.classList.remove("castle");
+                            document.getElementById("world-indicator").innerText = "ZNDR 1-1";
+                            break;
+                    }
+                }
             });
         });
     </script>

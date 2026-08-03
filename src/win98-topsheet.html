@@ -9,54 +9,6 @@
     <link rel="stylesheet" type="text/css" href="./styles/shared.css" />
     <link rel="stylesheet" type="text/css" href="./styles/win98.css" />
     <style type="text/css">
-        #chat-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 200px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        #chat-container>div {
-            box-sizing: border-box;
-            width: 100%;
-            border: solid 1px black;
-            background-color: #FFFF99;
-            color: black;
-            padding: 8px;
-            font-size: 10px;
-            display: flex;
-            flex-direction: row;
-            align-items: start;
-            justify-content: start;
-        }
-
-        /* Message envelope icon */
-        #chat-container .envelope {
-            padding-right: 8px;
-        }
-
-        /* Message content */
-        #chat-container .message-container {
-            max-width: 155px;
-            overflow-wrap: break-word;
-        }
-
-        #chat-container .username {
-            display: block;
-            margin: 2px 0 4px;
-            font-weight: bold;
-        }
-
-        #chat-container .message-container>img {
-            height: 10px;
-        }
-
-        #chat-container>div+div {
-            margin-top: 16px;
-        }
-
         #alert-popup {
             position: fixed;
             width: 500px;
@@ -97,7 +49,7 @@
             margin-right: 16px;
         }
 
-        #alert-text>.small {
+        #alert-text > .small {
             font-size: 14px;
         }
 
@@ -172,10 +124,6 @@
 </head>
 
 <body>
-    <div id="chat-container">
-
-    </div>
-
     <div id="alert-popup" class="window hidden">
         <div id="title-bar" class="title-bar">
             <div class="title-bar-wrapper">
@@ -244,22 +192,6 @@
             }
         }
 
-        function deleteChatMessage(messageId) {
-            document.getElementById(messageId)?.remove();
-        }
-
-        function showChatMessage(message) {
-            const elem = document.createElement("div");
-            elem.id = message.id;
-            elem.innerHTML = `<div><img class="envelope" src="./images/win98/message_envelope_open_16x16.png"></div><div class="message-container"><span class="username">${message.sender}</span>${message.message}</div>`;
-
-            document.getElementById("chat-container").appendChild(elem);
-
-            setTimeout(() => {
-                deleteChatMessage(message.id);
-            }, 8000)
-        }
-
         function showPopup(popupData) {
             setElementStyleProperty("alert-popup", "top", `${Math.floor(Math.random() * 320)}px`);
             setElementStyleProperty("alert-popup", "left", `${Math.floor(Math.random() * 440)}px`);
@@ -305,12 +237,6 @@
             setTimeout(loadClippy, 1 * 1000);
 
             zunderstreamEvents.on(`${customVariableEventName}:win98RedemptionId`, checkRedemption);
-
-            zunderstreamEvents.on(chatMessageEventName, showChatMessage);
-
-            zunderstreamEvents.on(chatMessageDeletedEventName, (message) => {
-                deleteChatMessage(message.id);
-            });
 
             zunderstreamEvents.on(zunderstreamWin98PopupEventName, (popupData) => {
                 showPopup(popupData);

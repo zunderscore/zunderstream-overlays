@@ -103,9 +103,13 @@ const zunderstreamWin98SetDialupTextEventName = `${WIN98_EVENT_PREFIX}:set-dialu
 async function getFirebotCustomVariable(variableName) {
     let url = `${firebotApiRootUrl}/custom-variables/${variableName}`;
 
-    const response = await fetch(url);
+    try {
+        const response = await fetch(url);
 
-    return JSON.parse(await response.text());
+        return JSON.parse(await response.text());
+    } catch {
+        return null;
+    }
 }
 
 async function setFirebotCustomVariable(variableName, value, ttl) {

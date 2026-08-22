@@ -98,6 +98,7 @@ const zunderstreamWin98PopupEventName = `${WIN98_EVENT_PREFIX}:show-popup`;
 const zunderstreamWin98ShowDialupWindowEventName = `${WIN98_EVENT_PREFIX}:show-dialup-window`;
 const zunderstreamWin98HideDialupWindowEventName = `${WIN98_EVENT_PREFIX}:hide-dialup-window`;
 const zunderstreamWin98SetDialupTextEventName = `${WIN98_EVENT_PREFIX}:set-dialup-text`;
+const zunderstreamWin98SetDesktopBackgroundEventName = `${WIN98_EVENT_PREFIX}:set-desktop-background`;
 
 // Helper functions
 async function getFirebotCustomVariable(variableName) {

@@ -8,15 +8,6 @@
     <title>zunderstream Windows 98</title>
     <link rel="stylesheet" type="text/css" href="./styles/win98.css" />
     <style type="text/css">
-        #desktop {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: #008081;
-        }
-
         #shutdown-window {
             position: fixed;
             top: 100px;
@@ -24,6 +15,8 @@
             width: 320px;
         }
     </style>
+    <script src="./scripts/reconnecting-websocket.js"></script>
+    <script src="./scripts/zunderstream-base.js"></script>
 </head>
 
 <body>
@@ -50,6 +43,26 @@
             </div>
         </div>
     </div>
+
+    <script type="text/javascript">
+        function setDesktopBackground(background) {
+            document.getElementById("desktop").style.background = background;
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const background = await getZunderstreamPropertyValue(win98DesktopBackgroundPropertyName);
+
+            if (!!background?.length) {
+                setDesktopBackground(background);
+            }
+
+            zunderstreamEvents.on(zunderstreamPropertyUpdatedEventName, (data) => {
+                if (data.property === win98DesktopBackgroundPropertyName) {
+                    setDesktopBackground(data.value);
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

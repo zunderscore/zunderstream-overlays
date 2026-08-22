@@ -77,6 +77,7 @@ function runAlertLoop(alertHandler) {
 const zunderstreamEvents = new EventEmitter();
 
 const customVariableEventName = "custom-variable";
+const zunderstreamPropertyUpdatedEventName = "zunderstream:property-updated";
 
 const zunderstreamTitleUpdatedEventName = "zunderstream:stream-title-updated";
 
@@ -98,9 +99,22 @@ const zunderstreamWin98PopupEventName = `${WIN98_EVENT_PREFIX}:show-popup`;
 const zunderstreamWin98ShowDialupWindowEventName = `${WIN98_EVENT_PREFIX}:show-dialup-window`;
 const zunderstreamWin98HideDialupWindowEventName = `${WIN98_EVENT_PREFIX}:hide-dialup-window`;
 const zunderstreamWin98SetDialupTextEventName = `${WIN98_EVENT_PREFIX}:set-dialup-text`;
-const zunderstreamWin98SetDesktopBackgroundEventName = `${WIN98_EVENT_PREFIX}:set-desktop-background`;
+
+const win98DesktopBackgroundPropertyName = "win98.desktopBackground";
 
 // Helper functions
+async function getZunderstreamPropertyValue(property) {
+    let url = `${zunderstreamAdminRootUrl}/property/${property}`;
+
+    try {
+        const response = await fetch(url);
+
+        return JSON.parse(await response.text());
+    } catch {
+        return null;
+    }
+}
+
 async function getFirebotCustomVariable(variableName) {
     let url = `${firebotApiRootUrl}/custom-variables/${variableName}`;
 

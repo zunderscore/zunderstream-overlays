@@ -9,17 +9,6 @@
     <link rel="stylesheet" type="text/css" href="./styles/shared.css" />
     <link rel="stylesheet" type="text/css" href="./styles/win98.css" />
     <style type="text/css">
-        #desktop {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-size: cover !important;
-            background-position: center !important;
-            background: #008081;
-        }
-
         #discord-active-desktop {
             position: fixed;
             top: 20px;
@@ -50,8 +39,16 @@
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
-            zunderstreamEvents.on(zunderstreamWin98SetDesktopBackgroundEventName, (data) => {
-                setDesktopBackground(data);
+            const background = await getZunderstreamPropertyValue(win98DesktopBackgroundPropertyName);
+
+            if (!!background?.length) {
+                setDesktopBackground(background);
+            }
+
+            zunderstreamEvents.on(zunderstreamPropertyUpdatedEventName, (data) => {
+                if (data.property === win98DesktopBackgroundPropertyName) {
+                    setDesktopBackground(data.value);
+                }
             });
         });
     </script>

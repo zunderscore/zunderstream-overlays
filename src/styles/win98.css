@@ -47,3 +47,14 @@ body {
 .news-bar-blue {
     color: #06f;
 }
+
+#desktop {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-size: cover !important;
+    background-position: center !important;
+    background: #008081;
+}
